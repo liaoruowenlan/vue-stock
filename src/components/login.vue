@@ -10,10 +10,12 @@
 				<div class="phone">
 					<p>手机号码</p>
 					<input type="text" />
+					<div>*请输入11位数字</div>
 				</div>
 				<div class="passworld">
 					<p>登陆密码</p>
 					<input type="password" />
+					<div>*账号或密码错误，请仔细核对</div>
 				</div>
 				<input type="button" value="登陆" class="login-btn" v-on:click="doThis()" />
 				<div class="login-operation">
@@ -27,11 +29,11 @@
 			</div>
 		</div>
 
-		<ul>
-			<li v-for="item in recommendList">
-				{{ item.name }}
-			</li>
-		</ul>
+		<!--<ul>-->
+			<!--<li v-for="item in recommendList">-->
+				<!--{{ item.name }}-->
+			<!--</li>-->
+		<!--</ul>-->
 	</section>
 </template>
 
@@ -80,10 +82,19 @@ section>div {
 	margin-top: 42px;
 	position: relative;
 }
+.phone,.passworld{
+	position: relative;
+}
+.phone>div,.passworld>div{
+	position: absolute;
+	bottom: -21px;
+	color: #e26042;
+	font-size: 12px;
+	left: 110px;
+}
 .phone{
 	margin-top: 28px;
 	margin-bottom: 37px;
-	height: 32px;
 }
 .phone p,.passworld p{
 	margin-left: 42px;
@@ -95,7 +106,7 @@ section>div {
 }
 .phone input,.passworld input {
 	width: 212px;
-	height: 32px
+	height: 28px
 }
 	.login-title{
 		text-align: center;
