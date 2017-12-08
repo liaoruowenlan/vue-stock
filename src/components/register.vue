@@ -19,7 +19,7 @@
 				<div class="passworld">
 					<p>登陆密码</p>
 					<input type="password" />
-					<img src="../assets/img/dl-yincang@2x.png"/>
+					<img src="../assets/img/dl-yincang@2x.png" v-on:click="myMethod()" />
 				</div>
 				<input type="button" value="注册" class="login-btn"  />
 				<div class="login-operation">
@@ -34,7 +34,18 @@
 </template>
 
 <script>
+	export default {
+	    name: "register",
+		mounted: function() {
 
+		},
+		methods: {
+	        myMethod: function () {
+				var _this = this;
+				alert(_this.src);
+            }
+		}
+	}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -4,19 +4,8 @@
             <img src="src/assets/img/logo.png" />
         </div>
         <div class="logo-nav">
-            <ul>
-                <li class="active">
-                    首页
-                </li>
-                <li>
-                    详情
-                </li>
-                <li>
-                    持仓
-                </li>
-                <li>
-                    我的账户
-                </li>
+            <ul id="warp">
+                <li class="" v-for="item in navLists"><router-link :to="item.url">{{item.text}}</router-link></li>
             </ul>
         </div>
         <div class="nav-login">
@@ -39,8 +28,31 @@
 
 <script>
     export default {
-        name: "header"
+        name: "header",
+        data(){
+            return{
+                navLists:[
+                    {
+                        "text":"首页",
+                        "url":"/"
+                    },
+                    {
+                        "text":"详情",
+                        "url":"/reset"
+                    },
+                    {
+                        "text":"持仓",
+                        "url":"/register"
+                    },
+                    {
+                        "text":"我的账户",
+                        "url":"/home"
+                    }
+                ]
+            }
+        }
     }
+
 </script>
 
 <style scoped>
@@ -58,8 +70,8 @@
     }
 
     .logo>img {
-        width: 100%;
-        height: 100%;
+        width: 320px;
+        height: 44px;
     }
 
     .logo-nav {
@@ -80,12 +92,14 @@
         color: #687284;
         margin-left: 10px;
     }
-
-    .logo-nav ul li.active {
-        color: #3c5fb5;
-        border-bottom: 4px solid #3e59a7;
+    .logo-nav ul li a{
+        color: #687284;
     }
-
+.router-link-exact-active{
+    color: #3c5fb5;
+    border-bottom: 4px solid #3e59a7;
+    padding: 0 18px;
+}
     .logo-nav ul li:hover {
         color: #3c5fb5;
         border-bottom: 4px solid #3e59a7;
@@ -102,7 +116,12 @@
         margin: 30px 0;
         color: #687284;
     }
-
+    .nav-login>ul>li a{
+        color: #687284;
+    }
+    .nav-login>ul>li a:hover{
+        color: blue;
+    }
     .border {
         width: 1px;
         background: #dcdee3;
@@ -117,5 +136,8 @@
         display: inline-block;
         vertical-align: middle;
         margin-top: -3px;
+    }
+    .logo-nav ul li:last-child a{
+        padding: 0 0 !important;
     }
 </style>

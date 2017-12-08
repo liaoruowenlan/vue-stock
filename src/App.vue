@@ -18,9 +18,9 @@
 
     export default {
         name: 'app',
-        components: {
-            TopHeader,
-            FooterNav
+            components: {
+                TopHeader,
+                FooterNav
         }
     }
 </script>

@@ -19,7 +19,7 @@
 				</div>
 				<input type="button" value="登陆" class="login-btn" v-on:click="doThis()" />
 				<div class="login-operation">
-					<a href="#">
+					<a href="#/reset">
 						忘记密码
 					</a>
 					<a href="#/register">
