@@ -1,7 +1,7 @@
 <template>
     <header class="nav">
         <div class="logo">
-            <img src="src/assets/img/logo.png" />
+            <img src="../assets/img/logo.png" />
         </div>
         <div class="logo-nav">
             <ul id="warp">
@@ -38,15 +38,15 @@
                     },
                     {
                         "text":"详情",
-                        "url":"/reset"
+                        "url":"/a"
                     },
                     {
                         "text":"持仓",
-                        "url":"/register"
+                        "url":"/s"
                     },
                     {
                         "text":"我的账户",
-                        "url":"/home"
+                        "url":"/c"
                     }
                 ]
             }
@@ -60,6 +60,7 @@
         width: 1024px;
         margin: 0 auto;
         height: 80px;
+        background: #fff;
     }
 
     .logo {

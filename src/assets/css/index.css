@@ -9,7 +9,10 @@
 img {
 	display: block;
 }
-
+.width100{
+	width: 100%;
+	background: #f7f7f7;
+}
 
 
 

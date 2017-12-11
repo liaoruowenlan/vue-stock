@@ -68,10 +68,10 @@
 
 <style scoped>
     footer {
-        height: 212px;
+        height: 208px;
         width: 1024px;
         margin: 0 auto;
-        margin-top: 26px;
+        background: #fff;
     }
 
     footer>div.footer-nav {
@@ -79,6 +79,7 @@
         height: 128px;
         margin-right: 119px;
         float: left;
+        margin-top: 28px;
     }
 
     footer>.footer-nav p {
@@ -89,7 +90,7 @@
 
     footer>.footer-nav ul {
         text-align: center;
-        line-height: 32px;
+        line-height: 36px;
     }
 
     footer>div ul li {
@@ -99,6 +100,7 @@
 
     .tel {
         float: left;
+        margin-top: 28px;
     }
 
     .Customer {

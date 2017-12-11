@@ -1,72 +1,65 @@
-<template xmlns="http://www.w3.org/1999/html">
-	<section>
-		<div>
-			<div class="login-div">
-				<div class="login-title">
-					<div class="login-title-left"></div>
-					<p>欢迎登录</p>
-					<div class="login-title-right"></div>
-				</div>
-				<div class="phone">
-					<p>手机号码</p>
-					<input type="text" />
-					<div>*请输入11位数字</div>
-				</div>
-				<div class="passworld">
-					<p>登陆密码</p>
-					<input type="password" />
-					<div>*账号或密码错误，请仔细核对</div>
-				</div>
-				<input type="button" value="登陆" class="login-btn" v-on:click="doThis()" />
-				<div class="login-operation">
-					<a href="#/reset">
-						忘记密码
-					</a>
-					<a href="#/register">
-						注册账号
-					</a>
+<template>
+	<div>
+		<top-header></top-header>
+		<section>
+			<div>
+				<div class="login-div">
+					<div class="login-title">
+						<div class="login-title-left"></div>
+						<p>欢迎登录</p>
+						<div class="login-title-right"></div>
+					</div>
+					<div class="phone">
+						<p>手机号码</p>
+						<input type="text" />
+						<div>*请输入11位数字</div>
+					</div>
+					<div class="passworld">
+						<p>登陆密码</p>
+						<input type="password" />
+						<div>*账号或密码错误，请仔细核对</div>
+					</div>
+					<input type="button" value="登陆" class="login-btn" v-on:click="doThis()" />
+					<div class="login-operation">
+						<a href="#/reset">
+							忘记密码
+						</a>
+						<a href="#/register">
+							注册账号
+						</a>
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<!--<ul>-->
-			<!--<li v-for="item in recommendList">-->
-				<!--{{ item.name }}-->
-			<!--</li>-->
-		<!--</ul>-->
-	</section>
+		</section>
+		<footer-nav></footer-nav>
+	</div>
 </template>
 
 <script>
-    import axios from 'axios'
+     import TopHeader from '../../components/header.vue'
+     import FooterNav from '../../components/footer.vue'
     export default {
         name: "login",
+        components: {
+            TopHeader,
+            FooterNav
+        },
 		data () {
-            return {
-                recommendList: []
+			return{
+
 			}
 		},
         mounted: function() {
-            var _this = this;
-            axios.get('http://10.0.0.99:8083/tactics/stock/stockRecommend?page=0&size=10')
-			.then(function (response) {
-			    _this.recommendList = response.data.result.content;
-			    console.log(_this.recommendList)
-			})
-			.catch(function (response) {
-				console.log(response);
-			});
+
         },
 		methods: {
-            doThis: function () {
-				alert("doThis");
-            }
+
 		}
     }
 </script>
 <style>
 section{
-	background: url("../assets/img/bg.png") no-repeat;
+	background: url("../../assets/img/bg.png") no-repeat;
 	background-size:100% 100%;
 	height: 480px;
 }

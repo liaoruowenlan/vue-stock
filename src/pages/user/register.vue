@@ -1,57 +1,64 @@
 <template>
-	<section>
-		<div>
-			<div class="login-div">
-				<div class="login-title">
-					<div class="login-title-left"></div>
-					<p>欢迎注册</p>
-					<div class="login-title-right"></div>
-				</div>
-				<div class="phone">
-					<p>手机号码</p>
-					<input type="text" />
-				</div>
-				<div class="AuCode">
-					<p class="mr24">验证码</p>
-					<input type="text" />
-					<button>获取验证码</button>
-				</div>
-				<div class="passworld">
-					<p>登陆密码</p>
-					<input type="password" />
-					<img src="../assets/img/dl-yincang@2x.png" v-on:click="myMethod()" />
-				</div>
-				<input type="button" value="注册" class="login-btn"  />
-				<div class="login-operation">
-					<a href="#"></a>
-					<a href="#/login">
-						已有账号，直接登录
-					</a>
+	<div>
+		<top-header></top-header>
+		<section>
+			<div>
+				<div class="login-div">
+					<div class="login-title">
+						<div class="login-title-left"></div>
+						<p>欢迎注册</p>
+						<div class="login-title-right"></div>
+					</div>
+					<div class="phone">
+						<p>手机号码</p>
+						<input type="text" />
+					</div>
+					<div class="AuCode">
+						<p class="mr24">验证码</p>
+						<input type="text" />
+						<button>获取验证码</button>
+					</div>
+					<div class="passworld">
+						<p>登陆密码</p>
+						<input type="password" />
+						<img src="../../assets/img/dl-yincang@2x.png" />
+					</div>
+					<input type="button" value="注册" class="login-btn"  />
+					<div class="login-operation">
+						<a href="#"></a>
+						<a href="#/login">
+							已有账号，直接登录
+						</a>
+					</div>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+		<footer-nav></footer-nav>
+	</div>
 </template>
 
 <script>
+    import TopHeader from '../../components/header.vue'
+    import FooterNav from '../../components/footer.vue'
+
 	export default {
 	    name: "register",
+        components: {
+            TopHeader,
+            FooterNav
+        },
 		mounted: function() {
 
 		},
 		methods: {
-	        myMethod: function () {
-				var _this = this;
-				alert(_this.src);
-            }
+
 		}
 	}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	section{
-		background: url("../assets/img/bg.png") no-repeat;
+		background: url("../../assets/img/bg.png") no-repeat;
 		background-size:100% 100%;
 		height: 480px;
 	}
