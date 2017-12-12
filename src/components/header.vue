@@ -19,7 +19,7 @@
                 </li>
                 <li>
                     <img src="../assets/img/help.png" class="help-img" />
-                    <a href="#">帮助中心</a>
+                    <a href="#/help">帮助中心</a>
                 </li>
             </ul>
         </div>
@@ -46,7 +46,7 @@
                     },
                     {
                         "text":"我的账户",
-                        "url":"/c"
+                        "url":"/setup"
                     }
                 ]
             }

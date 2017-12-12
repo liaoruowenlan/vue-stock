@@ -1,5 +1,5 @@
 <template>
-    <el-carousel trigger="click" :interval="5000" arrow="always" height="480px">
+    <el-carousel trigger="click" :interval="3000" arrow="always" height="480px">
         <el-carousel-item v-for="item in cards" :key="item.cardTypeName">
             <a :href="item.href"><img :src="item.img" /></a>
         </el-carousel-item>
