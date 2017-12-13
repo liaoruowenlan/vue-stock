@@ -27,7 +27,7 @@
 					<div class="login-operation">
 						<a href="#"></a>
 						<a href="#/login">
-							已有账号，直接登录
+							已有账号，直接登录{{message}}
 						</a>
 					</div>
 				</div>
@@ -41,12 +41,14 @@
     import TopHeader from '../../components/header.vue'
     import FooterNav from '../../components/footer.vue'
 
+
 	export default {
 	    name: "register",
         components: {
             TopHeader,
             FooterNav
         },
+
 		mounted: function() {
 
 		},

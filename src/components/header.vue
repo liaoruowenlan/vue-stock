@@ -38,7 +38,7 @@
                     },
                     {
                         "text":"行情",
-                        "url":"/a"
+                        "url":"/quotation"
                     },
                     {
                         "text":"持仓",
