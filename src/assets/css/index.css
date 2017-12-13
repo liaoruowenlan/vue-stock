@@ -13,6 +13,11 @@ img {
 	width: 100%;
 	background: #f7f7f7;
 }
-
+.user_div{
+	width: 725px;
+	margin-top: 32px;
+	margin-left: 46px;
+	font-size: 14px;
+}
 
 

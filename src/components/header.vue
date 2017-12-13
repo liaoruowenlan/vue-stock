@@ -34,10 +34,10 @@
                 navLists:[
                     {
                         "text":"首页",
-                        "url":"/"
+                        "url":"/home"
                     },
                     {
-                        "text":"详情",
+                        "text":"行情",
                         "url":"/a"
                     },
                     {
@@ -46,7 +46,7 @@
                     },
                     {
                         "text":"我的账户",
-                        "url":"/setup"
+                        "url":"/myaccount"
                     }
                 ]
             }
@@ -97,12 +97,23 @@
         color: #687284;
     }
 .router-link-exact-active{
-    color: #3c5fb5;
+    color: #3e59a7;
     border-bottom: 4px solid #3e59a7;
     padding: 0 18px;
 }
+.router-link-active{
+    color: #3e59a7;
+    border-bottom: 4px solid #3e59a7;
+}
+    .router-link-exact-active{
+        color: #3e59a7 !important;
+    }
     .logo-nav ul li:hover {
-        color: #3c5fb5;
+        color: #3e59a7 !important;
+        border-bottom: 4px solid #3e59a7;
+    }
+    .logo-nav ul li a:hover {
+        color: #3e59a7 !important;
         border-bottom: 4px solid #3e59a7;
     }
 
