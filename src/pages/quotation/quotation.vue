@@ -72,17 +72,19 @@
             TopHeader,
             FooterNav
         },
-        mounted() {
-            axios.get('http://10.0.0.99:8083/tactics//system/stockMarketExponent')
-                .then(function (response) {
-                    if(response.data.code == 200){
-                        console.log(response.data.result);
-                        this.message = response.data.result;
-                    }
-                }.bind(this))
-                .catch(function (error) {
-                    console.log(error);
-                });
+        created(){
+            axios.get('/strategist/system/stockMarketExponent')
+            .then(function (response) {
+                if(response.data.code == 200){
+                    this.message = response.data.result;
+                }
+            }.bind(this))
+            .catch(function (error) {
+                console.log(error);
+            })
+        },
+        mounted(){
+
         }
     }
 
