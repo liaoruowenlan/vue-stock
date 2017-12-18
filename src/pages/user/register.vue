@@ -1,9 +1,10 @@
 <template>
-	<div>
+	<div v-model="spanValue">
 		<top-header></top-header>
 		<section>
 			<div>
 				<div class="login-div">
+					<span></span>
 					<div class="login-title">
 						<div class="login-title-left"></div>
 						<p>欢迎注册</p>
@@ -11,23 +12,27 @@
 					</div>
 					<div class="phone">
 						<p>手机号码</p>
-						<input type="text" />
+						<input type="text" v-model="phone.userPhone"  MAXLENGTH="11" @blur="blur()"/>
+						<div v-if="phone.phoneReg">{{phone.phoneMsg}}</div>
 					</div>
 					<div class="AuCode">
 						<p class="mr24">验证码</p>
-						<input type="text" />
-						<button>获取验证码</button>
+						<input type="text" v-model="AuCode.userAcd" maxlength="4"  />
+						<span v-show="show" :class="this.AuCode.AuCodeUp?'addColor':''" @click="getAuCode()">获取验证码</span>
+                        <span class="addColor" v-show="!show">{{count}}s</span>
+						<div v-if="AuCode.AuCodeReg">{{AuCode.AuCodeMeg}}</div>
 					</div>
 					<div class="passworld">
 						<p>登陆密码</p>
-						<input type="password" />
-						<img src="../../assets/img/dl-yincang@2x.png" />
+						<input type="password" v-model="password.userPwd" ref="passwordInput" />
+						<img :src="imgSrc"  @click="changePasswordType()"/>
+						<div v-if="password.Pwdreg">{{password.phoneMsg}}</div>
 					</div>
-					<input type="button" value="注册" class="login-btn"  />
+					<input type="button" value="注册" class="login-btn"  :class="btnUp?'addColor':''" @click="register()" />
 					<div class="login-operation">
 						<a href="#"></a>
 						<a href="#/login">
-							已有账号，直接登录{{message}}
+							已有账号，直接登录
 						</a>
 					</div>
 				</div>
@@ -40,29 +45,128 @@
 <script>
     import TopHeader from '../../components/header.vue'
     import FooterNav from '../../components/footer.vue'
+    import axios from 'axios'
+    import qs from 'qs'
 
 
 	export default {
 	    name: "register",
+		data(){
+	      return{
+	         phone:{
+	             userPhone:"",
+				 phoneReg:"",
+				 phoneMsg:"*请检查手机号码格式"
+			 },
+			  password:{
+                  userPwd:"",
+                  PwdReg:"",
+                  phoneMsg:"*账号或密码错误，请仔细核对"
+			  },
+			  AuCode:{
+	             userAcd:"",
+				 AuCodeReg:"",
+				 AuCodeMeg:"*验证码有误，请重新输入",
+				  AuCodeUp:""
+			  },
+			  btnUp:"",
+              count:"",
+              show: true,
+              timer: null,
+			  imgSrc:'../src/assets/img/dl-yincang@2x.png'
+		  }
+		},
+        computed:{
+            spanValue:function () {
+                this.btnUp = this.phone.userPhone.length > 0 && this.password.userPwd.length > 0 && this.AuCode.userAcd.length > 0;
+                this.AuCode.AuCodeUp = /^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone);
+            }
+		},
         components: {
             TopHeader,
             FooterNav
         },
-
-		mounted: function() {
-
-		},
-		methods: {
-
+        methods:{
+            changePasswordType() {
+                var origin = this.$refs.passwordInput.type;
+                this.$refs.passwordInput.type = origin == "password" ? "text" : "password";
+                this.imgSrc = this.imgSrc=="../src/assets/img/dl-yincang@2x.png"?this.imgSrc="../src/assets/img/show@2x.png":this.imgSrc="../src/assets/img/dl-yincang@2x.png";
+            },
+			blur(){
+                this.phone.phoneReg = this.phone.userPhone.trim() != '' && !(/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone));
+			},
+            register(){
+                var _this = this;
+                axios.post('/strategist/publisher/register', qs.stringify({
+                    phone: this.phone.userPhone,
+                    password: this.password.userPwd,
+                    verificationCode:this.AuCode.userAcd
+                }))
+                    .then(function(res){
+                        if(res.data.code!=200){
+                            _this.password.PwdReg = true;
+                            console.log(res.data);
+                            _this.AuCode.AuCodeReg=true;
+                            return false;
+                        }else if(res.data.code==200){
+                            self.$router.replace({ path: 'myaccount' });
+                            sessionStorage.setItem("token",res.data.result.token);
+						}
+                        console.log(res.data);
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+			},
+            getAuCode(){
+			    if(!/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone)){
+			        return false;
+                }
+                var _this = this;
+                axios.post("/strategist/publisher/sendSms",qs.stringify({
+                    phone:_this.phone.userPhone,
+                    type:1
+                }))
+                    .then(function(res){
+                        console.log(res.data);
+                        const TIME_COUNT = 60;
+                        if (!_this.timer) {
+                            _this.count = TIME_COUNT;
+                            _this.show = false;
+                            _this.timer = setInterval(() => {
+                                if (_this.count > 0 && _this.count <= TIME_COUNT) {
+                                    _this.count--;
+                                } else {
+                                    _this.show = true;
+                                    clearInterval(_this.timer);
+                                    _this.timer = null;
+                                }
+                            }, 1000)
+                        }
+                    }).catch(function(err){
+                        console.log(err)
+                })
+            }
 		}
 	}
 </script>
 
 <style scoped>
+	.addColor{
+		background:#ee8354 !important;
+		color: #fff !important;
+	}
 	section{
 		background: url("../../assets/img/bg.png") no-repeat;
 		background-size:100% 100%;
 		height: 480px;
+	}
+	.AuCode > div, .passworld > div,.iphone>div {
+		position: absolute;
+		bottom: -21px;
+		color: #e26042;
+		font-size: 12px;
+		left: 110px;
 	}
 	section>div {
 		width: 1024px;
@@ -114,11 +218,10 @@
 		line-height: 40px;
 		font-size: 16px;
 		color: #fff;
-		background:#ee8354 ;
+		background: #f9d9cb;
 		border: 0;
 		margin-left: 54px;
 		margin-top: 35px;
-		opacity: .3;
 	}
 	.phone,.passworld,.AuCode{
 		position: relative;
@@ -153,7 +256,8 @@
 		width: 212px;
 		height: 28px
 	}
-	button{
+	.AuCode span{
+        display: block;
 		width: 68px;
 		height: 20px;
 		color: #adb3c1;
@@ -164,6 +268,8 @@
 		position: absolute;
 		right: 60px;
 		top: 6px;
+        line-height: 20px;
+		cursor: pointer;
 	}
 	.login-operation{
 		width: 260px;

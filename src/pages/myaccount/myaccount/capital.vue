@@ -4,14 +4,14 @@
             <div class="frozen">
                 <div>
                     <span>¥</span>
-                    <span>123.90</span>
+                    <span>{{User.frozenCapital}}</span>
                 </div>
                 <p>冻结履约保证金</p>
             </div>
             <div class="frozen">
                 <div>
                     <span>¥</span>
-                    <span>12.00</span>
+                    <span>{{User.availableBalance}}</span>
                 </div>
                 <p>可用资金</p>
             </div>
@@ -27,7 +27,7 @@
         <div class="user_blnk">
             <div class="frozen">
                 <div>
-                    <span>0</span>
+                    <span>{{BlankLength}}</span>
                 </div>
                 <p>我的银行卡</p>
             </div>
@@ -41,8 +41,48 @@
 </template>
 
 <script>
+    import axios from 'axios'
     export default {
-        name: "capital"
+        name: "capital",
+        data(){
+            return {
+                User: {
+
+                },
+                BlankLength:null
+            }
+        },
+        created(){
+            var _this = this;
+            console.log(sessionStorage.getItem("token"))
+            axios.get('/strategist/capitalAccount/', {
+                headers: {
+                    'Authorization': sessionStorage.getItem("token")
+                }
+            })
+            .then(function(res){
+                console.log(res.data.result);
+                _this.User = res.data.result;
+
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+            axios.get('/strategist/bindCard/myBankCardList', {
+                headers: {
+                    'Authorization': sessionStorage.getItem("token")
+                }
+            })
+                .then(function(res){
+                    console.log(res.data);
+                    console.log(res.data.result.length)
+                    _this.BlankLength = res.data.result.length;
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+
+        }
     }
 </script>
 
@@ -73,7 +113,7 @@
 
     .user_money .frozen > div > span:last-child {
         font-size: 32px;
-        margin-left: 7px;
+        margin-left: 10px;
         font-weight: bold;
         color: #e26042;
     }

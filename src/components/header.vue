@@ -9,7 +9,7 @@
             </ul>
         </div>
         <div class="nav-login">
-            <ul>
+            <ul v-if="!loginOpen">
                 <li>
                     <a href="#/register">注册</a>
                 </li>
@@ -17,11 +17,14 @@
                 <li>
                     <a href="#/login">登陆</a>
                 </li>
-                <li>
+            </ul>
+            <div v-if="loginOpen">
+                    欢迎回来，<a href="#/myaccount">{{phone}}</a>
+            </div>
+            <div>
                     <img src="../assets/img/help.png" class="help-img" />
                     <a href="#/help">帮助中心</a>
-                </li>
-            </ul>
+            </div>
         </div>
     </header>
 </template>
@@ -48,7 +51,21 @@
                         "text":"我的账户",
                         "url":"/myaccount"
                     }
-                ]
+                ],
+                phone: '',
+                loginOpen: false
+            }
+        },
+        mounted: function(){
+            this.refreshUserInfo();
+        },
+        methods: {
+            refreshUserInfo: function () {
+                var phone = sessionStorage.getItem("phone");
+                if(phone)  {
+                    this.loginOpen = true;
+                    this.phone = phone.substring(0, 3) + "****" + phone.substring(7);
+                }
             }
         }
     }
@@ -96,15 +113,15 @@
     .logo-nav ul li a{
         color: #687284;
     }
-.router-link-exact-active{
-    color: #3e59a7;
-    border-bottom: 4px solid #3e59a7;
-    padding: 0 18px;
-}
-.router-link-active{
-    color: #3e59a7;
-    border-bottom: 4px solid #3e59a7;
-}
+    .router-link-exact-active{
+        color: #3e59a7;
+        border-bottom: 4px solid #3e59a7;
+        padding: 0 18px;
+    }
+    .router-link-active{
+        color: #3e59a7;
+        border-bottom: 4px solid #3e59a7;
+    }
     .router-link-exact-active{
         color: #3e59a7 !important;
     }
@@ -131,18 +148,33 @@
     .nav-login>ul>li a{
         color: #687284;
     }
+    .nav-login>ul{
+        height: 80px;
+        float: left;
+    }
     .nav-login>ul>li a:hover{
         color: blue;
+    }
+    .nav-login>div a{
+        color: #687284;
+    }
+    .nav-login>div:last-child{
+        float: right;
+        height: 80px;
+        line-height: 80px;
+        margin-left: 20px;
+    }
+    .nav-login>div:first-child{
+        float: left;
+        line-height: 80px;
+        font-size: 14px;
+        color: #687284;
     }
     .border {
         width: 1px;
         background: #dcdee3;
         height: 21px;
         margin: 30px 10px !important;
-    }
-
-    .nav-login>ul li:last-child {
-        margin-left: 17px;
     }
     .help-img{
         display: inline-block;

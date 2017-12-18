@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-model="spanValue">
         <top-header></top-header>
         <section>
             <div>
@@ -11,19 +11,23 @@
                     </div>
                     <div class="phone">
                         <p>手机号码</p>
-                        <input type="text"/>
+                        <input type="text" v-model="phone.userPhone"  MAXLENGTH="11" @blur="blur()"/>
+                        <div v-if="phone.phoneReg">{{phone.phoneMsg}}</div>
                     </div>
                     <div class="AuCode">
                         <p class="mr24">验证码</p>
-                        <input type="text"/>
-                        <button>获取验证码</button>
+                        <input type="text" v-model="AuCode.userAcd" maxlength="4"  />
+                        <span v-show="show" :class="this.AuCode.AuCodeUp?'addColor':''" @click="getAuCode()">获取验证码</span>
+                        <span class="addColor" v-show="!show">{{count}}s</span>
+                        <div v-if="AuCode.AuCodeReg">{{AuCode.AuCodeMeg}}</div>
                     </div>
                     <div class="passworld">
                         <p>登陆密码</p>
-                        <input type="password"/>
-                        <img src="../../assets/img/dl-yincang@2x.png" v-on:click="myMethod()"/>
+                        <input type="password" v-model="password.userPwd" ref="passwordInput" />
+                        <img :src="imgSrc"  @click="changePasswordType()"/>
+                        <div v-if="password.Pwdreg">{{password.phoneMsg}}</div>
                     </div>
-                    <input type="button" value="确定" class="login-btn"/>
+                    <input type="button" value="确定" class="login-btn"  :class="btnUp?'addColor':''" @click="resetPwd()"  />
                 </div>
             </div>
         </section>
@@ -34,17 +38,113 @@
 <script>
     import TopHeader from '../../components/header.vue'
     import FooterNav from '../../components/footer.vue'
-
+    import axios from 'axios'
+    import qs from 'qs'
     export default {
         name: "reset",
         components: {
             TopHeader,
             FooterNav
         },
+        data(){
+            return{
+                phone:{
+                    userPhone:"",
+                    phoneReg:"",
+                    phoneMsg:"*请检查手机号码格式"
+                },
+                password:{
+                    userPwd:"",
+                    Pwdreg:"",
+                    phoneMsg:"*账号或密码错误，请仔细核对"
+                },
+                AuCode:{
+                    userAcd:"",
+                    AuCodeReg:"",
+                    AuCodeMeg:"*验证码有误，请重新输入",
+                    AuCodeUp:""
+                },
+                btnUp:"",
+                count:"",
+                show: true,
+                timer: null,
+                imgSrc:'../src/assets/img/dl-yincang@2x.png'
+            }
+        },
+        computed:{
+            spanValue:function () {
+                this.btnUp = this.phone.userPhone.length > 0 && this.password.userPwd.length > 0 && this.AuCode.userAcd.length > 0;
+                this.AuCode.AuCodeUp = /^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone);
+            }
+        },
         mounted: function () {
 
         },
-        methods: {}
+        methods: {
+            resetPwd(){
+                var _this = this;
+                axios.post('/strategist/publisher/modifyPassword', qs.stringify({
+                    phone: this.phone.userPhone,
+                    password: this.password.userPwd,
+                    verificationCode:this.AuCode.userAcd
+                }))
+                .then(function(res){
+                    if(res.data.code!=200){
+                        _this.password.PwdReg = true;
+                        console.log(res.data);
+                        _this.AuCode.AuCodeReg=true;
+                        return false;
+                    }else if(res.data.code==200){
+                        console.log(res.data);
+                         _this.$router.push({ path: '/login' });
+                        sessionStorage.setItem("token",res.data.result.token);
+                    }
+                    console.log(res.data);
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+            },
+            changePasswordType() {
+                var origin = this.$refs.passwordInput.type;
+                this.$refs.passwordInput.type = origin == "password" ? "text" : "password";
+                this.imgSrc = this.imgSrc=="../src/assets/img/dl-yincang@2x.png"?this.imgSrc="../src/assets/img/show@2x.png":this.imgSrc="../src/assets/img/dl-yincang@2x.png";
+            },
+            blur(){
+                this.phone.phoneReg = this.phone.userPhone.trim() != '' && !(/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone));
+            },
+            reset(){
+
+            },
+            getAuCode(){
+                if(!/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone)){
+                    return false;
+                }
+                var _this = this;
+                axios.post("/strategist/publisher/sendSms",qs.stringify({
+                    phone:_this.phone.userPhone,
+                    type:2
+                }))
+                    .then(function(res){
+                        const TIME_COUNT = 60;
+                        if (!_this.timer) {
+                            _this.count = TIME_COUNT;
+                            _this.show = false;
+                            _this.timer = setInterval(() => {
+                                if (_this.count > 0 && _this.count <= TIME_COUNT) {
+                                    _this.count--;
+                                } else {
+                                    _this.show = true;
+                                    clearInterval(_this.timer);
+                                    _this.timer = null;
+                                }
+                            }, 1000)
+                        }
+                    }).catch(function(err){
+                    console.log(err)
+                })
+            }
+        }
     }
 </script>
 
@@ -54,7 +154,10 @@
         background-size: 100% 100%;
         height: 480px;
     }
-
+    .addColor{
+        background:#ee8354 !important;
+        color: #fff !important;
+    }
     section > div {
         width: 1024px;
         margin: 0 auto;
@@ -80,7 +183,21 @@
         margin-top: 42px;
         position: relative;
     }
-
+    .AuCode span{
+        display: block;
+        width: 68px;
+        height: 20px;
+        color: #adb3c1;
+        font-size: 12px;
+        text-align: center;
+        background:#f7f7f7 ;
+        border: 0;
+        position: absolute;
+        right: 60px;
+        top: 6px;
+        line-height: 20px;
+        cursor: pointer;
+    }
     .login-title {
         text-align: center;
         font-size: 18px;
@@ -114,11 +231,10 @@
         line-height: 40px;
         font-size: 16px;
         color: #fff;
-        background: #ee8354;
+        background: #f9d9cb;
         border: 0;
         margin-left: 54px;
         margin-top: 35px;
-        opacity: .3;
     }
 
     .phone, .passworld, .AuCode {

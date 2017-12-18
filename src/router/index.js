@@ -54,6 +54,7 @@ export default new Router({
             component: Quotation
         },
         {
+
             path: '/myaccount',
             component: Myaccount,
             children: [
@@ -63,5 +64,6 @@ export default new Router({
                 {path: '/myaccount/recharge', component: Recharge},
                 {path: '/myaccount/setup', component: Setup},
                 {path: '/myaccount/withdrawals', component: Withdrawals}]
-        }]
+        }
+        ]
 })

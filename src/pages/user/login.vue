@@ -1,6 +1,6 @@
 <template>
     <div>
-        <top-header></top-header>
+        <top-header :phone="phoneTran" :loginOpen="userOpen"></top-header>
         <section>
             <div>
                 <div class="login-div">
@@ -12,13 +12,13 @@
                     </div>
                     <div class="phone">
                         <p>手机号码</p>
-                        <input type="text" v-model="phone" maxlength="11" @blur="blur()"/>
-                        <div v-if="PhoneOpen">*请检查您登陆号码</div>
+                        <input type="text" v-model="phone.UserPhone" maxlength="11" @blur="blur()" autocomplete="off"/>
+                        <div v-if="phone.PhoneReg">{{phone.PhoneMsg}}</div>
                     </div>
                     <div class="passworld">
                         <p>登陆密码</p>
-                        <input type="password" v-model="password" @keyup="change()"/>
-                        <div v-if="passTrue">*账号或密码错误，请仔细核对</div>
+                        <input type="password" v-model="Pwd.UserPwd" @keyup="change()" autocomplete="off"/>
+                        <div v-if="Pwd.PwdReg">{{Pwd.PwdMsg}}</div>
                     </div>
                     <input :class="btnUp?'addColor':''" type="button" value="登陆" class="login-btn" @click="login"/>
                     <div class="login-operation">
@@ -50,43 +50,54 @@
         },
         data() {
             return {
-                PhoneOpen:'',
-                phone: '',
-                password:'',
-                passTrue: false,
-                btnUp: false
+                phone:{
+                  UserPhone:"",
+                  PhoneMsg:"*请检查您登陆号码",
+                  PhoneReg:""
+                },
+                Pwd:{
+                    UserPwd:"",
+                    PwdMsg:"*账号或密码错误，请仔细核对",
+                    PwdReg:""
+                },
+                btnUp: false,
+                phoneTran: '',
+                userOpen:''
             }
-        },
-        mounted: function () {
-
         },
         computed: {
           spanValue: function() {
-              if(this.phone.trim().length > 0 && this.password.length > 0){
+              if(this.phone.UserPhone.length > 0 && this.Pwd.UserPwd.length > 0){
                   this.btnUp = true;
               } else {
                   this.btnUp = false;
               }
-              return this.phone + "_" + this.password
           }
         },
         methods: {
             change() {
-                this.passTrue = false;
+                this.phone.PhoneReg = false;
             },
             blur() {
-                this.PhoneOpen = this.phone.trim() != '' && !(/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone))?true:false;
+                this.phone.PhoneReg = this.phone.UserPhone.trim() != '' && !(/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.UserPhone));
             },
             login(){
                 var _this = this;
                 axios.post('/strategist/login', qs.stringify({
-                    phone: this.phone,
-                    password: this.password
+                    phone: this.phone.UserPhone,
+                    password: this.Pwd.UserPwd
                 }))
                 .then(function(res){
                     if(res.data.code!=200){
-                        _this.passTrue = true;
+                        _this.Pwd.PwdReg = true;
+                        return false;
                     }
+                    console.log(res.data.result.token)
+                    sessionStorage.setItem("token",res.data.result.token);
+
+                    // 修改header data
+                    sessionStorage.setItem("phone", _this.phone.UserPhone);
+                    _this.$children[0].refreshUserInfo();
                 })
                 .catch(function(err){
                     console.log(err);
@@ -110,6 +121,7 @@
         background:#ee8354 !important;
         color: #fff;
     }
+
     .login-div {
         width: 374px;
         height: 346px;
@@ -148,7 +160,7 @@
     .phone input, .passworld input {
         width: 212px;
         height: 28px;
-        lin-height:28px;
+        line-height:28px;
     }
 
     .login-title {

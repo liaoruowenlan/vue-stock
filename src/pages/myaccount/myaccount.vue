@@ -2,41 +2,14 @@
     <div>
         <top-header></top-header>
         <div class="width100">
-            <div class="user-title"></div>
+            <div class="user-title">
+                <img src="../../assets/img/userdcim-.png" />
+                <p>{{phone}}</p>
+            </div>
             <div class="user-operation">
                 <div>
                     <ul>
-                        <li>
-                            <router-link to="/myaccount/capital">
-                            <i></i>
-                                个人中心
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link to="/myaccount/core">
-                            <i></i>
-                            资金明细
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link to="/myaccount/recharge">
-                            <i></i>
-                            充值
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link to="/myaccount/withdrawals">
-                            <i></i>
-                            提现
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link to="/myaccount/setup">
-                            <i></i>
-                           设置
-                            </router-link>
-                        </li>
-
+                        <li class="" v-for="item in userLists"><router-link :to="item.url"><i></i>{{item.text}}</router-link></li>
                     </ul>
                 </div>
                 <div>
@@ -56,12 +29,39 @@
 
     export default {
         name: "myaccount",
+        data(){
+            return{
+                phone:null,
+                userLists:[
+                        {
+                            "text":"个人中心",
+                            "url":"/myaccount/capital"
+                        },
+                        {
+                            "text":"资金明细",
+                            "url":"/myaccount/core"
+                        },
+                        {
+                            "text":"充值",
+                            "url":"/myaccount/recharge"
+                        },
+                        {
+                            "text":"提现",
+                            "url":"/myaccount/withdrawals"
+                        },
+                        {
+                            "text":"设置",
+                            "url":"/myaccount/setup"
+                        }
+                ]
+            }
+        },
         components: {
             TopHeader,
             FooterNav
         },
-        mounted: function () {
-
+        mounted(){
+            this.phone = sessionStorage.getItem("phone");
         },
         methods: {
 
@@ -85,7 +85,20 @@
         background-size: 100% 100%;
         height: 240px;
     }
-
+    .user-title img{
+        width: 84px;
+        height: 84px;
+        margin: 0 auto;
+        padding-top: 20px;
+    }
+    .user-title>p{
+        text-align: center;
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        padding-top: 6px;
+        font-family: unset;
+    }
     .user-operation {
         height: 538px;
         background: #fff;
@@ -114,7 +127,9 @@
         color: #687284;
         border-bottom: 1px solid #dedee3;
     }
-
+    .user-operation > div:first-child li a{
+        color: #687284;
+    }
     .user-operation > div:first-child li .hover {
         width: 6px;
         height: 20px;
@@ -139,6 +154,9 @@
         top: 12px;
     }
     .router-link-active{
-        color: #ee8354;
+        color: #ee8354 !important;
+        background: url("../../assets/img/border-bg@2x.png") no-repeat;
+        display: block;
+        background-size: 4.5% 103%;
     }
 </style>
