@@ -11,19 +11,19 @@
         <div class="nav-login">
             <ul v-if="!loginOpen">
                 <li>
-                    <a href="#/register">注册</a>
+                    <a href="/register">注册</a>
                 </li>
                 <li class="border"></li>
                 <li>
-                    <a href="#/login">登陆</a>
+                    <a href="/login">登陆</a>
                 </li>
             </ul>
             <div v-if="loginOpen">
-                    欢迎回来，<a href="#/myaccount">{{phone}}</a>
+                    欢迎回来，<a href="/myaccount">{{phone}}</a>
             </div>
             <div>
                     <img src="../assets/img/help.png" class="help-img" />
-                    <a href="#/help">帮助中心</a>
+                    <a href="/help">帮助中心</a>
             </div>
         </div>
     </header>

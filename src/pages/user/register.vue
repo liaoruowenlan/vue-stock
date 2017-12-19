@@ -109,7 +109,7 @@
                             _this.AuCode.AuCodeReg=true;
                             return false;
                         }else if(res.data.code==200){
-                            self.$router.replace({ path: 'myaccount' });
+                            _this.$router.push({ path: 'myaccount' });
                             sessionStorage.setItem("token",res.data.result.token);
 						}
                         console.log(res.data);

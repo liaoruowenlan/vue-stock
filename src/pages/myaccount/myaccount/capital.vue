@@ -91,7 +91,9 @@
         height: 120px;
         border-bottom: 1px dashed #dcdee3;
     }
-
+    .user_div{
+        height: 538px;
+    }
     .user_money > div {
         float: left;
         width: 230px;

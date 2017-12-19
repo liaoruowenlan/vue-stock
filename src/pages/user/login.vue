@@ -94,7 +94,7 @@
                     }
                     console.log(res.data.result.token)
                     sessionStorage.setItem("token",res.data.result.token);
-
+                    _this.$router.push({ path: 'myaccount' });
                     // 修改header data
                     sessionStorage.setItem("phone", _this.phone.UserPhone);
                     _this.$children[0].refreshUserInfo();

@@ -18,6 +18,7 @@ import Quotation from '@/pages/quotation/quotation.vue'
 Vue.use(Router)
 
 export default new Router({
+    mode:'history',
     routes: [
         {
             path: '/',
@@ -58,7 +59,7 @@ export default new Router({
             path: '/myaccount',
             component: Myaccount,
             children: [
-                {path: '/', component: Capital},
+                {path: '/', component: Capital,redirect: '/myaccount/capital'},
                 {path: '/myaccount/capital', component: Capital},
                 {path: '/myaccount/core', component: Core},
                 {path: '/myaccount/recharge', component: Recharge},

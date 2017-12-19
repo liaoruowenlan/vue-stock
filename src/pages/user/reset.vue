@@ -96,7 +96,7 @@
                         return false;
                     }else if(res.data.code==200){
                         console.log(res.data);
-                         _this.$router.push({ path: '/login' });
+                        _this.$router.push({ path: 'myaccount' });
                         sessionStorage.setItem("token",res.data.result.token);
                     }
                     console.log(res.data);

@@ -77,7 +77,8 @@
         opacity: 0
     }
     .width100 {
-        height: 718px;
+        height: 100%;
+        padding-bottom: 40px;
     }
 
     .user-title {
@@ -100,13 +101,16 @@
         font-family: unset;
     }
     .user-operation {
-        height: 538px;
+        height:100%;
         background: #fff;
         width: 1024px;
         margin: 0 auto;
         margin-top: -90px;
+        overflow: hidden;
     }
-
+    .user-operation > div:last-child{
+        height: 100%;
+    }
     .user-operation > div {
         float: left;
     }

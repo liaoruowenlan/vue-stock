@@ -215,7 +215,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .el-breadcrumb {
         width: 1004px;
         margin: 0 auto;
