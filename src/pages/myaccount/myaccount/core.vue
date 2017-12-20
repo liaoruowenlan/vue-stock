@@ -22,63 +22,67 @@
             <div>
                 <p>交易时间：</p>
                 <ul>
-                    <li v-bind:class="{'time-active': item.active}" v-for="item in times"  @click="TimeClick(item)">{{item.time}}</li>
+                    <li v-bind:class="{'time-active': item.active}" v-for="item in times" @click="TimeClick(item)">
+                        {{item.time}}
+                    </li>
                 </ul>
             </div>
             <div>
                 <p>交易类型：</p>
                 <ul>
-                   <li v-for="item in types">{{item.type}}</li>
+                    <li v-bind:class="{'time-active': item.active}" v-for="item in types" @click="TypeClick(item)">
+                        {{item.type}}
+                    </li>
                 </ul>
             </div>
         </div>
         <div class="user_div-table">
             <!--<el-table-->
-                    <!--:data="tableData"-->
-                    <!--style="width: 100%"-->
-                    <!--:class-name="active">-->
-                <!--<el-table-column-->
-                        <!--prop="date"-->
-                        <!--label="交易时间"-->
-                        <!--width="160"-->
-                        <!--align="center">-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="name"-->
-                        <!--label="交易类型"-->
-                        <!--width="76"-->
-                        <!--align="center">-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="address"-->
-                        <!--label="收入"-->
-                        <!--width="89"-->
-                        <!--align="center">-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="address"-->
-                        <!--label="支出"-->
-                        <!--width="89"-->
-                        <!--align="center">-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="address"-->
-                        <!--label="冻结"-->
-                        <!--width="89"-->
-                        <!--align="center">-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="address"-->
-                        <!--label="交易金额"-->
-                        <!--width="89"-->
-                        <!--align="center">-->
-                <!--</el-table-column>-->
-                <!--<el-table-column-->
-                        <!--prop="address"-->
-                        <!--label="备注"-->
-                        <!--width="57"-->
-                        <!--align="center">-->
-                <!--</el-table-column>-->
+            <!--:data="tableData"-->
+            <!--style="width: 100%"-->
+            <!--:class-name="active">-->
+            <!--<el-table-column-->
+            <!--prop="date"-->
+            <!--label="交易时间"-->
+            <!--width="160"-->
+            <!--align="center">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+            <!--prop="name"-->
+            <!--label="交易类型"-->
+            <!--width="76"-->
+            <!--align="center">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+            <!--prop="address"-->
+            <!--label="收入"-->
+            <!--width="89"-->
+            <!--align="center">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+            <!--prop="address"-->
+            <!--label="支出"-->
+            <!--width="89"-->
+            <!--align="center">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+            <!--prop="address"-->
+            <!--label="冻结"-->
+            <!--width="89"-->
+            <!--align="center">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+            <!--prop="address"-->
+            <!--label="交易金额"-->
+            <!--width="89"-->
+            <!--align="center">-->
+            <!--</el-table-column>-->
+            <!--<el-table-column-->
+            <!--prop="address"-->
+            <!--label="备注"-->
+            <!--width="57"-->
+            <!--align="center">-->
+            <!--</el-table-column>-->
             <!--</el-table>-->
         </div>
     </div>
@@ -96,54 +100,66 @@
                 times: [
                     {
                         time: '今天',
-                        range:10,
-                        active:true
+                        range: 10,
+                        active: true
                     },
                     {
                         time: '最近一周',
-                        range:1,
-                        active:false
+                        range: 1,
+                        active: false
                     },
                     {
                         time: '最近一月',
-                        range:2,
-                        active:false
+                        range: 2,
+                        active: false
                     },
                     {
                         time: '最近半年',
-                        range:3,
-                        active:false
+                        range: 3,
+                        active: false
                     },
                     {
                         time: '最近一年',
-                        range:4,
-                        active:false
+                        range: 4,
+                        active: false
                     },
                 ],
                 types: [
                     {
-                        type: "全部"
+                        type: "全部",
+                        active: true
                     },
                     {
-                        type: "充值"
+                        type: "充值",
+                        active: false
                     },
                     {
-                        type: "提现"
+                        type: "提现",
+                        active: false
                     },
                     {
-                        type: "冻结资金"
+                        type: "冻结资金",
+                        active: false
                     },
                     {
-                        type: "卖出结算"
+                        type: "卖出结算",
+                        active: false
                     },
                     {
-                        type: "递延费"
-                    }, {
-                        type: "扣除管理费"
-                    }, {
-                        type: "推广分红"
-                    }, {
-                        type: "支付管理费"
+                        type: "递延费",
+                        active: false
+                    },
+                    {
+                        type: "扣除管理费",
+                        active: false
+                    },
+                    {
+                        type: "推广分红",
+                        active: false
+                    },
+                    {
+                        type: "支付管理费",
+                        active: false
                     }
                 ]
             }
@@ -186,14 +202,18 @@
         methods: {
             TimeClick: function (currentItem) {
                 console.log(currentItem)
-                for(var i = 0; i < this.times.length; i++) {
+                for (var i = 0; i < this.times.length; i++) {
                     this.times[i].active = false;
                 }
                 currentItem.active = true;
                 console.log(currentItem.range);
             },
-            TypeClick:function(currentItem){
-
+            TypeClick: function (currentItem) {
+                for (var i = 0; i < this.types.length; i++) {
+                    this.types[i].active = false;
+                }
+                currentItem.active = true;
+                console.log(currentItem.range);
             }
         }
     }
@@ -212,7 +232,7 @@
 
     .user_div {
         margin-top: 0px !important;
-        height:860px;
+        height: 860px;
     }
 
     .user-operation {
@@ -224,9 +244,11 @@
         color: #687284;
         font-size: 12px;
     }
-        .time-active{
-            font-size: 24px;
-        }
+
+    .time-active {
+        font-size: 24px;
+    }
+
     .user_div-data > div {
         padding-top: 25px;
         width: 770px;
