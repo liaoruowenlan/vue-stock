@@ -106,7 +106,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     section {
         background: url("../../assets/img/bg.png") no-repeat;
         background-size: 100% 100%;

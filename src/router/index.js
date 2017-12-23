@@ -17,7 +17,7 @@ import Quotation from '@/pages/quotation/quotation.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
     routes: [
         {
             path: '/',
@@ -65,5 +65,18 @@ export default new Router({
                 {path: '/myaccount/setup', component: Setup},
                 {path: '/myaccount/withdrawals', component: Withdrawals}]
         }
-        ]
+    ]
 })
+router.beforeEach((to, from, next) => {
+    const Token = sessionStorage.getItem("token");
+    if(!Token) {
+        if(to.name == 'Home' || to.name == 'Register'|| to.name == 'Login') {
+            next()
+        } else {
+            next('/login')
+        }
+    }else {
+        next()
+    }
+})
+export default router;
