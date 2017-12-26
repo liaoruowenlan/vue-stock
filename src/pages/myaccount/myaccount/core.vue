@@ -232,12 +232,11 @@
 
     .user_div {
         margin-top: 0px !important;
-        height: 860px;
     }
 
-    .user-operation {
-        height: 860px !important;
-    }
+    /*.user-operation {*/
+        /*height: 860px !important;*/
+    /*}*/
 
     .user_div-data > div > p {
         float: left;

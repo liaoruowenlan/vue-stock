@@ -1,6 +1,6 @@
 <template>
     <div class="user_div">
-        <div>
+        <div v-model="spanValue">
             <div class="title">
                 充值
                 <ul>
@@ -21,8 +21,8 @@
                     </el-form-item>
                     <el-form-item label="选择银行">
                         <ul>
-                            <li v-for="blank in blanks" @click="selectStyle(blank)"
-                                :class="{'actives':blank.active}">
+                            <li v-for="(blank, index ) in blanks" @click="selectStyle(index, blank)"
+                                :class="{'actives':blank.active}" :key="index">
                                 <img :src="blank.iconLink"/>
                                 {{blank.bankName}}
                             </li>
@@ -33,6 +33,9 @@
                         </ul>
                     </el-form-item>
                 </el-form>
+                <div class="pay" :class="btnUp?'addColor':''" @click="pay">
+                    充值
+                </div>
             </div>
         </div>
     </div>
@@ -44,8 +47,22 @@
 
     export default {
         name: "recharge",
+        mounted ()  {
+            for (var i = 0; i < this.blanks.length; i++) {
+                i===0?this.blanks[i].active = true:this.blanks[i].active = false;
+                i===0?this.bindCardId=this.blanks[i].id:'';
+            }
+            this.blanks = Object.assign({},this.blanks);
+        },
         data() {
             return {
+                btnUp:"",
+                token:sessionStorage.getItem('token'),
+                phone:sessionStorage.getItem('phone'),
+                activeIdx: 0,
+                bindCardId:'',
+                banCode:'null',
+                publisherId:sessionStorage.getItem('id'),
                 ruleForm: {
                     name: '',
                     resource: '',
@@ -53,6 +70,7 @@
                 rules: {
                     name: [
                         {required: true, message: '请输入充值金额', trigger: 'blur'},
+                        { pattern: /^([1-9]\d+|[2-9])$/, message: '充值金额不得低于2元', trigger: 'change' }
                     ]
                 },
                 blanks: [
@@ -83,27 +101,36 @@
                 ]
             }
         },
-        computed:{
+        created(){
 
         },
-        updated: function(){
-            for (var i = 0; i < this.blanks.length; i++) {
-               this.blanks[i]['active']=false;
+        computed:{
+            spanValue: function() {
+              this.btnUp = (/^([1-9]\d+|[2-9])$/.test(this.ruleForm.name))?true:false;
             }
-            console.log(JSON.stringify(this.blanks))
         },
         methods: {
-            addActive: function () {
-
-            },
-            selectStyle(item) {
+            selectStyle(index, item) {
+                if(this.activeIdx !== undefined){
+                    this.blanks[this.activeIdx].active = false;
+                }
+                this.activeIdx = index;
                 this.$nextTick(function () {
-                    for (var i = 0; i < this.blanks.length; i++) {
-                        this.blanks[i].active = false;
-                    }
-                    item.active = true;
-                    console.log(item.active);
-                    console.log(item.id);
+                    item.active = !item.active;
+                    this.$data.blanks = Object.assign({},this.$data.blanks);
+                    this.bindCardId = item.id;
+                    this.banCode = item.bankCode
+                });
+            },
+            pay(){
+                if(this.ruleForm.name == ''){
+                    return false;
+                }
+                window.location.href='/strategist/payment/recharge?' + qs.stringify({
+                    publisherId:this.publisherId,
+                    paymentType: 1,
+                    amount:this.ruleForm.name,
+                    banCode:this.banCode
                 });
             }
         }
@@ -111,6 +138,16 @@
 </script>
 
 <style scoped>
+    .pay{
+        width: 360px;
+        height: 48px;
+        background: #f9d9cb;
+        text-align: center;
+        color: #fff;
+        margin: 0 auto;
+        line-height: 48px;
+        font-size: 16px;
+    }
     .el-form-item__content ul li {
         float: left;
         width: 190px;
@@ -147,7 +184,10 @@
     .user_div {
         min-height: 538px;
     }
-
+    .addColor{
+        background:#ee8354 !important;
+        color: #fff;
+    }
     .el-input {
         width: 48%;
     }

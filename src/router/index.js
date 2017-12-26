@@ -6,6 +6,7 @@ import Reset from '@/pages/user/reset.vue'
 import Register from '@/pages/user/register.vue'
 import Help from '@/pages/help/help.vue'
 import Myaccount from '@/pages/myaccount/myaccount.vue'
+import Position from '@/pages/position/position.vue'
 
 import Capital from '@/pages/myaccount/myaccount/capital.vue'
 import Core from '@/pages/myaccount/myaccount/core.vue'
@@ -13,6 +14,9 @@ import Recharge from '@/pages/myaccount/myaccount/recharge.vue'
 import Setup from '@/pages/myaccount/myaccount/setup.vue'
 import Withdrawals from '@/pages/myaccount/myaccount/withdrawals.vue'
 import Quotation from '@/pages/quotation/quotation.vue'
+
+import Price from '@/pages/position/position/price.vue'
+import Optional from '@/pages/position/position/optional.vue'
 
 
 Vue.use(Router)
@@ -52,6 +56,15 @@ const router =  new Router({
             path: '/quotation',
             name: 'Quotation',
             component: Quotation
+        },
+        {
+            path: '/position',
+            component: Position,
+            children:[
+                {path: '/', component: Price,redirect: '/position/price'},
+                {path: '/position/price', component: Price},
+                {path: '/position/optional', component: Optional}
+            ]
         },
         {
 

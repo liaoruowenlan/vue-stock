@@ -45,7 +45,7 @@
                     },
                     {
                         "text":"持仓",
-                        "url":"/s"
+                        "url":"/position"
                     },
                     {
                         "text":"我的账户",

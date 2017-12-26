@@ -19,6 +19,7 @@
                 </div>
             </div>
         </div>
+        <div style="clear: both;display: none;"></div>
         <footer-nav></footer-nav>
     </div>
 </template>
@@ -105,15 +106,14 @@
         font-family: unset;
     }
     .user-operation {
-        height:100%;
+        min-height: 570px;
         background: #fff;
         width: 1024px;
         margin: 0 auto;
         margin-top: -90px;
-        overflow: hidden;
     }
-    .user-operation > div:last-child{
-        height: 100%;
+    .user-operation:after{
+        display:block; content:"clear"; height:0; clear:both; overflow:hidden; visibility:hidden;
     }
     .user-operation > div {
         float: left;

@@ -92,12 +92,17 @@
                         _this.Pwd.PwdReg = true;
                         return false;
                     }
-                    console.log(res.data.result.token)
+                    console.log(res.data);
+                    console.log(res.data.result.id);
+                    console.log(res.data.result.token);
                     sessionStorage.setItem("token",res.data.result.token);
+                    sessionStorage.setItem("phone", _this.phone.UserPhone);
+                    sessionStorage.setItem('id',res.data.result.id);
+                    _this.$children[0].refreshUserInfo();
                     _this.$router.push({ path: 'myaccount' });
                     // 修改header data
-                    sessionStorage.setItem("phone", _this.phone.UserPhone);
-                    _this.$children[0].refreshUserInfo();
+
+
                 })
                 .catch(function(err){
                     console.log(err);

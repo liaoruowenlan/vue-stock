@@ -19,12 +19,23 @@
                 <input type="text" v-model="money"/>
                 <p>可用金额：<span>20000.00</span></p>
             </div>
-            <div class="no_blank">
+            <div v-if="!blank" class="no_blank">
                 <div class="addblank" @click="addblank1" >
                     <img src="../../../assets/img/addblank@2x.png" />
                     增加银行卡
                 </div>
                 <p>提现请先添加银行卡信息 !</p>
+            </div>
+            <div class="blank" v-if="blank">
+                <ul :class="list1?'margin1':''">
+                    <li class="blank-list" v-for="(item,index) in blankdata" @click="setActive(index)" :class="{'Clickactive':item.blankActive}">
+                        <img :src="item.bankIconLink" />
+                        <div>
+                            <p>{{item.bankName}}</p>
+                            <p>{{item.bankCard}}</p>
+                        </div>
+                    </li>
+                </ul>
             </div>
             <div class="withdrawals" :class="btnadd?'addColor':''">
                 我要提现
@@ -56,58 +67,6 @@
                     <el-input v-model="ruleForm.BlankTitle"></el-input>
                 </el-form-item>
             </el-form>
-            <!--<div class="form">-->
-                 <!--<div class="form-main">-->
-                    <!--<div>持卡人</div>-->
-                    <!--<div>-->
-                        <!--<input type="text" v-model="addBlank.userBlank" />-->
-                    <!--</div>-->
-                     <!--<div>-->
-                         <!--*请输入持卡人姓名-->
-                     <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-main">-->
-                    <!--<div>身份证</div>-->
-                    <!--<div>-->
-                        <!--<input type="text"  v-model="addBlank.ID" />-->
-                    <!--</div>-->
-                    <!--<div>-->
-                        <!--*身份证信息错误，请检查后输入-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-main">-->
-                    <!--<div>银行卡</div>-->
-                    <!--<div>-->
-                        <!--<input type="text" v-model="addBlank.BlankCard"/>-->
-                    <!--</div>-->
-                    <!--<div>-->
-                        <!--*请输入正确的银行卡信息-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-main">-->
-                    <!--<div class="mar10">支行信息</div>-->
-                    <!--<div>-->
-                        <!--<input type="text"  v-model="addBlank.BlankTitle"/>-->
-                    <!--</div>-->
-                    <!--<div>-->
-                        <!--*请输入相应的支行信息-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-main">-->
-                    <!--<div>手机号</div>-->
-                    <!--<div>-->
-                        <!--<input type="text"  v-model="addBlank.Phone" />-->
-                    <!--</div>-->
-                    <!--<div>-->
-                        <!--*请输入11位数字-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">-->
-                <!--<el-form-item label="活动名称" prop="name">-->
-                    <!--<el-input v-model="ruleForm.name"></el-input>-->
-                <!--</el-form-item>-->
-            <!--</el-form>-->
             <section>
                 <div>确定</div>
                 <div class="bgcolor" @click="hide">取消</div>
@@ -117,14 +76,21 @@
 </template>
 
 <script>
+    import axios from "axios"
+    import qs from 'qs'
+
     export default {
         name: "withdrawals",
         data(){
          return{
+             list1:'',
+             activeIdx: 0,
              btnadd:false,
+             blank:false,
+             blankdata:{},
+             token:sessionStorage.getItem('token'),
              money:'',
              addBlank:{
-
                  BlankOpen:''
              },
              ruleForm: {
@@ -155,6 +121,35 @@
              }
          }
         },
+        mounted(){
+            // for(var i= 0;){
+            //
+            // }
+        },
+        created(){
+            var _this = this;
+            axios.get('/strategist/bindCard/myBankCardList', {
+                headers: {
+                    'Authorization': this.token
+                }
+            })
+                .then(function (res) {
+                    console.log(res.data);
+                    // _this.User = res.data.result;
+                    _this.blank = res.data.result!='';
+                    _this.list1 = res.data.result.length===1;
+                    _this.blankdata = res.data.result;
+                    for (var i = 0; i < _this.blankdata.length; i++) {
+                        _this.blankdata[i].blankActive = (i == 0);
+                        _this.activeIdx = 0;
+                    }
+                    _this.blankdata = Object.assign({},_this.blankdata);
+                    console.log(_this.blankdata)
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        },
         computed:{
             spanbalue:function(){
                     this.btnadd = this.money.length>0;
@@ -179,18 +174,99 @@
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            setActive(index){
+                if(this.activeIdx !== undefined){
+                    this.blankdata[this.activeIdx].blankActive = false;
+                }
+                this.activeIdx = index;
+                this.blankdata[index].blankActive = true;
+                this.blankdata = Object.assign({},this.blankdata);
             }
         }
     }
 </script>
 
 <style scoped>
+    .margin1{
+        width: 375px !important;
+        margin: 0 auto !important;
+    }
+    .blank-list div>p:first-child{
+        color: #fff;
+        font-size: 14px;
+        padding-top: 23px;
+    }
+    .blank-list div{
+        padding-left: 7px;
+        float: left;
+    }
+    .blank-list div>p:last-child{
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+        padding-top: 9px;
+    }
+    .blank ul li img{
+        width:52px;
+        height: 52px;
+        margin: 20px 0px 20px 15px;
+        border-radius: 30px;
+        float: left;
+    }
+    .blank ul li.Clickactive{
+        background-image:url("../../../assets/img/blank-selet1.png");
+    }
+    .user_div>div:after{
+        content:".";
+        clear:both;
+        display:block;
+        height:0;
+        overflow:hidden;
+        visibility:hidden;
+    }
+    .blank{
+        min-height: 129px;
+        border-bottom: 1px dashed #dcdee3;
+        margin-bottom: 45px;
+    }
+    .blank:after{
+        content:".";
+        clear:both;
+        display:block;
+        height:0;
+        overflow:hidden;
+        visibility:hidden;
+    }
+    .blank ul li:nth-child(2n){
+        margin-left:47px;
+    }
+    .blank ul:after{
+        content:".";
+        clear:both;
+        display:block;
+        height:0;
+        overflow:hidden;
+        visibility:hidden;
+    }
+    .blank ul li{
+        width: 310px;
+        height: 92px;
+        border-radius: 8px;
+        background-color: #4277e8;
+        float: left;
+        margin-left: 35px;
+        margin-top: 19px;
+        margin-bottom: 19px;
+        background:#4277e8 url("../../../assets/img/blank-selet.png") no-repeat 286px 4px;
+        background-size: 20px 20px;
+    }
     .demo-ruleForm{
         width: 360px;
         margin-top: 20px;
     }
     .user_div{
-        height: 538px;
+        min-height: 538px;
     }
     .form-main>div:last-child{
         position: absolute;
@@ -294,6 +370,7 @@
     }
     .no_blank{
         height: 127px;
+        margin-bottom: 44px;
         /*border-bottom: 1px dashed #dcdee3;*/
     }
     .withdrawals{
@@ -305,7 +382,7 @@
         color: #fff;
         background: #f9d9cb;
         margin: 0 auto;
-        margin-top:34px;
+        margin-bottom: 106px;
     }
     .no_blank p{
         width: 310px;
@@ -332,9 +409,6 @@
         width: 15px;
         display: inline-block;
         vertical-align: -3px;
-    }
-    .user_div{
-        height: 538px;
     }
     .user_text{
         height: 141px;
