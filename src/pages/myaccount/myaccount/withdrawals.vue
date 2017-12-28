@@ -64,11 +64,15 @@
                     <el-input v-model="ruleForm.Phone"></el-input>
                 </el-form-item>
                 <el-form-item label="支行信息" >
-                    <el-input v-model="ruleForm.BlankTitle"></el-input>
+                    <el-cascader
+                            :options="options2"
+                            @active-item-change="handleItemChange"
+                            :props="props"
+                    ></el-cascader>
                 </el-form-item>
             </el-form>
             <section>
-                <div>确定</div>
+                <div @click="submitdata">确定</div>
                 <div class="bgcolor" @click="hide">取消</div>
             </section>
         </div>
@@ -156,6 +160,34 @@
             }
         },
         methods:{
+            submitdata(){
+                var _this = this;
+                axios.post('/strategist/bindCard/bindBankCard', qs.stringify({
+                    name: this.rules.userBlank,
+                    idCard: this.rules.userBlank,
+                    phone: this.rules.userBlank,
+                    bankCard: this.rules.userBlank,
+                    verificationCode: this.rules.userBlank,
+                }))
+                    .then(function(res){
+                        if(res.data.code!=200){
+                            _this.Pwd.PwdReg = true;
+                            return false;
+                        }
+                        console.log(res.data);
+                        console.log(res.data.result.id);
+                        console.log(res.data.result.token);
+                        sessionStorage.setItem("token",res.data.result.token);
+                        sessionStorage.setItem("phone", _this.phone.UserPhone);
+                        sessionStorage.setItem('id',res.data.result.id);
+                        _this.$children[0].refreshUserInfo();
+                        _this.$router.push({ path: 'myaccount' });
+                        // 修改header data
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    })
+            },
             addblank1(){
                 this.addBlank.BlankOpen = true;
             },
@@ -188,6 +220,9 @@
 </script>
 
 <style scoped>
+    .el-cascader {
+        width: 100% !important;
+    }
     .margin1{
         width: 375px !important;
         margin: 0 auto !important;

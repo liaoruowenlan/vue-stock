@@ -17,7 +17,7 @@
             </div>
             <div class="user_btn">
                 <div class="pay">
-                    充值
+                  充值
                 </div>
                 <div class="withdrawals">
                     提现
@@ -32,8 +32,8 @@
                 <p>我的银行卡</p>
             </div>
 
-            <div>
-                添加银行卡
+            <div style="display: none;">
+                <!--添加银行卡-->
             </div>
 
         </div>

@@ -10,11 +10,11 @@
                 <p>冻结履约保证金</p>
             </div>
             <div>
-                <span>884,556.90</span>
+                <span>{{User.balance}}</span>
                 <p>累计充值金额</p>
             </div>
             <div>
-                <span>14,389.90</span>
+                <span>{{User.totalRechargeAmount}}</span>
                 <p>累计提现金额</p>
             </div>
         </div>

@@ -14,13 +14,14 @@
                     </div>
                 </div>
                 <div>
-                    <div>新密码</div>
-                    <div>
+                    <div class="active13">新密码</div>
+                    <div class="active13">
                         <input v-model="oldpassworld.newloginpass" type="password" placeholder="  请输入新密码"/>
                     </div>
+                    <p v-show="newPay.btn" class="regw">*请检查原密码</p>
                 </div>
                 <section>
-                    <div>确定</div>
+                    <div @click="setPass">确定</div>
                     <div class="bgcolor" @click="hide">取消</div>
                 </section>
             </div>
@@ -47,15 +48,21 @@
                         <span v-show="show" @click="getAuCode" :class="this.newPay.AuCodeAdd?'addColor':''">获取验证码</span>
                         <span class="addColor" v-show="!show">{{count}}s</span>
                     </div>
+                    <div v-show="newPay.AuCode1" class="regw1">
+                        *验证码错误或者验证码已过期
+                    </div>
                 </div>
                 <div class="pass3">
                     <div>新密码</div>
                     <div>
                         <input type="password" maxlength="6" v-model="newPay.PassWorld"/>
                     </div>
+                    <div>
+
+                    </div>
                 </div>
                 <section>
-                    <div>确定</div>
+                    <div @click="payWold">确定</div>
                     <div class="bgcolor" @click="hide">取消</div>
                 </section>
             </div>
@@ -72,61 +79,102 @@
         name: "setup",
         data() {
             return {
-                oldpassworld:{
-                    loginpass:'',
-                    newloginpass:'',
-                    passOpen:''
+                oldpassworld: {
+                    loginpass: '',
+                    newloginpass: '',
+                    passOpen: ''
                 },
-                newPay:{
-                    Phone:'',
-                    Aucode:'',
-                    AuCodeAdd:'',
-                    payOen:'',
-                    PassWorld:'',
-                    PhoneReg:'',
+                newPay: {
+                    Phone: '',
+                    Aucode: '',
+                    AuCodeAdd: '',
+                    payOen: '',
+                    PassWorld: '',
+                    PhoneReg: '',
+                    btn: '',
+                    AuCode1:''
                 },
-                count:"",
+                count: "",
                 timer: null,
                 show: true
             }
         },
-        computed:{
-            spanval:function(){
+        computed: {
+            spanval: function () {
+                var test = "test" + this.newPay.Aucode;
                 this.newPay.AuCodeAdd = /^1[3|4|5|7|8][0-9]{9}$/.test(this.newPay.Phone);
+                console.log(1);
+                 this.newPay.AuCode1 = false;
+                 this.newPay.PhoneReg = false;
             }
         },
         methods: {
-            blur(){
+            blur() {
                 this.newPay.PhoneReg = this.newPay.Phone.trim() != '' && !(/^1[3|4|5|7|8][0-9]{9}$/.test(this.newPay.Phone));
             },
             login() {
                 this.newPay.payOen = false;
                 this.oldpassworld.passOpen = true;
             },
-            paylogin(){
+            paylogin() {
                 this.newPay.payOen = true;
                 this.oldpassworld.passOpen = false;
             },
             hide() {
-                this.oldpassworld.loginpass=null;
-                this.oldpassworld.newloginpass=null;
-                this.oldpassworld.passOpen=false;
-                this.newPay.Phone=null;
-                this.newPay.Aucode=null;
+                this.oldpassworld.loginpass = null;
+                this.oldpassworld.newloginpass = null;
+                this.oldpassworld.passOpen = false;
+                this.newPay.Phone = null;
+                this.newPay.Aucode = null;
                 this.newPay.payOen = false;
-                this.newPay.PassWorld=null;
+                this.newPay.PassWorld = null;
                 this.newPay.PhoneReg = false;
+                this.newPay.btn = false;
             },
-            getAuCode(){
-                if(!/^1[3|4|5|7|8][0-9]{9}$/.test(this.newPay.Phone)){
+            setPass() {
+                var _this = this;
+                axios.post("/strategist/publisher/resetPassword", qs.stringify({
+                    phone: this.newPay.Phone,
+                    paymentPassword: this.newPay.PassWorld,
+                    verificationCode:this.newPay.Aucode
+                }), {
+                    headers: {
+                        'Authorization': sessionStorage.getItem("token")
+                    }
+                })
+                    .then(function (err) {
+                        console.log(err.data)
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+            payWold(){
+                var _this = this;
+                axios.post("/strategist/publisher/modifyPaymentPassword", qs.stringify({
+                    phone: _this.newPay.Phone,
+                    type: 5
+                }))
+                    .then(function (res) {
+                        console.log(res.data);
+                        if(res.data.code!=200){
+                            _this.newPay.AuCode1 = true;
+                        }
+
+                    }).catch(function (err) {
+                    console.log(err)
+                })
+            },
+            getAuCode() {
+                if (!/^1[3|4|5|7|8][0-9]{9}$/.test(this.newPay.Phone)) {
                     return false;
                 }
                 var _this = this;
-                axios.post("/strategist/publisher/sendSms",qs.stringify({
-                    phone:_this.newPay.Phone,
-                    type:2
+                axios.post("/strategist/publisher/sendSms", qs.stringify({
+                    phone: _this.newPay.Phone,
+                    type: 5
                 }))
-                    .then(function(res){
+                    .then(function (res) {
                         console.log(res.data);
                         const TIME_COUNT = 60;
                         if (!_this.timer) {
@@ -140,9 +188,9 @@
                                     clearInterval(_this.timer);
                                     _this.timer = null;
                                 }
-                            }, 1000)
+                            }, 2000)
                         }
-                    }).catch(function(err){
+                    }).catch(function (err) {
                     console.log(err)
                 })
             }
@@ -151,21 +199,37 @@
 </script>
 
 <style scoped>
-    .addColor{
-        background:#ee8354 !important;
+    .regw {
+        position: absolute;
+        bottom: -30px;
+        color: #e26042;
+        font-size: 12px;
+        left: 105px;
+    }
+    .regw1 {
+        position: absolute;
+        bottom: -18px;
+        color: #e26042;
+        font-size: 12px;
+        left: 105px;
+    }
+    .addColor {
+        background: #ee8354 !important;
         color: #fff !important;
     }
-    .aucode{
+
+    .aucode {
         position: relative;
     }
-    .aucode span{
+
+    .aucode span {
         display: block;
         width: 68px;
         height: 20px;
         color: #adb3c1;
         font-size: 12px;
         text-align: center;
-        background:#f7f7f7 ;
+        background: #f7f7f7;
         border: 0;
         position: absolute;
         right: 5px;
@@ -173,48 +237,61 @@
         line-height: 20px;
         cursor: pointer;
     }
-    .pass3 input{
+
+    .pass3 input {
         letter-spacing: 35px;
         text-indent: 10px !important;
     }
-    .pass2,.pass3{
+
+    .pass2, .pass3 {
         padding: 0 0 20px 34px;
     }
-    .pass2>div:first-child,.pass3>div:first-child{
+
+    .pass2 > div:first-child, .pass3 > div:first-child {
         margin-right: 24px;
     }
-    .pass1{
+
+    .pass1 {
         padding: 27px 0px 19px 34px;
         position: relative;
     }
-    .pass1>div:last-child{
+
+    .pass1 > div:last-child {
         position: absolute;
         bottom: -10px;
         color: #e26042;
         font-size: 12px;
         left: 100px;
     }
-    .pass1>div:first-child{
+
+    .pass1 > div:first-child {
         margin-right: 10px;
     }
-    .pass1>div{
-        float:left;
-        heigh:33px;
+
+    .pass1 > div {
+        float: left;
+        heigh: 33px;
         line-height: 33px;
     }
-    .pass1>div input,.pass2>div input,.pass3>div input{
+
+    .pass1 > div input, .pass2 > div input, .pass3 > div input {
         height: 28px;
         line-height: 28px;
         width: 256px;
         text-indent: 5px;
     }
-    .pass>div{
-        height:33px;
-        color: #687284;    margin-top: 10px;
+
+    .pass > div {
+        height: 33px;
+        color: #687284;
+        margin-top: 10px;
+        position: relative;
     }
-    .pass>div>div{
+
+    .pass > div > div {
         float: left;
     }
+
     .pass section > div {
         width: 134px;
         height: 32px;
@@ -226,16 +303,20 @@
         cursor: pointer;
         margin-left: 53px;
     }
-    .pass section{
+
+    .pass section {
         overflow: hidden;
+        margin-top: 10px;
     }
 
-    .pass section > div:last-child{
+    .pass section > div:last-child {
         margin-left: 20px;
     }
+
     .user_div {
         height: 538px;
     }
+
     i {
         border: 1px dashed #dcdee3;
         width: 100%;
@@ -254,6 +335,7 @@
     .user_div > div p:first-child {
         color: #687284;
     }
+
     .user_div > div p img {
         display: inline-block;
         vertical-align: -2px;
@@ -279,11 +361,12 @@
         margin-top: 25px;
         margin-left: 53px;
     }
-    .login1passWorld section{
+
+    .login1passWorld section {
         overflow: hidden;
     }
 
-    .login1passWorld section > div:last-child{
+    .login1passWorld section > div:last-child {
         margin-left: 20px;
     }
 
@@ -294,6 +377,7 @@
     .login1passWorld > div {
         height: 33px;
         padding-top: 21px;
+        position: relative;
     }
 
     .login1passWorld > div:last-child {
@@ -325,8 +409,9 @@
         background: #f7f7f7;
         margin-bottom: 19px;
     }
-.pass{
-    height: 254px;
-    background: #f7f7f7;
-}
+
+    .pass {
+        height: 264px;
+        background: #f7f7f7;
+    }
 </style>

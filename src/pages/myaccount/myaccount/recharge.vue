@@ -14,7 +14,7 @@
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm"
                          label-position="left">
                     <el-form-item label="充值金额" prop="name">
-                        <el-input v-model="ruleForm.name"></el-input>
+                        <el-input v-model.number="ruleForm.name"></el-input>
                     </el-form-item>
                     <el-form-item label="支付方式" prop="name">
                         <img src="../../../assets/img/blanks@2x.png"/>
@@ -38,6 +38,17 @@
                 </div>
             </div>
         </div>
+        <el-dialog
+                title="正在充值中"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                center
+                :show-close="!centerDialogVisible">
+            <span style="display: block;text-align: center" >正在充值中，请勿关闭窗口!</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="payGouser">已成功充值!</el-button>
+             </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -47,98 +58,103 @@
 
     export default {
         name: "recharge",
-        mounted ()  {
+        mounted() {
             for (var i = 0; i < this.blanks.length; i++) {
-                i===0?this.blanks[i].active = true:this.blanks[i].active = false;
-                i===0?this.bindCardId=this.blanks[i].id:'';
+                i === 0 ? this.blanks[i].active = true : this.blanks[i].active = false;
+                i === 0 ? this.bindCardId = this.blanks[i].id : '';
             }
-            this.blanks = Object.assign({},this.blanks);
+            this.blanks = Object.assign({}, this.blanks);
         },
         data() {
             return {
-                btnUp:"",
-                token:sessionStorage.getItem('token'),
-                phone:sessionStorage.getItem('phone'),
+                centerDialogVisible: false,
+                btnUp: "",
+                token: sessionStorage.getItem('token'),
+                phone: sessionStorage.getItem('phone'),
                 activeIdx: 0,
-                bindCardId:'',
-                banCode:'null',
-                publisherId:sessionStorage.getItem('id'),
+                bindCardId: '',
+                banCode: 'null',
+                diaOpen:false,
+                publisherId: sessionStorage.getItem('id'),
                 ruleForm: {
                     name: '',
                     resource: '',
                 },
                 rules: {
                     name: [
+                        {type: 'number', message: '充值金额必须为数字'},
                         {required: true, message: '请输入充值金额', trigger: 'blur'},
-                        { pattern: /^([1-9]\d+|[2-9])$/, message: '充值金额不得低于2元', trigger: 'change' }
+                        {pattern: /^([1-9]\d+|[5-9])$/, message: '充值金额不得低于5元', trigger: 'change'},
+                        {pattern: /^(?:[1-9]\d{0,3}|0|50000|[1-4]\d{4})$/, message: '单次充值金额不得大于50000元', trigger: 'change'}
                     ]
                 },
                 blanks: [
-                    {
-                        "id": 4,
-                        "bankCode": "105",
-                        "bankName": "中国建设银行",
-                        "iconLink": "http://10.0.0.99:8083/bankIcon/jsyh@3x.png",
-                        "appSupport": true,
-                        "pcSupport": null
-                    },
-                    {
-                        "id": 11,
-                        "bankCode": "303",
-                        "bankName": "中国光大银行",
-                        "iconLink": "http://10.0.0.99:8083/bankIcon/gdyh@3x.png",
-                        "appSupport": true,
-                        "pcSupport": null
-                    },
-                    {
-                        "id": 16,
-                        "bankCode": "308",
-                        "bankName": "招商银行",
-                        "iconLink": "http://10.0.0.99:8083/bankIcon/zsyh@3x.png",
-                        "appSupport": true,
-                        "pcSupport": null
-                    }
+
                 ]
             }
         },
-        created(){
-
+        created() {
+            var _this = this;
+            axios.get('/strategist/cnaps/bankinfo/pclists')
+                .then(function (res) {
+                    _this.blanks = res.data.result;
+                    for (var i = 0; i < _this.blanks.length; i++) {
+                        _this.blanks[i].active = (i == 0);
+                        if (i == 0) {
+                            _this.bindCardId = _this.blanks[i].id;
+                            _this.bankCode = _this.blanks[i].bankCode;
+                        }
+                    }
+                    _this.blanks = Object.assign({}, _this.blanks);
+                })
+                .catch(function (err) {
+                    console.log(err)
+                });
         },
-        computed:{
-            spanValue: function() {
-              this.btnUp = (/^([1-9]\d+|[2-9])$/.test(this.ruleForm.name))?true:false;
+        computed: {
+            spanValue: function () {
+                this.btnUp = (/^([1-9]\d+|[5-9])$/.test(this.ruleForm.name)) && (/^(?:[1-9]\d{0,3}|0|50000|[1-4]\d{4})$/.test(this.ruleForm.name));
             }
         },
         methods: {
             selectStyle(index, item) {
-                if(this.activeIdx !== undefined){
+                if (this.activeIdx !== undefined) {
                     this.blanks[this.activeIdx].active = false;
                 }
                 this.activeIdx = index;
                 this.$nextTick(function () {
                     item.active = !item.active;
-                    this.$data.blanks = Object.assign({},this.$data.blanks);
+                    this.$data.blanks = Object.assign({}, this.$data.blanks);
                     this.bindCardId = item.id;
-                    this.banCode = item.bankCode
+                    this.bankCode = item.bankCode
                 });
             },
-            pay(){
-                if(this.ruleForm.name == ''){
+            pay() {
+                if(!/^([1-9]\d+|[2-9])$/.test(this.ruleForm.name)||!(/^(?:[1-9]\d{0,3}|0|50000|[1-4]\d{4})$/.test(this.ruleForm.name))){
                     return false;
                 }
-                window.location.href='/strategist/payment/recharge?' + qs.stringify({
-                    publisherId:this.publisherId,
-                    paymentType: 1,
-                    amount:this.ruleForm.name,
-                    banCode:this.banCode
-                });
+                // var jump = '/strategist/payment/recharge?' + qs.stringify({
+                //     publisherId: this.publisherId,
+                //     paymentType: 1,
+                //     amount: this.ruleForm.name,
+                //     bankCode: this.bankCode
+                // });
+                // window.open(jump), "_blank";
+                this.centerDialogVisible = true;
+            },
+            payGouser(){
+                var _this =this;
+                _this.$router.push({ path: '/myaccount/capital'});
             }
         }
     }
 </script>
 
 <style scoped>
-    .pay{
+    .el-dialog__body{
+        text-align: center !important;
+    }
+    .pay {
         width: 360px;
         height: 48px;
         background: #f9d9cb;
@@ -147,7 +163,9 @@
         margin: 0 auto;
         line-height: 48px;
         font-size: 16px;
+        margin-bottom: 20px;
     }
+
     .el-form-item__content ul li {
         float: left;
         width: 190px;
@@ -172,7 +190,7 @@
         margin: 13px 10px 13px 11px;
     }
 
-    .el-form-item__content ul li:nth-child(3) {
+    .el-form-item__content ul li:nth-child(3n) {
         margin-right: 0;
     }
 
@@ -184,10 +202,12 @@
     .user_div {
         min-height: 538px;
     }
-    .addColor{
-        background:#ee8354 !important;
+
+    .addColor {
+        background: #ee8354 !important;
         color: #fff;
     }
+
     .el-input {
         width: 48%;
     }

@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/strategist': {
-            target: 'http://10.0.0.99:8083/',//设置你调用的接口域名和端口号 别忘了加http
+            target: 'http://10.0.0.99:8084/',//设置你调用的接口域名和端口号 别忘了加http
             // target: 'http://waben.cn/strategist',//设置你调用的接口域名和端口号 别忘了加http
             changeOrigin: true,
             pathRewrite: {

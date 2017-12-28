@@ -45,7 +45,45 @@
             </div>
             <div class="width100">
                 <div class="stock-data">
-                    <div id="main" style="width: 594px; height: 482px">
+                    <div class="stock-left">
+
+                    </div>
+                    <div class="stock-right">
+                        <div class="stock-right-div1">
+                            <p>实时交易动态</p>
+                            <ul class="data-stock">
+                                <li v-for="item in transaction">
+                                    <div class="stock-title">
+                                        <span>{{item.phone}}</span>
+                                        <span>{{item.tradeTime}}{{item.tradeType}}</span>
+                                    </div>
+                                    <div class="stock-nuber">
+                                        <span>{{item.stockName}}</span>
+                                        <span>{{item.stockCode}}</span>
+                                    </div>
+                                    <div>
+                                        {{item.tradeType}}价格{{item.tradePrice}}
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="stock-right-div2">
+                            <p>热门股票</p>
+                            <ul class="data-stock">
+                                <li v-for="item in hot">
+                                    <div class="stock-title">
+                                        <span>{{item.name}}</span>
+                                        <span>{{item.code}}</span>
+                                    </div>
+                                    <div class="stock-nuber">
+                                        <span>{{item.lastPrice}}</span>
+                                    </div>
+                                    <div>
+                                        <span>点买</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,6 +96,7 @@
     import TopHeader from '../../components/header.vue'
     import FooterNav from '../../components/footer.vue'
     import  axios from 'axios'
+    import qs from 'qs'
 
     import echarts from 'echarts'
 
@@ -65,7 +104,9 @@
         name: "quotation",
         data(){
             return{
-                message: null
+                message: null,
+                transaction:null,
+                hot:null
             }
         },
         components:{
@@ -73,15 +114,49 @@
             FooterNav
         },
         created(){
+            let  _this = this;
             axios.get('/strategist/system/stockMarketExponent')
             .then(function (response) {
                 if(response.data.code == 200){
                     this.message = response.data.result;
+                    console.log(this.message)
                 }
             }.bind(this))
             .catch(function (error) {
                 console.log(error);
-            })
+            });
+            axios.get('/strategist/buyRecord/tradeDynamic?' + qs.stringify({
+                page: 0,
+                size: 5
+            }))
+                .then(function (res) {
+                    _this.transaction = res.data.result.content;//拿到所有数据
+                    console.log(_this.transaction);
+                    for (var i = 0; i < _this.transaction.length; i++) {//循环所有数据，找到type数据，然后修改值
+                        // _this.blanks[i].active = (i == 0);
+                        // if (i == 0) {
+                        //     _this.bindCardId = _this.blanks[i].id;
+                        //     _this.bankCode = _this.blanks[i].bankCode;
+                        // }
+                        _this.transaction[i].tradeType = _this.transaction[i].tradeType==1?'买入':'卖出'
+                        _this.transaction[i].tradeTime = _this.transaction[i].tradeTime.substring(11,16);
+                    }
+                    this.transaction = Object.assign({}, this.transaction);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+            axios.get('/strategist/stock/stockRecommend?' + qs.stringify({
+                page: 0,
+                size: 5
+            }))
+                .then(function (res) {
+                    _this.hot = res.data.result.content;
+                    console.log(_this.hot)
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
         },
         mounted(){
 
@@ -91,10 +166,113 @@
 </script>
 
 <style scoped>
-    .stock-data{
-        width: 1024px;
-        background: #fff;
+    .stock-right-div2{
+        margin-top: 10px;
+    }
+    .stock-right-div2 ul li>div:last-child span{
+            display: block;
+        width: 78px;
+        height: 30px;
+        line-height: 32px;
+        border: 1px solid #ee8354;
+        text-align: center;
+        color: #ee8354;
         margin: 0 auto;
+        margin-top: 18px;
+    }
+    .stock-right-div2 .stock-nuber span{
+        text-align: center;
+        line-height: 68px;
+        color: #e26042;
+        font-size: 14px;
+        display: block;
+        text-align: center;
+    }
+    .stock-right-div2 .stock-title>span{
+        display: block;
+        font-size: 14px;
+        color: #adb3c1;
+        margin-left: 15px;
+    }
+    .stock-right-div2 .stock-title>span:first-child{
+        padding-top: 18px;
+        color: #1e242e;
+    }
+    .stock-right-div1 .stock-title>span:first-child{
+        color: #818081;
+        padding-top: 18px;
+    }
+    .stock-right-div1 .stock-title>span:last-child{
+        color: #adb3c1;
+        font-size: 12px;
+        padding-top: 2px;
+    }
+    .stock-right-div1 .stock-title>span{
+        display: block;
+        margin-left: 13px;
+    }
+    .stock-right-div1 .stock-title{
+        font-size: 14px;
+    }
+    .stock-right-div1 .stock-nuber{
+        text-align: center;
+        font-size: 14px;
+    }
+    .stock-right-div1 .stock-nuber>span:first-child{
+           color: #1e242e;
+        display: block;
+        padding-top: 18px;
+    }
+    .stock-right-div1 .stock-nuber>span:last-child{
+        color: #adb3c1;
+        display: block;
+        padding-top: 1px;
+    }
+    .data-stock{
+        background: #f7f7f7;
+    }
+    .stock-right-div1 .data-stock li>div,.stock-right-div2 .data-stock div{
+        width: 33%;
+        float: left;
+    }
+    .stock-right-div1 .data-stock li,.stock-right-div2 .data-stock li{
+        height: 68px;
+        margin-bottom: 1px;
+        background: #fff;
+    }
+    .stock-right-div1 .data-stock li>div:last-child{
+        line-height:68px;
+        color: #e26042;
+        text-align: center;
+    }
+    .stock-right>div>p{
+        height: 40px;
+        line-height: 40px;
+        color: #3e59a7;
+        border-bottom: 1px solid #f7f7f7;
+        padding-left: 15px;
+        font-size: 16px;
+        background: #fff;
+
+    }
+    .stock-right{
+        width: 420px;
+        float: right;
+    }
+    .stock-data{
+        min-height: 808px;
+        width: 1024px;
+        margin: 0 auto;
+        padding-top: 10px;
+        padding-bottom: 20px;
+    }
+    .stock-data:after{
+        content: ".";
+        clear: both;
+        display: block;
+        overflow: hidden;
+        font-size: 0;
+        height: 0;
     }
     .stock-seo{
         width: 1024px;
@@ -220,10 +398,5 @@
     .stock_export>div>.bond-rose>span:first-child{
         margin-right: 10px;
     }
-    .stock-data{
-        height: 808px;
-        width: 1024px;
-        margin: 0 auto;
-        background: #fff;
-    }
+
 </style>

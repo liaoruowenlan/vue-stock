@@ -67,6 +67,7 @@
         },
         computed: {
           spanValue: function() {
+              console.log(1);
               if(this.phone.UserPhone.length > 0 && this.Pwd.UserPwd.length > 0){
                   this.btnUp = true;
               } else {
@@ -101,8 +102,6 @@
                     _this.$children[0].refreshUserInfo();
                     _this.$router.push({ path: 'myaccount' });
                     // 修改header data
-
-
                 })
                 .catch(function(err){
                     console.log(err);
