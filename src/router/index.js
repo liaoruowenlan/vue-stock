@@ -82,14 +82,10 @@ const router =  new Router({
 })
 router.beforeEach((to, from, next) => {
     const Token = sessionStorage.getItem("token");
-    if(!Token) {
-        if(to.name == 'Home' || to.name == 'Register'|| to.name == 'Login') {
-            next()
-        } else {
-            next('/login')
-        }
-    }else {
+    if(to.name == 'Home' || to.name == 'Register'|| to.name == 'Login'|| Token != "undefined") {
         next()
+    } else {
+        next('/login')
     }
 })
 export default router;

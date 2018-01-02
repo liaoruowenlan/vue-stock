@@ -1,23 +1,23 @@
 <template>
     <div class="user_div" v-model="spanbalue" >
-        <div v-show="!addBlank.BlankOpen">
+        <div v-show="addBlank.BlankOpen">
             <div class="title">
                 提现
                 <ul>
-                    <li>
+                    <li @click="myblankClick">
                         <img src="../../../assets/img/myblank.png" />
                         我的银行卡
                     </li>
                     <li>
                         <img src="../../../assets/img/withdrawsls.png" />
-                        提现记录
+                        <router-link to="/myaccount/core">提现记录</router-link>
                     </li>
                 </ul>
             </div>
             <div class="user_text">
                 <p>提现金额</p>
-                <input type="text" v-model="money"/>
-                <p>可用金额：<span>20000.00</span></p>
+                <input type="text" v-model="moneyOne" class="winmoney"/>
+                <p>可用金额：<span>{{userMoney}}</span></p>
             </div>
             <div v-if="!blank" class="no_blank">
                 <div class="addblank" @click="addblank1" >
@@ -41,11 +41,11 @@
                 我要提现
             </div>
         </div>
-        <div class="adblank" v-show="addBlank.BlankOpen">
+        <div class="adblank" v-show="addBlank.myblank1">
             <div>
                 <span class="Fzcolor" @click="hide">提现</span>
                 <span class="mar5">></span>
-                <span class="Fzcolor">我的银行卡</span>
+                <span  @click="myblankClick" class="Fzcolor">我的银行卡</span>
                 <span class="mar5">></span>
                 <span>添加银行卡</span>
             </div>
@@ -64,11 +64,7 @@
                     <el-input v-model="ruleForm.Phone"></el-input>
                 </el-form-item>
                 <el-form-item label="支行信息" >
-                    <el-cascader
-                            :options="options2"
-                            @active-item-change="handleItemChange"
-                            :props="props"
-                    ></el-cascader>
+                    <el-cascader :disabled="cascadeDisabled" :options="provinces" @active-item-change="handleCascadeChange" :props="props" v-model="ruleForm.cnaps"></el-cascader>
                 </el-form-item>
             </el-form>
             <section>
@@ -76,6 +72,57 @@
                 <div class="bgcolor" @click="hide">取消</div>
             </section>
         </div>
+        <div class="adblank" v-show="myBlank">
+            <div>
+                <span class="Fzcolor" @click="hide">提现</span>
+                <span class="mar5">></span>
+                <span>我的银行卡</span>
+            </div>
+            <div class="border"></div>
+            <div class="user-div">
+                <div class="frozen">
+                    <div>
+                        <span>{{lengths}}</span>
+                    </div>
+                    <p>我的银行卡</p>
+                </div>
+                <div class="user_btn">
+                    <div class="pay" @click="addblank1">
+                        绑定银行卡
+                    </div>
+                    <div class="withdrawals">
+                        <router-link to="/myaccount/recharge">提现</router-link>
+                    </div>
+                </div>
+            </div>
+            <div class="blank">
+                <ul :class="list1?'margin1':''">
+                    <li class="blank-list no-bg" v-for="(item,index) in blankdata">
+                        <img :src="item.bankIconLink" />
+                        <div>
+                            <p>{{item.bankName}}</p>
+                            <p>{{item.bankCard}}</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <el-dialog
+                title="请输入支付密码"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                custom-class="dialogg"
+                center>
+            <div>
+                <input type="password"  class="payPasw" maxlength="6"/>
+            </div>
+            <span slot="footer" class="dialog-footer">
+            <div class="paypassword">
+                确定
+            </div>
+  </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -87,15 +134,21 @@
         name: "withdrawals",
         data(){
          return{
+             myBlank:'',
              list1:'',
              activeIdx: 0,
              btnadd:false,
              blank:false,
+             cascadeDisabled: true,
              blankdata:{},
+             lengths:"",
+             userMoney:'',
+             centerDialogVisible: true,
              token:sessionStorage.getItem('token'),
-             money:'',
+             moneyOne:'',
              addBlank:{
-                 BlankOpen:''
+                 BlankOpen:true,
+                 myblank1:''
              },
              ruleForm: {
                  userBlank:'',
@@ -122,13 +175,17 @@
                      { required: true, message: '请输入手机号码', trigger: 'blur' },
                      { pattern: /^1[34578]\d{9}$/, message: '请检查手机号码', trigger: 'blur' }
                  ]
+             },
+             provinces: [],
+             props: {
+                 value: 'value',
+                 label: 'label',
+                 children: 'children'
              }
          }
         },
         mounted(){
-            // for(var i= 0;){
-            //
-            // }
+
         },
         created(){
             var _this = this;
@@ -137,76 +194,258 @@
                     'Authorization': this.token
                 }
             })
+            .then(function (res) {
+                console.log(res.data);
+                // _this.User = res.data.result;
+                _this.blank = res.data.result!='';
+                _this.list1 = res.data.result.length===1;
+                _this.blankdata = res.data.result;
+                _this.lengths = res.data.result.length;
+                for (var i = 0; i < _this.blankdata.length; i++) {
+                    _this.blankdata[i].blankActive = (i == 0);
+                    _this.activeIdx = 0;
+                }
+                _this.blankdata = Object.assign({},_this.blankdata);
+                console.log(_this.blankdata)
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+            axios.get('/strategist/capitalAccount/', {
+                headers: {
+                    'Authorization': this.token
+                }
+            })
                 .then(function (res) {
-                    console.log(res.data);
-                    // _this.User = res.data.result;
-                    _this.blank = res.data.result!='';
-                    _this.list1 = res.data.result.length===1;
-                    _this.blankdata = res.data.result;
-                    for (var i = 0; i < _this.blankdata.length; i++) {
-                        _this.blankdata[i].blankActive = (i == 0);
-                        _this.activeIdx = 0;
-                    }
-                    _this.blankdata = Object.assign({},_this.blankdata);
-                    console.log(_this.blankdata)
+                    _this.userMoney = res.data.result.availableBalance;
                 })
                 .catch(function (err) {
                     console.log(err);
                 });
+            // 加载省份
+            this.loadProvinces();
         },
         computed:{
             spanbalue:function(){
-                    this.btnadd = this.money.length>0;
+                this.btnadd = this.moneyOne.length>0;
+                 this.cascadeDisabled =  /^([1-9]{1})(\d{14}|\d{18})$/.test(this.ruleForm.BlankCard)?false:true;
+                console.log(this.ruleForm.BlankCard)
+                console.log(this.cascadeDisabled)
             }
         },
         methods:{
-            submitdata(){
-                var _this = this;
-                axios.post('/strategist/bindCard/bindBankCard', qs.stringify({
-                    name: this.rules.userBlank,
-                    idCard: this.rules.userBlank,
-                    phone: this.rules.userBlank,
-                    bankCard: this.rules.userBlank,
-                    verificationCode: this.rules.userBlank,
-                }))
-                    .then(function(res){
-                        if(res.data.code!=200){
-                            _this.Pwd.PwdReg = true;
-                            return false;
-                        }
-                        console.log(res.data);
-                        console.log(res.data.result.id);
-                        console.log(res.data.result.token);
-                        sessionStorage.setItem("token",res.data.result.token);
-                        sessionStorage.setItem("phone", _this.phone.UserPhone);
-                        sessionStorage.setItem('id',res.data.result.id);
-                        _this.$children[0].refreshUserInfo();
-                        _this.$router.push({ path: 'myaccount' });
-                        // 修改header data
-                    })
-                    .catch(function(err){
-                        console.log(err);
-                    })
-            },
-            addblank1(){
-                this.addBlank.BlankOpen = true;
-            },
-            hide(){
+            /**
+            * 用户点击我的银行卡
+            **/
+            myblankClick(){
+                this.myBlank = true;
                 this.addBlank.BlankOpen = false;
+                this.addBlank.myblank1 = false;
+                this.moneyOne = '';
             },
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
+            myblankclick(){
+
+            },
+            /**
+             * 处理没有输入银行银行卡的情况
+             */
+            handleNoBankCard() {
+                // TODO
+                console.log("no bankCard");
+            },
+            /**
+             * 处理没有支行的情况
+             */
+            handleNoCnaps() {
+                // TODO
+                console.log("no cnaps");
+            },
+            /**
+             * 级联操作
+             */
+            handleCascadeChange(code) {
+                var codeArr = ("" + code).split(",");
+                if(codeArr.length == 1) {
+                    this.loadCities(codeArr[0]);
+                } else if(codeArr.length == 2) {
+                    if(!this.ruleForm.BlankCard || this.ruleForm.BlankCard.trim() == "") {
+                        this.handleNoBankCard();
+                        return;
                     }
+                    this.loadCnaps(codeArr[0], codeArr[1], this.ruleForm.BlankCard.trim());
+                } else {
+                    alert(code);
+                }
+            },
+            /**
+             * 加载支行列表
+             */
+            loadCnaps(provinceCode, cityCode, bankCard) {
+                var _this = this;
+                axios.get('/strategist/cnaps/lists/'+ cityCode + "?bankCard=" + bankCard, {
+                    headers: {
+                        'feign': 'true',
+                        'Authorization': this.token
+                    }
+                })
+                .then(function(res){
+                    if("200" == res.data.code) {
+                        var cnaps = res.data.result;
+                        for(var i = 0; i < _this.provinces.length; i++) {
+                            if(_this.provinces[i].value == provinceCode) {
+                                var cities = _this.provinces[i].children;
+                                for(var j = 0; j < cities.length; j++) {
+                                    if(cities[j].value == cityCode) {
+                                        for(var k = 0; k < cnaps.length; k++) {
+                                            cnaps[k].value = cnaps[k].cnaps + "_" + cnaps[k].bnkName;
+                                            cnaps[k].label = cnaps[k].bnkName;
+                                        }
+                                        cities[j].children = cnaps;
+                                    }
+                                }
+                                _this.provinces = Object.assign([], _this.provinces);
+                            }
+                        }
+                    } else {
+                        _this.handleNoCnaps();
+                    }
+                })
+                .catch(function(err){
+                    _this.handleNoCnaps();
                 });
             },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
+            /**
+             * 加载城市
+             */
+            loadCities(provinceCode) {
+                var _this = this;
+                axios.get('/strategist/areainfo/children/'+ provinceCode)
+                .then(function(res){
+                    if("200" == res.data.code) {
+                        var cities = res.data.result;
+                        for(var i = 0; i < _this.provinces.length; i++) {
+                            if(_this.provinces[i].value == provinceCode) {
+                                for(var j = 0; j < cities.length; j++) {
+                                    cities[j].value = cities[j].areaCode;
+                                    cities[j].label = cities[j].areaName;
+                                    cities[j].children = [];
+                                }
+                                _this.provinces[i].children = cities;
+                                _this.provinces = Object.assign([], _this.provinces);
+                            }
+                        }
+                    } else {
+                        console.log(res.data.code + ":" + res.data.message)
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
             },
+            /**
+             * 加载省份
+             */
+            loadProvinces() {
+                var _this = this;
+                axios.get('/strategist/areainfo/provinces',{
+                    headers: {
+                        'Authorization': this.token
+                    }
+                })
+                .then(function(res){
+                    if("200" == res.data.code) {
+                        _this.provinces = res.data.result;
+                        for(var i = 0; i < _this.provinces.length; i++) {
+                            _this.provinces[i].value = _this.provinces[i].areaCode;
+                            _this.provinces[i].label = _this.provinces[i].areaName;
+                            _this.provinces[i].children = [];
+                        }
+                        _this.provinces = Object.assign([], _this.provinces);
+                    } else {
+                        console.log(res.data.code + ":" + res.data.message)
+                    }
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
+            },
+            submitdata(){
+                var _this = this;
+                // 请求数据对象
+                if(this.ruleForm.userBlank==''||this.ruleForm.ID==''||this.ruleForm.Phone==''||this.ruleForm.BlankCard==''){
+                    this.$message({
+                        message: '请核实用户银行卡资料',
+                        customClass:'ablout',
+                        type: 'warning'
+                    });
+                    return false;
+                }
+                var requestObj = {
+                    name: this.ruleForm.userBlank,
+                    idCard: this.ruleForm.ID,
+                    phone: this.ruleForm.Phone,
+                    bankCard: this.ruleForm.BlankCard
+                };
+                if(this.ruleForm.cnaps) {
+                    requestObj.branchCode = ("" + this.ruleForm.cnaps).split(",")[2].split("_")[0];
+                    requestObj.branchName = ("" + this.ruleForm.cnaps).split(",")[2].split("_")[1];
+                }
+                // 发送绑卡请求
+                axios.post('/strategist/bindCard/bindBankCard', qs.stringify(requestObj))
+                .then(function(res){
+                    if(res.data.code!=200){
+                        _this.$message({
+                            message: res.data.message,
+                            customClass:'ablout',
+                            type: 'warning'
+                        });
+                            console.log(res.data)
+                        return false;
+                    }else{
+                        _this.$message({
+                            message: '绑定成功，正在跳转中。',
+                            type: 'success',
+                            customClass:'ablout',
+                            onClose:function(){
+                                location.reload()
+                            }
+                        });
+                    }
+
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+            },
+            /**
+             * 用户点击增加银行卡按钮
+             */
+            addblank1(){
+                this.addBlank.BlankOpen = false;
+                this.addBlank.myblank1 = true;
+                this.myBlank = false;
+            },
+            /**
+             * 用户点击提现按钮
+             */
+            hide(){
+                this.addBlank.BlankOpen = true;
+                this.addBlank.myblank1 = false;
+                this.myBlank = false;
+            },
+            // submitForm(formName) {
+            //     this.$refs[formName].validate((valid) => {
+            //         if (valid) {
+            //             alert('submit!');
+            //         } else {
+            //             console.log('error submit!!');
+            //             return false;
+            //         }
+            //     });
+            // },
+            // resetForm(formName) {
+            //     this.$refs[formName].resetFields();
+            // },
             setActive(index){
                 if(this.activeIdx !== undefined){
                     this.blankdata[this.activeIdx].blankActive = false;
@@ -219,7 +458,102 @@
     }
 </script>
 
-<style scoped>
+<style>
+    .paypassword{
+        width: 300px;
+        height: 40px;
+        background: #f9d9cb;
+        color: #fff;
+        text-align: center;
+        line-height: 40px;
+        margin: 0 auto;
+        font-size: 16px;
+    }
+    .dialogg{
+        width: 408px !important;
+        margin-top: 40vh !important;
+        height: 236px !important;
+        border-radius: 10px;
+    }
+    .ablout{
+        min-width: 265px !important;
+        top: 410px !important;
+    }
+    .payPasw{
+        width: 286px;
+        height: 42px;
+        margin: 0 auto;
+        display: block;
+        letter-spacing: 40px;
+        text-indent: 25px;
+    }
+    .no-bg{
+        background: #4277e8!important;
+    }
+    .user-div{
+        border-bottom: 1px dashed #dcdee3;
+        height: 99px;
+    }
+    .user_btn{
+        float: left;
+        width: 230px;
+        position: relative;
+        font-size: 14px;
+        padding-top: 10px;
+        padding-left: 130px;
+    }
+    .user_btn > div {
+        width: 120px;
+        height: 32px;
+        text-align: center;
+        line-height: 32px;
+        margin: 0 auto;
+    }
+    .pay  {
+        color: #fff;
+        background: #ee8354;
+        display: block;
+        cursor: pointer;
+    }
+    .user_btn .withdrawals a {
+        display: block;
+        width: 118px;
+        height: 30px;
+        color: #ee8354;
+        border: 1px solid #ee8354;
+        margin-top: 6px;
+        background: #fff;
+        font-size: 14px;
+    }
+    .frozen{
+        float: left;
+        width: 230px;
+        position: relative;
+        font-size: 14px;
+        padding-top: 10px;
+        text-align: center;
+        padding-left: 20px;
+    }
+    .frozen > div {
+        text-align: center;
+    }
+
+    .frozen > div > span:first-child {
+        font-size: 14px;
+        color: #e26042;
+    }
+
+   .frozen > div > span:last-child {
+        font-size: 32px;
+        font-weight: bold;
+        color: #e26042;
+    }
+
+     .frozen > p {
+        text-align: center;
+        margin-top: 8px;
+    }
+
     .el-cascader {
         width: 100% !important;
     }
@@ -373,6 +707,9 @@
         float: right;
         color: #ee8354;
     }
+    .title ul a{
+        color: #ee8354;
+    }
     .addColor{
         background:#ee8354 !important;
         color: #fff !important;
@@ -386,6 +723,7 @@
     .title ul li{
         float: left;
         margin-right: 15px;
+        cursor: pointer;
     }
     .title ul li img{
         display: inline-block;
@@ -465,6 +803,8 @@
         height: 42px;
         width: 302px;
         float: left;
+        font-size: 18px;
+        text-indent: 10px;
     }
     .user_text span{
         color: #e26042;

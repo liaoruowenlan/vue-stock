@@ -20,4 +20,14 @@ new Vue({
   router,
   template: '<App/>',
   components: { App }
-})
+});
+// axios.interceptors.request.use(function (config) {    // 这里的config包含每次请求的内容
+//     var token = sessionStorage.getItem("token");
+//     alert(token);
+//     if (token) {
+//         config.headers.Authorization = token;
+//     }
+//     return config;
+// }, function (err) {
+//     this.$message.error('服务器正在开小差，请稍后再试');
+// });

@@ -1,14 +1,14 @@
 <template>
     <div class="user_div">
-        <div class="user_money">
-            <div class="frozen">
+        <div class="userAmoney">
+            <div class="frozen1">
                 <div>
                     <span>¥</span>
                     <span>{{User.frozenCapital}}</span>
                 </div>
                 <p>冻结履约保证金</p>
             </div>
-            <div class="frozen">
+            <div class="frozen1">
                 <div>
                     <span>¥</span>
                     <span>{{User.availableBalance}}</span>
@@ -17,15 +17,15 @@
             </div>
             <div class="user_btn">
                 <div class="pay">
-                  充值
+                 <router-link to="/myaccount/recharge">充值</router-link>
                 </div>
                 <div class="withdrawals">
-                    提现
+                    <router-link to="/myaccount/recharge">提现</router-link>
                 </div>
             </div>
         </div>
-        <div class="user_blnk">
-            <div class="frozen">
+        <div class="user_blnk1">
+            <div class="frozen1">
                 <div>
                     <span>{{BlankLength}}</span>
                 </div>
@@ -87,14 +87,17 @@
 </script>
 
 <style scoped>
-    .user_money {
+    .user_btn{
+        padding-left: 0 !important;
+    }
+    .userAmoney {
         height: 120px;
         border-bottom: 1px dashed #dcdee3;
     }
     .user_div{
         height: 538px;
     }
-    .user_money > div {
+    .userAmoney > div {
         float: left;
         width: 230px;
         position: relative;
@@ -102,30 +105,30 @@
         padding-top: 15px;
     }
 
-    .user_money .frozen > div {
+    .userAmoney .frozen1 > div {
         text-align: center;
     }
 
-    .user_money .frozen > div > span:first-child {
+    .userAmoney .frozen1 > div > span:first-child {
         font-size: 14px;
         color: #e26042;
         position: absolute;
         top: 20px;
     }
 
-    .user_money .frozen > div > span:last-child {
+    .userAmoney .frozen1 > div > span:last-child {
         font-size: 32px;
         margin-left: 10px;
         font-weight: bold;
         color: #e26042;
     }
 
-    .user_money .frozen > p {
+    .userAmoney .frozen1 > p {
         text-align: center;
         margin-top: 8px;
     }
 
-    .user_money .user_btn > div {
+    .userAmoney .user_btn > div {
         width: 120px;
         height: 32px;
         text-align: center;
@@ -133,12 +136,14 @@
         margin: 0 auto;
     }
 
-    .pay {
+    .pay a {
         color: #fff;
         background: #ee8354;
+        display: block;
     }
 
-    .user_money .user_btn .withdrawals {
+    .userAmoney .user_btn .withdrawals a {
+        display: block;
         width: 118px;
         height: 30px;
         color: #ee8354;
@@ -146,7 +151,7 @@
         margin-top: 6px;
     }
 
-    .user_blnk > div {
+    .user_blnk1 > div {
         float: left;
         width: 230px;
         position: relative;
@@ -155,17 +160,17 @@
         text-align: center;
     }
 
-    .user_blnk .frozen > div > span {
+    .user_blnk1 .frozen1 > div > span {
         font-size: 32px;
         font-weight: bold;
         color: #e26042;
     }
 
-    .user_blnk .frozen > p {
+    .user_blnk1 .frozen1 > p {
         text-align: center;
         margin-top: 6px;
     }
-    .user_div .user_blnk>div:last-child{
+    .user_div .user_blnk1>div:last-child{
         margin-right: 90px;
         margin-top: 42px;
         padding: 0;

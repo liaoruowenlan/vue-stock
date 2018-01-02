@@ -6,7 +6,7 @@
                 <ul>
                     <li>
                         <img src="../../../assets/img/myblank.png"/>
-                        充值记录
+                        <router-link to="/myaccount/core">提现记录</router-link>
                     </li>
                 </ul>
             </div>
@@ -165,7 +165,10 @@
         font-size: 16px;
         margin-bottom: 20px;
     }
-
+    .el-form-item__content ul{
+        width: 645px !important;
+        overflow: hidden;
+    }
     .el-form-item__content ul li {
         float: left;
         width: 190px;
@@ -232,7 +235,9 @@
         margin-right: 15px;
         color: #ee8354;
     }
-
+    .title ul li a{
+        color: #ee8354;
+    }
     .el-form-item {
         font-weight: 700;
     }

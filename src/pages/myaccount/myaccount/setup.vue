@@ -103,7 +103,6 @@
             spanval: function () {
                 var test = "test" + this.newPay.Aucode;
                 this.newPay.AuCodeAdd = /^1[3|4|5|7|8][0-9]{9}$/.test(this.newPay.Phone);
-                console.log(1);
                  this.newPay.AuCode1 = false;
                  this.newPay.PhoneReg = false;
             }
