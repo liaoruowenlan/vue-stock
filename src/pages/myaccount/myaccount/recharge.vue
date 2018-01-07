@@ -133,13 +133,13 @@
                 if(!/^([1-9]\d+|[2-9])$/.test(this.ruleForm.name)||!(/^(?:[1-9]\d{0,3}|0|50000|[1-4]\d{4})$/.test(this.ruleForm.name))){
                     return false;
                 }
-                // var jump = '/strategist/payment/recharge?' + qs.stringify({
-                //     publisherId: this.publisherId,
-                //     paymentType: 1,
-                //     amount: this.ruleForm.name,
-                //     bankCode: this.bankCode
-                // });
-                // window.open(jump), "_blank";
+                var jump = '/strategist/payment/recharge?' + qs.stringify({
+                    publisherId: this.publisherId,
+                    paymentType: 1,
+                    amount: this.ruleForm.name,
+                    bankCode: this.bankCode
+                });
+                window.open(jump), "_blank";
                 this.centerDialogVisible = true;
             },
             payGouser(){

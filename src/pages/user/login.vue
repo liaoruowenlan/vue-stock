@@ -73,6 +73,9 @@
               } else {
                   this.btnUp = false;
               }
+              //值改变，所有验证开关，为false
+              this.phone.PhoneReg = false;
+              this.Pwd.PwdReg = false;
           }
         },
         methods: {

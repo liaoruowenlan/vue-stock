@@ -82,7 +82,7 @@ const router =  new Router({
 })
 router.beforeEach((to, from, next) => {
     const Token = sessionStorage.getItem("token");
-    if(to.name == 'Home' || to.name == 'Register'|| to.name == 'Login'|| Token != "undefined") {
+    if(to.name == 'Home' || to.name == 'Register'|| to.name == 'Login'|| Token != "undefined"||!Token) {
         next()
     } else {
         next('/login')

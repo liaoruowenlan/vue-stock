@@ -16,8 +16,11 @@
             </div>
             <div class="user_text">
                 <p>提现金额</p>
-                <input type="text" v-model="moneyOne" class="winmoney"/>
-                <p>可用金额：<span>{{userMoney}}</span></p>
+                <input type="text" class="winmoney" v-model="moneyOne"/>
+                <p class="uesrmoney">可用金额：<span>{{userMoney}}</span></p>
+                <div v-show="userMoneyReg" class="user_text_red">
+                    *提现金额不能大于用户余额、
+                </div>
             </div>
             <div v-if="!blank" class="no_blank">
                 <div class="addblank" @click="addblank1" >
@@ -37,7 +40,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="withdrawals" :class="btnadd?'addColor':''">
+            <div class="withdrawals" :class="btnadd?'addColor':''" @click="userPaypass">
                 我要提现
             </div>
         </div>
@@ -50,7 +53,7 @@
                 <span>添加银行卡</span>
             </div>
             <div class="border"></div>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm" size="small">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm ruleFa" size="small">
                 <el-form-item label="持卡人" prop="userBlank">
                     <el-input v-model="ruleForm.userBlank"></el-input>
                 </el-form-item>
@@ -114,12 +117,13 @@
                 custom-class="dialogg"
                 center>
             <div>
-                <input type="password"  class="payPasw" maxlength="6"/>
+                <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass"/>
             </div>
             <span slot="footer" class="dialog-footer">
-            <div class="paypassword">
+            <div @click="userWithd" class="paypassword">
                 确定
             </div>
+                <input type="text"  style="display: none;"/>
   </span>
         </el-dialog>
 
@@ -134,8 +138,11 @@
         name: "withdrawals",
         data(){
          return{
+             payPass:'',
              myBlank:'',
              list1:'',
+             userMoneyReg:'',
+             abcdefghijk:null,
              activeIdx: 0,
              btnadd:false,
              blank:false,
@@ -143,7 +150,7 @@
              blankdata:{},
              lengths:"",
              userMoney:'',
-             centerDialogVisible: true,
+             centerDialogVisible: false,
              token:sessionStorage.getItem('token'),
              moneyOne:'',
              addBlank:{
@@ -227,13 +234,23 @@
         },
         computed:{
             spanbalue:function(){
-                this.btnadd = this.moneyOne.length>0;
+                 this.btnadd = this.moneyOne>=1&&this.moneyOne<=this.userMoney&&this.lengths>=1;
                  this.cascadeDisabled =  /^([1-9]{1})(\d{14}|\d{18})$/.test(this.ruleForm.BlankCard)?false:true;
+                  this.userMoneyReg = this.moneyOne>this.userMoney;
                 console.log(this.ruleForm.BlankCard)
                 console.log(this.cascadeDisabled)
             }
         },
         methods:{
+            /**
+             * 支付密码失去焦点
+             **/
+            showTime(){
+                if(this.payPass.length===6){
+                    this.$refs.paymentPwdInput.blur();
+                }
+                console.log(this.payPass.length)
+            },
             /**
             * 用户点击我的银行卡
             **/
@@ -243,8 +260,11 @@
                 this.addBlank.myblank1 = false;
                 this.moneyOne = '';
             },
-            myblankclick(){
+            userWithd(){
 
+            },
+            userPaypass(){
+                this.centerDialogVisible = this.btnadd?true:false;
             },
             /**
              * 处理没有输入银行银行卡的情况
@@ -486,6 +506,7 @@
         display: block;
         letter-spacing: 40px;
         text-indent: 25px;
+        background: url("../../../assets/img/passWborder.png") no-repeat;
     }
     .no-bg{
         background: #4277e8!important;
@@ -524,6 +545,7 @@
         margin-top: 6px;
         background: #fff;
         font-size: 14px;
+        cursor: pointer;
     }
     .frozen{
         float: left;
@@ -630,7 +652,7 @@
         background:#4277e8 url("../../../assets/img/blank-selet.png") no-repeat 286px 4px;
         background-size: 20px 20px;
     }
-    .demo-ruleForm{
+    .ruleFa{
         width: 360px;
         margin-top: 20px;
     }
@@ -786,13 +808,21 @@
     .user_text{
         height: 141px;
         border-bottom: 1px dashed #dcdee3;
+        position: relative;
+    }
+    .user_text_red{
+        position: absolute;
+        bottom: 30px;
+        color: #e26042;
+        font-size: 12px;
+        left: 211px;
     }
     .user_text p:first-child{
         color: #adb3c1;
         float: left;
         margin: 52px 10px 52px 145px;
     }
-    .user_text p:last-child{
+    .user_text>p.uesrmoney{
         color: #687284;
         float: left;
         font-size: 12px;

@@ -75,6 +75,9 @@
             spanValue:function () {
                 this.btnUp = this.phone.userPhone.length > 0 && this.password.userPwd.length > 0 && this.AuCode.userAcd.length > 0;
                 this.AuCode.AuCodeUp = /^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone);
+                this.AuCode.AuCodeReg = false;
+                this.password.Pwdreg = false;
+                this.phone.phoneReg = false;
             }
         },
         mounted: function () {
