@@ -16,12 +16,16 @@ import Withdrawals from '@/pages/myaccount/myaccount/withdrawals.vue'
 import Quotation from '@/pages/quotation/quotation.vue'
 
 import Price from '@/pages/position/position/price.vue'
+
+import Holding from '@/pages/position/position/price/holding.vue'
+import Settlement from '@/pages/position/position/price/settlement.vue'
+
 import Optional from '@/pages/position/position/optional.vue'
 
 
 Vue.use(Router)
 
-const router =  new Router({
+const router = new Router({
     routes: [
         {
             path: '/',
@@ -60,9 +64,31 @@ const router =  new Router({
         {
             path: '/position',
             component: Position,
-            children:[
-                {path: '/', component: Price,redirect: '/position/price'},
-                {path: '/position/price', component: Price},
+            children: [
+                {
+                    path: '/',
+                    component: Price,
+                    redirect: '/position/price'
+                },
+                {
+                    path: '/position/price',
+                    component: Price,
+                    children:[
+                        {
+                            path: '/',
+                            component: Holding,
+                            redirect: '/position/price/holding'
+                        },
+                        {
+                            component: Holding,
+                            path: '/position/price/holding'
+                        },
+                        {
+                            component: Settlement,
+                            path: '/position/price/settlement'
+                        }
+                    ]
+                },
                 {path: '/position/optional', component: Optional}
             ]
         },
@@ -71,7 +97,7 @@ const router =  new Router({
             path: '/myaccount',
             component: Myaccount,
             children: [
-                {path: '/', component: Capital,redirect: '/myaccount/capital'},
+                {path: '/', component: Capital, redirect: '/myaccount/capital'},
                 {path: '/myaccount/capital', component: Capital},
                 {path: '/myaccount/core', component: Core},
                 {path: '/myaccount/recharge', component: Recharge},
@@ -82,7 +108,7 @@ const router =  new Router({
 })
 router.beforeEach((to, from, next) => {
     const Token = sessionStorage.getItem("token");
-    if(to.name == 'Home' || to.name == 'Register'|| to.name == 'Login'|| Token != "undefined"||!Token) {
+    if (to.name == 'Home' || to.name == 'Register' || to.name == 'Login' || Token != "undefined" || !Token) {
         next()
     } else {
         next('/login')

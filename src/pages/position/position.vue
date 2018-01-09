@@ -5,13 +5,16 @@
             <div class="position">
                 <div class="position-left">
                     <ul>
-                        <li v-for="item in navLists"><router-link :to="item.url"><i></i>{{item.text}}</router-link></li>
+                        <li v-for="(item) in navLists"><router-link :to="item.url"><i></i>{{item.text}}</router-link></li>
                     </ul>
                 </div>
                 <div class="position-right">
                     <transition name="fade" mode="out-in">
                         <router-view></router-view>
                     </transition>
+                </div>
+                <div style="clear: both;">
+
                 </div>
             </div>
         </div>
@@ -47,7 +50,6 @@
 </script>
 
 <style scoped>
-
 .position{
     width: 1024px;
     min-height: 656px;
@@ -55,6 +57,13 @@
     padding-top: 10px;
     margin-bottom: 20px;
     background: #f7f7f7;
+}
+.position:after{
+    content:"";
+    display:block;
+    height:0;
+    clear:both;
+    visibility:hidden;
 }
 .position-right{
     float: right;
@@ -64,6 +73,7 @@
     background: #fff;
     min-height: 626px;
 }
+
 .position-left ul li {
     height: 44px;
     position: relative;
@@ -72,10 +82,10 @@
     line-height: 44px;
     color: #687284;
 }
-.position-left ul li a{
+.position-left>ul li a{
     color: #687284;
 }
-position-left li:hover a{
+.position-left li:hover a{
     color: #ee8354;
 }
 .router-link-active{
@@ -89,7 +99,7 @@ position-left li:hover a{
     background: #f7f7f7 !important;
     width: 131px;
 }
-    .position ul{
+    .position .position-left>ul{
         height: 626px;
         background: #ffffff;
     }
