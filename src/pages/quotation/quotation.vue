@@ -188,6 +188,7 @@ export default {
       )
       .then(function(res) {
         _this.hot = res.data.result.content;
+        console.log(1);
       })
       .catch(function(err) {
         console.log(err);
