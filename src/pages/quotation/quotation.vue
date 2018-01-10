@@ -98,7 +98,7 @@
                     </div>
                 </div>
             </div>
-        <BuyMask  :show="show" :dataList="dataList" :listTitle="listTitle" :amountValues="amountValues" :upLimitPrice="upLimitPrice"></BuyMask>
+        <BuyMask  :show="show" :dataList="dataList" :listTitle="listTitle" :amountValues="amountValues" :upLimitPrice="upLimitPrice" :name="name" :instrumentId="instrumentId"></BuyMask>
         </div>
         <footer-nav></footer-nav>
     </div>
@@ -134,7 +134,9 @@ export default {
       dataList:[],
       listTitle:[],
       amountValues:[],
-      upLimitPrice:''
+      upLimitPrice:'',
+      name:'',
+      instrumentId:''
     };
   },
   components: {
@@ -267,8 +269,7 @@ export default {
       axios
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {
-          console.log(response.data.code);
-          if (response.data.code == 200) {
+           if (response.data.code == 200) {
               var data = response.data.result;
             _this.serchList = data;
             _this.first = data.slice(0,1);
@@ -287,7 +288,6 @@ export default {
         this.dayormonth = index
         var _this = this
         axios.get('/strategist/stock/kLine?stockCode='+code+'&type='+type).then((response)=>{
-            console.log(response.data)
             if(response.data.code==200){
                 _this.rawData =response.data.result
                 _this.drawK();
@@ -301,11 +301,13 @@ export default {
         .get("/strategist/stock/market/" + code)
         .then(
           function(response) {
-            this.market = response.data.result;
+            var data = response.data.result
+            this.market =data;
             this.market.upDropSpeed = (this.market.upDropSpeed * 100).toFixed(2) + "%";
             this.fullscreenLoading = false; 
-            this.upLimitPrice = response.data.result.upLimitPrice
-                console.log(this.upLimitPrice)           
+            this.upLimitPrice =data.upLimitPrice
+            this.name =data.name  
+            this.instrumentId =data.instrumentId  
           }.bind(this)
         )
         .catch(function(error) {

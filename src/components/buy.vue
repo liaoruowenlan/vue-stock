@@ -1,7 +1,8 @@
 <template>
-  <div class="mask" v-show="show">
+  <div class="mask" v-if="show">
       <div class="main">
-          <h2>中国中铁</h2>
+          <span class="close" @click="close"> X </span>
+          <h2>{{name}} {{instrumentId}}</h2>
           <ul class="firstUl" v-for="(item,index) in dataList" :key="index" v-show="index==bigI">
               <li class="topone clearfix">
                   <span class="label fl">点买类型</span>
@@ -21,7 +22,7 @@
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">资金使用率</span>
-                  <div>100股</div>
+                  <div>{{((parseInt(marketValue/upLimitPrice)-parseInt(marketValue/upLimitPrice)%100)*upLimitPrice/marketValue*100).toFixed(2)}}%</div>
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">止盈率</span>
@@ -39,7 +40,7 @@
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">履约保证金</span>
-                  <div>{{marketValue*Math.ceil(losses+item.wearingPoint)}}</div>
+                  <div>{{marketValue*(losses*1000+item.wearingPoint*1000)/1000}}</div>
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">递 延 费</span>
@@ -70,48 +71,73 @@ export default {
     dataList: {
       type: Array
     },
-    listTitle:{
-      type:Array
+    listTitle: {
+      type: Array
     },
-    amountValues:{
-      type:Array
+    amountValues: {
+      type: Array
     },
-    upLimitPrice:{
-      type:[Number,String]
+    upLimitPrice: {
+      type: [Number, String]
+    },
+    name:{
+      type:String
+    },
+    instrumentId:{
+      type:String
+    }
+  },
+  watch: {
+    dataList() {
+      this.marketValue = this.dataList[0].amountValues[0].value;
+      this.losses = this.dataList[0].losses[0].point;
+
+      //  this.Bond()
     }
   },
   data() {
     return {
-      bigI:0,
+      bigI: 0,
       index1: 0,
       index2: 0,
       index3: 0,
       color1: "",
       checked: true,
-      marketValue:this.dataList[0].amountValues[0].value,
-      losses:'',
+      marketValue: "",
+      losses: 0
     };
   },
   methods: {
+    close(){
+      console.log(this)
+      this.show = false;
+    },
     click(index) {
+      this.losses = this.dataList[index].losses[0].point;
+      this.marketValue = this.dataList[index].amountValues[0].value;
       this.index1 = index;
       this.bigI = index;
     },
-    click1(value,index) {
-      console.log(value.value,index)
-      
+    click1(value, index) {
       this.index2 = index;
       this.marketValue = value.value;
     },
-    click2(value,index) {
-      console.log(value.point,index)
+    click2(value, index) {
       this.index3 = index;
       this.losses = value.point;
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
+.close{
+  position: absolute;
+  color: #ddd;
+  font-size: 40px;
+  right: 34px;
+  top: 10px;
+  cursor: pointer;
+}
 .mask {
   position: fixed;
   width: 100%;
@@ -143,14 +169,13 @@ export default {
   border-bottom: 1px solid #ece7e7;
   margin-bottom: 20px;
 }
-.firstUl>li:nth-of-type(2n) {
+.firstUl > li:nth-of-type(2n) {
   border-bottom: 1px dashed #ece7e7;
 }
-.firstUl>li{
+.firstUl > li {
   padding: 10px 0;
-
 }
-.firstUl>li:last-child {
+.firstUl > li:last-child {
   border: none;
 }
 .toptwo {
@@ -188,7 +213,7 @@ li.active {
 .buyNow {
   text-align: center;
 }
-li.losses{
+li.losses {
   width: 100px;
 }
 .secondUl button {
