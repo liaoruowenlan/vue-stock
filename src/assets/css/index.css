@@ -24,4 +24,23 @@ input:-webkit-autofill {
 	-webkit-box-shadow: 0 0 0px 1000px white inset;
 	border: 1px solid #CCC!important;
 }
-
+.clearfix { 
+	*zoom: 1; 
+  } 
+   
+  .clearfix:before, 
+  .clearfix:after { 
+	display: table; 
+	line-height: 0; 
+	content: ""; 
+  } 
+   
+  .clearfix:after { 
+	clear: both; 
+  }
+.fl{
+	float: left;
+}
+.fr{
+	float:right;
+}

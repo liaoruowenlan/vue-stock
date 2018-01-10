@@ -106,9 +106,9 @@ const router = new Router({
         }
     ]
 })
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
     const Token = sessionStorage.getItem("token");
-    if (to.name == 'Home' || to.name == 'Register' || to.name == 'Login' || Token != "undefined" || !Token) {
+    if (to.name == 'Home' || to.name == 'Register' || to.name == 'Login' || Token != "undefined") {
         next()
     } else {
         next('/login')

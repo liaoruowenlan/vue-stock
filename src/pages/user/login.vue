@@ -29,6 +29,7 @@
                             注册账号
                         </a>
                     </div>
+                    <input type="text" style="display:none;" />
                 </div>
             </div>
         </section>
@@ -67,7 +68,6 @@
         },
         computed: {
           spanValue: function() {
-              console.log(1);
               if(this.phone.UserPhone.length > 0 && this.Pwd.UserPwd.length > 0){
                   this.btnUp = true;
               } else {
@@ -96,9 +96,6 @@
                         _this.Pwd.PwdReg = true;
                         return false;
                     }
-                    console.log(res.data);
-                    console.log(res.data.result.id);
-                    console.log(res.data.result.token);
                     sessionStorage.setItem("token",res.data.result.token);
                     sessionStorage.setItem("phone", _this.phone.UserPhone);
                     sessionStorage.setItem('id',res.data.result.id);

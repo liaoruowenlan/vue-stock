@@ -5,7 +5,7 @@
         </div>
         <div class="logo-nav">
             <ul id="warp">
-                <li class="" v-for="item in navLists"><router-link :to="item.url">{{item.text}}</router-link></li>
+                <li class="" v-for="(item,index) in navLists" :key="index"><router-link :to="item.url">{{item.text}}</router-link></li>
             </ul>
         </div>
         <div class="nav-login">
@@ -31,7 +31,7 @@
 
 <script>
     export default {
-        name: "header",
+        // name: "header",
         data(){
             return{
                 navLists:[

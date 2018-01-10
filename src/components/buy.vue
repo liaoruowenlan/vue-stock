@@ -1,0 +1,209 @@
+<template>
+  <div class="mask" v-show="show">
+      <div class="main">
+          <h2>中国中铁</h2>
+          <ul class="firstUl" v-for="(item,index) in dataList" :key="index" v-show="index==bigI">
+              <li class="topone clearfix">
+                  <span class="label fl">点买类型</span>
+                  <ul class="toptwo fr clearfix" ref="toptwo">
+                      <li :class="index1==i?'active fl':'fl'"  v-for="(o,i) in listTitle" :key="i" @click="click(i)">{{o}}</li>
+                  </ul>
+              </li> 
+              <li class="topone clearfix" >
+                  <span class="label fl">申请金额</span>
+                  <ul class="toptwo fr clearfix">
+                      <li :class="index2==i?'active fl':'fl'" v-for="(el,i) in item.amountValues" :key="i"  @click="click1(el,i)">{{((el.value)/10000).toFixed(1)}}万</li>
+                  </ul>
+              </li>
+              <li class="topone clearfix" >
+                  <span class="label fl">股  &nbsp;&nbsp;数</span>
+                  <div>{{parseInt(marketValue/upLimitPrice)%100>0?parseInt(marketValue/upLimitPrice)-parseInt(marketValue/upLimitPrice)%100:'不足购买一手'}}</div>
+              </li>
+              <li class="topone clearfix" >
+                  <span class="label fl">资金使用率</span>
+                  <div>100股</div>
+              </li>
+              <li class="topone clearfix" >
+                  <span class="label fl">止盈率</span>
+                  <div>50%</div>
+              </li>
+              <li class="topone clearfix" >
+                  <span class="label fl">止损率</span>
+                  <ul class="toptwo fr clearfix">
+                      <li :class="index3==i?'active fl losses':'fl losses'" v-for="(el,i) in item.losses" :key="i"  @click="click2(el,i)">-{{((el.point)*100).toFixed(2)}}%</li>
+                  </ul>
+              </li>
+              <li class="topone clearfix" >
+                  <span class="label fl">信息服务费</span>
+                  <div>{{item.serviceFeePerWan}}元</div>
+              </li>
+              <li class="topone clearfix" >
+                  <span class="label fl">履约保证金</span>
+                  <div>{{marketValue*Math.ceil(losses+item.wearingPoint)}}</div>
+              </li>
+              <li class="topone clearfix" >
+                  <span class="label fl">递 延 费</span>
+                  <div>{{item.deferred}}/天</div>
+              </li>
+          </ul>
+          <ul class="secondUl">
+            <li class="delayed">
+              <el-checkbox  v-model="checked" >递延费到期自动支付</el-checkbox>
+            </li>
+            <li class="buyNow">
+              <button>立即点买</button>
+            </li>
+            <li class="info">
+              交易时间 09:30-11:30 13:30-14:50
+            </li>
+          </ul>
+      </div>
+  </div>
+</template>
+<script>
+export default {
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    },
+    dataList: {
+      type: Array
+    },
+    listTitle:{
+      type:Array
+    },
+    amountValues:{
+      type:Array
+    },
+    upLimitPrice:{
+      type:[Number,String]
+    }
+  },
+  data() {
+    return {
+      bigI:0,
+      index1: 0,
+      index2: 0,
+      index3: 0,
+      color1: "",
+      checked: true,
+      marketValue:this.dataList[0].amountValues[0].value,
+      losses:'',
+    };
+  },
+  methods: {
+    click(index) {
+      this.index1 = index;
+      this.bigI = index;
+    },
+    click1(value,index) {
+      console.log(value.value,index)
+      
+      this.index2 = index;
+      this.marketValue = value.value;
+    },
+    click2(value,index) {
+      console.log(value.point,index)
+      this.index3 = index;
+      this.losses = value.point;
+    },
+  },
+};
+</script>
+<style scoped>
+.mask {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 99;
+  top: 0;
+  left: 0;
+}
+.mask .main {
+  width: 800px;
+  /* height: 678px; */
+  position: absolute;
+  background-color: #ffffff;
+  left: 50%;
+  margin-left: -339px;
+  top: 50%;
+  margin-top: -400px;
+  padding: 30px 140px;
+  box-sizing: border-box;
+}
+.mask .main h2 {
+  line-height: 50px;
+  font-family: MicrosoftYaHei;
+  font-size: 22px;
+  text-align: center;
+  color: #1e242e;
+  font-weight: normal;
+  border-bottom: 1px solid #ece7e7;
+  margin-bottom: 20px;
+}
+.firstUl>li:nth-of-type(2n) {
+  border-bottom: 1px dashed #ece7e7;
+}
+.firstUl>li{
+  padding: 10px 0;
+
+}
+.firstUl>li:last-child {
+  border: none;
+}
+.toptwo {
+  width: 82%;
+}
+.topone .label {
+  font-size: 14px;
+  display: inline-table;
+  line-height: 20px;
+  color: #687284;
+  margin-right: 20px;
+  margin-top: 2px;
+  width: 70px;
+}
+.toptwo li {
+  display: inline-block;
+  width: 70px;
+  height: 24px;
+  border: solid 1px #dee0e4;
+  text-align: center;
+  margin-right: 30px;
+  margin-bottom: 12px;
+}
+li.active {
+  background-color: #ee8354;
+  border: solid 1px #ee8354;
+  color: #fff;
+}
+.secondUl li {
+  padding: 10px 0;
+}
+.delayed {
+  text-align: right;
+}
+.buyNow {
+  text-align: center;
+}
+li.losses{
+  width: 100px;
+}
+.secondUl button {
+  width: 400px;
+  height: 42px;
+  background-color: #ee8354;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 16px;
+}
+li.info {
+  font-size: 12px;
+  color: #b2b0b3;
+  padding: 0;
+  text-align: center;
+}
+</style>
