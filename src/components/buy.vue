@@ -1,5 +1,21 @@
 <template>
   <div class="mask" v-if="show">
+      <el-dialog
+              title="请输入支付密码"
+              :visible.sync="centerDialogVisible"
+              width="30%"
+              custom-class="dialogg"
+              center>
+          <div>
+              <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass"/>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <div @click="userWithd" class="paypassword">
+                确定
+            </div>
+                <input type="text"  style="display: none;"/>
+  </span>
+      </el-dialog>
       <div class="main">
           <span class="close" @click="close"> X </span>
           <h2>{{name}} {{instrumentId}}</h2>
@@ -9,7 +25,7 @@
                   <ul class="toptwo fr clearfix" ref="toptwo">
                       <li :class="index1==i?'active fl':'fl'"  v-for="(o,i) in listTitle" :key="i" @click="click(i)">{{o}}</li>
                   </ul>
-              </li> 
+              </li>
               <li class="topone clearfix" >
                   <span class="label fl">申请金额</span>
                   <ul class="toptwo fr clearfix">
@@ -68,7 +84,7 @@ export default {
   props: {
     show: {
       type: Boolean,
-      default: false
+      default: false,
     },
     dataList: {
       type: Array
@@ -101,6 +117,8 @@ export default {
   },
   data() {
     return {
+        payPass:'',
+        centerDialogVisible:true,
       bigI: 0,
       index1: 0,
       index2: 0,
@@ -112,10 +130,20 @@ export default {
       id:'',
       reserveFund:'',
       profitPoint:'',
-      serviceFee:''
+      serviceFee:'',
+        dialogVisible:true
     };
   },
   methods: {
+      showTime(){
+          if(this.payPass.length===6){
+              this.$refs.paymentPwdInput.blur();
+          }
+          console.log(this.payPass.length)
+      },
+      userWithd(){
+
+      },
     submit(){
       var requestObj = {
        stockCode:this. instrumentId,//股票代码
@@ -160,7 +188,35 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
+    .v-modal{
+        z-index: 89 !important;
+    }
+    .dialogg{
+        width: 408px !important;
+        margin-top: 26vh !important;
+        height: 236px !important;
+        border-radius: 10px;
+    }
+    .payPasw{
+        width: 286px;
+        height: 42px;
+        margin: 0 auto;
+        display: block;
+        letter-spacing: 40px;
+        text-indent: 25px;
+        background: url("../assets/img/passWborder.png") no-repeat;
+    }
+    .paypassword{
+        width: 300px;
+        height: 40px;
+        background: #f9d9cb;
+        color: #fff;
+        text-align: center;
+        line-height: 40px;
+        margin: 0 auto;
+        font-size: 16px;
+    }
 .close {
   position: absolute;
   color: #ddd;
