@@ -81,7 +81,7 @@
                         <div class="stock-right-div2">
                             <p>热门股票</p>
                             <ul class="data-stock">
-                                <li v-for="(item,index) in hot" :key="index">
+                                <li v-for="(item,index) in hot" :key="index" @click="pointBuy(item.code)">
                                     <div class="stock-title">
                                         <span>{{item.name}}</span>
                                         <span>{{item.code}}</span>
@@ -98,7 +98,7 @@
                     </div>
                 </div>
             </div>
-        <BuyMask  :show="show" :dataList="dataList" :listTitle="listTitle" :amountValues="amountValues" :upLimitPrice="upLimitPrice" :name="name" :instrumentId="instrumentId"></BuyMask>
+        <BuyMask @close="close"  :show="show" :dataList="dataList" :listTitle="listTitle" :amountValues="amountValues" :upLimitPrice="upLimitPrice" :name="name" :instrumentId="instrumentId"></BuyMask>
         </div>
         <footer-nav></footer-nav>
     </div>
@@ -199,6 +199,31 @@ export default {
       });
   },
   methods: {
+    close(){
+      this.show=false;
+      this.dataList = []
+      this.listTitle= []
+      this.upLimitPrice=''
+      this.name=''
+      this.instrumentId=''
+      this.amountValues=[]
+    },
+    pointBuy(code){
+      axios
+        .get("/strategist/stock/market/" + code)
+        .then(
+          function(response) {
+            var data = response.data.result
+            this.upLimitPrice =data.upLimitPrice
+            this.name =data.name  
+            this.instrumentId =data.instrumentId  
+            this.buy()
+          }.bind(this)
+        )
+        .catch(function(error) { 
+          console.log(error);
+        });
+    },
     buy(){
       this.show = true
       var _this = this
@@ -244,9 +269,7 @@ export default {
         .then(
             function(response) {
             if (response.data.code == 200) {
-
                 _this.rawData = response.data.result;
-                
                 _this.drawK();
             }
             }.bind(this)

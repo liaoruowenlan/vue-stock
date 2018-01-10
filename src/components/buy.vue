@@ -26,7 +26,7 @@
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">止盈率</span>
-                  <div>50%</div>
+                  <div>{{item.profit*100}}%</div>
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">止损率</span>
@@ -36,7 +36,7 @@
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">信息服务费</span>
-                  <div>{{item.serviceFeePerWan}}元</div>
+                  <div>{{item.serviceFeePerWan*(marketValue/10000)}}元</div>
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">履约保证金</span>
@@ -52,7 +52,7 @@
               <el-checkbox  v-model="checked" >递延费到期自动支付</el-checkbox>
             </li>
             <li class="buyNow">
-              <button>立即点买</button>
+              <button @click="submit">立即点买</button>
             </li>
             <li class="info">
               交易时间 09:30-11:30 13:30-14:50
@@ -62,6 +62,8 @@
   </div>
 </template>
 <script>
+import axios from "axios";
+import qs from "qs";
 export default {
   props: {
     show: {
@@ -89,10 +91,12 @@ export default {
   },
   watch: {
     dataList() {
-      this.marketValue = this.dataList[0].amountValues[0].value;
-      this.losses = this.dataList[0].losses[0].point;
-
-      //  this.Bond()
+      this.marketValue = this.dataList.length>0?this.dataList[0].amountValues[0].value:'';
+      this.losses = this.dataList.length>0?this.dataList[0].losses[0].point:'';
+      this.reserveFund = this.dataList.length>0?this.dataList[0].wearingPoint:'';
+      this.profitPoint = this.dataList.length>0?this.dataList[0].profit:'';
+      this.serviceFee = this.dataList.length>0?this.dataList[0].serviceFeePerWan:'';
+      this.id = this.dataList.length>0?this.dataList[0].id:'';
     }
   },
   data() {
@@ -104,19 +108,46 @@ export default {
       color1: "",
       checked: true,
       marketValue: "",
-      losses: 0
+      losses: 0,
+      id:'',
+      reserveFund:'',
+      profitPoint:'',
+      serviceFee:''
     };
   },
   methods: {
+    submit(){
+      var requestObj = {
+       stockCode:this. instrumentId,//股票代码
+       lossPoint:this.losses,//止损点
+       profitPoint:this.profitPoint,//止盈点
+       delegatePrice:this.upLimitPrice,//upLimitPrice
+       reserveFund:this.marketValue*(this.losses*1000+this.reserveFund*1000)/1000,//保证金
+       serviceFee:this.serviceFee*this.marketValue/10000,//信息服务费
+       applyAmount:this.marketValue,//申请金额
+       strategyTypeId:this.id,//类型id
+        deferred: this.checked//选择框
+        // paymentPassword://支付密码
+      }
+      console.log(requestObj)
+      // axios.post('/strategist/buyRecord/buy',qs.stringify(requestObj))
+    },
     close(){
-      console.log(this)
-      this.show = false;
+      this.$emit('close')
     },
     click(index) {
       this.losses = this.dataList[index].losses[0].point;
       this.marketValue = this.dataList[index].amountValues[0].value;
-      this.index1 = index;
+      this.index1 =index;
+      this.index2 = 0;
+      this.index3 = 0;
       this.bigI = index;
+      this.id = index+1;
+      this.reserveFund = this.dataList[index].wearingPoint
+      this.serviceFee =  this.dataList[index].serviceFeePerWan
+      this.profitPoint =  this.dataList[index].profit 
+      console.log(this.reserveFund)
+
     },
     click1(value, index) {
       this.index2 = index;
@@ -130,7 +161,7 @@ export default {
 };
 </script>
 <style scoped>
-.close{
+.close {
   position: absolute;
   color: #ddd;
   font-size: 40px;
