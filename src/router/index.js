@@ -21,7 +21,7 @@ import Holding from '@/pages/position/position/price/holding.vue'
 import Settlement from '@/pages/position/position/price/settlement.vue'
 
 import Optional from '@/pages/position/position/optional.vue'
-
+import { MessageBox } from 'element-ui';
 
 Vue.use(Router)
 
@@ -63,6 +63,7 @@ const router = new Router({
         },
         {
             path: '/position',
+            name: 'Position',
             component: Position,
             children: [
                 {
@@ -81,6 +82,8 @@ const router = new Router({
                         },
                         {
                             component: Holding,
+                            name:'holding',
+                            
                             path: '/position/price/holding'
                         },
                         {
@@ -95,10 +98,11 @@ const router = new Router({
         {
 
             path: '/myaccount',
+            name:Myaccount,
             component: Myaccount,
             children: [
                 {path: '/', component: Capital, redirect: '/myaccount/capital'},
-                {path: '/myaccount/capital', component: Capital},
+                {path: '/myaccount/capital', component: Capital,name:'capital'},
                 {path: '/myaccount/core', component: Core},
                 {path: '/myaccount/recharge', component: Recharge},
                 {path: '/myaccount/setup', component: Setup},
@@ -108,10 +112,16 @@ const router = new Router({
 })
 router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
     const Token = sessionStorage.getItem("token");
-    if (to.name == 'Home' || to.name == 'Register' || to.name == 'Login' || Token != "undefined") {
+    if(  to.name == 'Quotation' || to.name == 'Position'|| to.name == 'capital'|| to.name == 'holding' ){
+        if(!Token){
+            // alert('您还没有登录，请先登录')
+            MessageBox.alert('您还没有登录，请先登录','提示',{confirmButtonText: '确定',})
+            next('/login')
+        }else{
+            next()
+        }
+    }else{
         next()
-    } else {
-        next('/login')
     }
 })
 export default router;

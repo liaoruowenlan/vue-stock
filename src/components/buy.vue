@@ -10,11 +10,11 @@
               <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass"/>
           </div>
           <span slot="footer" class="dialog-footer">
-            <div @click="userWithd" class="paypassword">
+            <div @click="userWithd" class="paypassword" ref="btn">
                 确定
             </div>
                 <input type="text"  style="display: none;"/>
-  </span>
+        </span>
       </el-dialog>
       <div class="main">
           <span class="close" @click="close"> X </span>
@@ -84,7 +84,7 @@ export default {
   props: {
     show: {
       type: Boolean,
-      default: false,
+      default: false
     },
     dataList: {
       type: Array
@@ -98,27 +98,32 @@ export default {
     upLimitPrice: {
       type: [Number, String]
     },
-    name:{
-      type:String
+    name: {
+      type: String
     },
-    instrumentId:{
-      type:String
+    instrumentId: {
+      type: String
     }
   },
   watch: {
     dataList() {
-      this.marketValue = this.dataList.length>0?this.dataList[0].amountValues[0].value:'';
-      this.losses = this.dataList.length>0?this.dataList[0].losses[0].point:'';
-      this.reserveFund = this.dataList.length>0?this.dataList[0].wearingPoint:'';
-      this.profitPoint = this.dataList.length>0?this.dataList[0].profit:'';
-      this.serviceFee = this.dataList.length>0?this.dataList[0].serviceFeePerWan:'';
-      this.id = this.dataList.length>0?this.dataList[0].id:'';
+      this.marketValue =
+        this.dataList.length > 0 ? this.dataList[0].amountValues[0].value : "";
+      this.losses =
+        this.dataList.length > 0 ? this.dataList[0].losses[0].point : "";
+      this.reserveFund =
+        this.dataList.length > 0 ? this.dataList[0].wearingPoint : "";
+      this.profitPoint =
+        this.dataList.length > 0 ? this.dataList[0].profit : "";
+      this.serviceFee =
+        this.dataList.length > 0 ? this.dataList[0].serviceFeePerWan : "";
+      this.id = this.dataList.length > 0 ? this.dataList[0].id : "";
     }
   },
   data() {
     return {
-        payPass:'',
-        centerDialogVisible:true,
+      payPass: "",
+      centerDialogVisible: false,
       bigI: 0,
       index1: 0,
       index2: 0,
@@ -127,55 +132,81 @@ export default {
       checked: true,
       marketValue: "",
       losses: 0,
-      id:'',
-      reserveFund:'',
-      profitPoint:'',
-      serviceFee:'',
-        dialogVisible:true
+      id: "",
+      reserveFund: "",
+      profitPoint: "",
+      serviceFee: "",
+      dialogVisible: true,
+      canBuy:true
     };
   },
   methods: {
-      showTime(){
-          if(this.payPass.length===6){
-              this.$refs.paymentPwdInput.blur();
-          }
-          console.log(this.payPass.length)
-      },
-      userWithd(){
-
-      },
-    submit(){
-      var requestObj = {
-       stockCode:this. instrumentId,//股票代码
-       lossPoint:this.losses,//止损点
-       profitPoint:this.profitPoint,//止盈点
-       delegatePrice:this.upLimitPrice,//upLimitPrice
-       reserveFund:this.marketValue*(this.losses*1000+this.reserveFund*1000)/1000,//保证金
-       serviceFee:this.serviceFee*this.marketValue/10000,//信息服务费
-       applyAmount:this.marketValue,//申请金额
-       strategyTypeId:this.id,//类型id
-        deferred: this.checked//选择框
-        // paymentPassword://支付密码
+    showTime() {
+      if (this.payPass.length > 5) {
+        this.$refs.paymentPwdInput.blur();
+        this.$refs.btn.style.backgroundColor="#ee8354"        
+      }else{
+        this.$refs.btn.style.backgroundColor="#f9d9cb" 
       }
-      console.log(requestObj)
-      // axios.post('/strategist/buyRecord/buy',qs.stringify(requestObj))
     },
-    close(){
-      this.$emit('close')
+    userWithd() {
+      if(this.payPass.length<5) return;
+      if(!this.canBuy) return;
+      this.canBuy =false;
+      var _this = this
+      var requestObj = {
+        stockCode: this.instrumentId, //股票代码
+        lossPoint: this.losses, //止损点
+        profitPoint: this.profitPoint, //止盈点
+        delegatePrice: this.upLimitPrice, //upLimitPrice
+        reserveFund:
+          this.marketValue *
+          (this.losses * 1000 + this.reserveFund * 1000) /
+          1000, //保证金
+        serviceFee: this.serviceFee * this.marketValue / 10000, //信息服务费
+        applyAmount: this.marketValue, //申请金额
+        strategyTypeId: this.id, //类型id
+        deferred: this.checked, //选择框
+        paymentPassword:this.payPass//支付密码
+      };
+      axios.post('/strategist/buyRecord/buy',qs.stringify(requestObj)).then((response)=>{
+        _this.canBuy = true
+        this.centerDialogVisible=false;
+        this.payPass='';
+        this.$refs.btn.style.backgroundColor="#f9d9cb";   
+        if(response.data.code==200){
+          this.$alert('已开启自动支付，在到期日期之后的交易日下午14:40自动扣除递延费18元/天,不出现止盈、止损、延期费扣除失败的情况下可以继续持有策略之下个交易日！', '购买成功', {
+          confirmButtonText: '我知道了',})
+        }else if(response.data.code==6008){          
+          this.$alert(response.data.message, '点买通知', {
+          confirmButtonText: '去设置支付密码',
+          callback: action => {
+           this.$router.push('/myaccount/setup')
+          }})
+        }else{
+          this.$alert(response.data.message, '购买提示', )          
+        }
+      })
+
+    },
+    submit() {
+      this.centerDialogVisible=true
+    },
+    close() {
+      this.$emit("close");
     },
     click(index) {
       this.losses = this.dataList[index].losses[0].point;
       this.marketValue = this.dataList[index].amountValues[0].value;
-      this.index1 =index;
+      this.index1 = index;
       this.index2 = 0;
       this.index3 = 0;
       this.bigI = index;
-      this.id = index+1;
-      this.reserveFund = this.dataList[index].wearingPoint
-      this.serviceFee =  this.dataList[index].serviceFeePerWan
-      this.profitPoint =  this.dataList[index].profit 
-      console.log(this.reserveFund)
-
+      this.id = index + 1;
+      this.reserveFund = this.dataList[index].wearingPoint;
+      this.serviceFee = this.dataList[index].serviceFeePerWan;
+      this.profitPoint = this.dataList[index].profit;
+      console.log(this.reserveFund);
     },
     click1(value, index) {
       this.index2 = index;
@@ -188,35 +219,36 @@ export default {
   }
 };
 </script>
-<style>
-    .v-modal{
-        z-index: 89 !important;
-    }
-    .dialogg{
-        width: 408px !important;
-        margin-top: 26vh !important;
-        height: 236px !important;
-        border-radius: 10px;
-    }
-    .payPasw{
-        width: 286px;
-        height: 42px;
-        margin: 0 auto;
-        display: block;
-        letter-spacing: 40px;
-        text-indent: 25px;
-        background: url("../assets/img/passWborder.png") no-repeat;
-    }
-    .paypassword{
-        width: 300px;
-        height: 40px;
-        background: #f9d9cb;
-        color: #fff;
-        text-align: center;
-        line-height: 40px;
-        margin: 0 auto;
-        font-size: 16px;
-    }
+<style scoped>
+.v-modal {
+  z-index: 89 !important;
+}
+.dialogg {
+  width: 408px !important;
+  margin-top: 26vh !important;
+  height: 236px !important;
+  border-radius: 10px;
+}
+.payPasw {
+  width: 286px;
+  height: 42px;
+  margin: 0 auto;
+  display: block;
+  letter-spacing: 40px;
+  text-indent: 25px;
+  background: url("../assets/img/passWborder.png") no-repeat;
+}
+.paypassword {
+  width: 300px;
+  height: 40px;
+  background: #f9d9cb;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  margin: 0 auto;
+  font-size: 16px;
+  cursor: pointer;
+}
 .close {
   position: absolute;
   color: #ddd;
@@ -236,11 +268,11 @@ export default {
 }
 .mask .main {
   width: 800px;
-  /* height: 678px; */
+  min-height: 710px;
   position: absolute;
   background-color: #ffffff;
   left: 50%;
-  margin-left: -339px;
+  margin-left: -408px;
   top: 50%;
   margin-top: -400px;
   padding: 30px 140px;
@@ -255,6 +287,9 @@ export default {
   font-weight: normal;
   border-bottom: 1px solid #ece7e7;
   margin-bottom: 20px;
+}
+.firstUl{
+  min-height: 468px;
 }
 .firstUl > li:nth-of-type(2n) {
   border-bottom: 1px dashed #ece7e7;

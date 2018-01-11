@@ -63,4 +63,7 @@
         height: 50px;
         color: #3e59a7;
     }
+    a{
+        color:#818081;
+    }
 </style>

@@ -94,13 +94,14 @@
                 .then(function(res){
                     if(res.data.code!=200){
                         _this.Pwd.PwdReg = true;
+                        
                         return false;
                     }
                     sessionStorage.setItem("token",res.data.result.token);
                     sessionStorage.setItem("phone", _this.phone.UserPhone);
                     sessionStorage.setItem('id',res.data.result.id);
                     _this.$children[0].refreshUserInfo();
-                    _this.$router.push({ path: 'myaccount' });
+                    _this.$router.push({ path: 'home' });
                     // 修改header data
                 })
                 .catch(function(err){

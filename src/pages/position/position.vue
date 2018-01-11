@@ -5,7 +5,7 @@
             <div class="position">
                 <div class="position-left">
                     <ul>
-                        <li v-for="(item) in navLists"><router-link :to="item.url"><i></i>{{item.text}}</router-link></li>
+                        <li v-for="(item,index) in navLists" :key="index"><router-link :to="item.url"><i></i>{{item.text}}</router-link></li>
                     </ul>
                 </div>
                 <div class="position-right">

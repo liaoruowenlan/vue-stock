@@ -22,7 +22,7 @@
             <div>
                 <p>交易时间：</p>
                 <ul>
-                    <li v-bind:class="{'time-active': item.active}" v-for="item in times" @click="TimeClick(item)">
+                    <li v-bind:class="{'time-active': item.active}" v-for="(item,index) in times" :key="index" @click="TimeClick(item)">
                         {{item.time}}
                     </li>
                 </ul>
@@ -30,273 +30,295 @@
             <div>
                 <p>交易类型：</p>
                 <ul>
-                    <li v-bind:class="{'time-active': item.active}" v-for="item in types" @click="TypeClick(item)">
+                    <li v-bind:class="{'time-active': item.active}" v-for="(item,index) in types" :key="index" @click="TypeClick(item)">
                         {{item.type}}
                     </li>
                 </ul>
             </div>
         </div>
         <div class="user_div-table">
-            <!--<el-table-->
-            <!--:data="tableData"-->
-            <!--style="width: 100%"-->
-            <!--:class-name="active">-->
-            <!--<el-table-column-->
-            <!--prop="date"-->
-            <!--label="交易时间"-->
-            <!--width="160"-->
-            <!--align="center">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-            <!--prop="name"-->
-            <!--label="交易类型"-->
-            <!--width="76"-->
-            <!--align="center">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-            <!--prop="address"-->
-            <!--label="收入"-->
-            <!--width="89"-->
-            <!--align="center">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-            <!--prop="address"-->
-            <!--label="支出"-->
-            <!--width="89"-->
-            <!--align="center">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-            <!--prop="address"-->
-            <!--label="冻结"-->
-            <!--width="89"-->
-            <!--align="center">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-            <!--prop="address"-->
-            <!--label="交易金额"-->
-            <!--width="89"-->
-            <!--align="center">-->
-            <!--</el-table-column>-->
-            <!--<el-table-column-->
-            <!--prop="address"-->
-            <!--label="备注"-->
-            <!--width="57"-->
-            <!--align="center">-->
-            <!--</el-table-column>-->
-            <!--</el-table>-->
+             <el-table
+            :data="tableData"
+            style="width: 100%"
+            :class-name="active">
+            <el-table-column
+            prop="name"
+            label="交易类型"
+            width="180"
+            align="center">
+            </el-table-column>
+
+            <el-table-column
+            prop="amount"
+            label="交易金额"
+            width="180"
+            align="center">
+            </el-table-column>
+            <el-table-column
+            prop="occurrenceTime"
+            label="交易时间"
+            width="180"
+            align="center">
+            </el-table-column>
+            <el-table-column
+            prop="address"
+            label="备注"
+            width="180"
+            align="center">
+            </el-table-column>
+            </el-table> 
         </div>
+        <el-pagination
+            layout="prev, pager, next"
+            :total="totalPage" v-show="tableData.length>0"
+            :page-size='2'
+            @current-change="currentPage">
+        </el-pagination>
     </div>
 </template>
 
 <script>
-    import axios from "axios"
-    import qs from "qs"
+import axios from "axios";
+import qs from "qs";
 
-    export default {
-        name: "core",
-        data() {
-            return {
-                User: {},
-                times: [
-                    {
-                        time: '今天',
-                        range: 10,
-                        active: true
-                    },
-                    {
-                        time: '最近一周',
-                        range: 1,
-                        active: false
-                    },
-                    {
-                        time: '最近一月',
-                        range: 2,
-                        active: false
-                    },
-                    {
-                        time: '最近半年',
-                        range: 3,
-                        active: false
-                    },
-                    {
-                        time: '最近一年',
-                        range: 4,
-                        active: false
-                    },
-                ],
-                types: [
-                    {
-                        type: "全部",
-                        active: true
-                    },
-                    {
-                        type: "充值",
-                        active: false
-                    },
-                    {
-                        type: "提现",
-                        active: false
-                    },
-                    {
-                        type: "冻结资金",
-                        active: false
-                    },
-                    {
-                        type: "卖出结算",
-                        active: false
-                    },
-                    {
-                        type: "递延费",
-                        active: false
-                    },
-                    {
-                        type: "扣除管理费",
-                        active: false
-                    },
-                    {
-                        type: "推广分红",
-                        active: false
-                    },
-                    {
-                        type: "支付管理费",
-                        active: false
-                    }
-                ]
-            }
+export default {
+  name: "core",
+  data() {
+    return {
+      User: {},
+      active: "",
+      times: [
+        {
+          time: "今天",
+          range: 10,
+          active: true
         },
-        created() {
-            var _this = this;
-            var token = sessionStorage.getItem("token");
-            console.log(sessionStorage.getItem("token"))
-            axios.get('/strategist/capitalAccount/', {
-                headers: {
-                    'Authorization': token
-                }
-            })
-                .then(function (res) {
-                    console.log(res.data.result);
-                    _this.User = res.data.result;
-
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
-            axios.get('/strategist/capitalFlow/pages?' + qs.stringify({
-                page: 0,
-                size: 10,
-                range: 0
-            }), {
-                headers: {
-                    'Authorization': token
-                }
-            })
-                .then(function (res) {
-                    console.log(res.data);
-                    // _this.User = res.data.result;
-
-                })
-                .catch(function (err) {
-                    console.log(err);
-                });
+        {
+          time: "最近一周",
+          range: 1,
+          active: false
         },
-        methods: {
-            TimeClick: function (currentItem) {
-                console.log(currentItem)
-                for (var i = 0; i < this.times.length; i++) {
-                    this.times[i].active = false;
-                }
-                currentItem.active = true;
-                console.log(currentItem.range);
-            },
-            TypeClick: function (currentItem) {
-                for (var i = 0; i < this.types.length; i++) {
-                    this.types[i].active = false;
-                }
-                currentItem.active = true;
-                console.log(currentItem.range);
-            }
+        {
+          time: "最近一月",
+          range: 2,
+          active: false
+        },
+        {
+          time: "最近半年",
+          range: 3,
+          active: false
+        },
+        {
+          time: "最近一年",
+          range: 4,
+          active: false
         }
+      ],
+      types: [
+        {
+          type: "全部",
+          active: true
+        },
+        {
+          type: "充值",
+          active: false
+        },
+        {
+          type: "提现",
+          active: false
+        },
+        {
+          type: "冻结资金",
+          active: false
+        },
+        {
+          type: "卖出结算",
+          active: false
+        },
+        {
+          type: "递延费",
+          active: false
+        },
+        {
+          type: "扣除管理费",
+          active: false
+        },
+        {
+          type: "推广分红",
+          active: false
+        },
+        {
+          type: "支付管理费",
+          active: false
+        }
+      ],
+      tableData: [],
+      range: 10,
+      totalPage: 0,
+      page: 0
+    };
+  },
+  created() {
+      this.getList()
+    var _this = this;
+    var token = sessionStorage.getItem("token");
+    axios
+      .get("/strategist/capitalAccount/", {
+        headers: {
+          Authorization: token
+        }
+      })
+      .then(function(res) {
+        _this.User = res.data.result;
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  },
+  methods: {
+    currentPage(val) {
+      console.log(val);
+      this.page = val-1
+      this.getList()
+    },
+    getList() {
+        var _this =this
+      axios
+        .get(
+          "/strategist/capitalFlow/pages?" +
+            qs.stringify({
+              page: this.page,
+              size: 4,
+              range: this.range
+            }),
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token")
+            }
+          }
+        )
+        .then(function(res) {
+          if (res.data.code == 200) {
+            var data = res.data.result,
+                list = data.content,
+                arr = [];
+            for(let i = 0;i<list.length;i++){
+                var obj = {}
+                obj.name = list[i].name
+            }
+            _this.tableData = data.content;
+            _this.totalPage = data.totalElements;
+          }
+          console.log(res.data);
+          // _this.User = res.data.result;
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    },
+
+    TimeClick: function(currentItem) {
+      this.range = currentItem.range
+      for (var i = 0; i < this.times.length; i++) {
+        this.times[i].active = false;
+      }
+      currentItem.active = true;
+      this.getList()
+    },
+    TypeClick: function(currentItem) {
+      for (var i = 0; i < this.types.length; i++) {
+        this.types[i].active = false;
+      }
+      currentItem.active = true;
     }
+  }
+};
 </script>
 
 <style scoped>
-    .user_div-table {
-        font-size: 14px;
-        text-align: center !important;
-    }
+.el-pagination {
+  padding: 20px 5px;
+  text-align: center;
+}
+.user_div-table {
+  font-size: 14px;
+  text-align: center !important;
+}
 
-    .time-active {
-        background: #ee8354 !important;
-        color: #fff !important;
-    }
+.time-active {
+  background: #ee8354 !important;
+  color: #fff !important;
+}
 
-    .user_div {
-        margin-top: 0px !important;
-    }
+.user_div {
+  margin-top: 0px !important;
+}
 
-    /*.user-operation {*/
-        /*height: 860px !important;*/
-    /*}*/
+/*.user-operation {*/
+/*height: 860px !important;*/
+/*}*/
 
-    .user_div-data > div > p {
-        float: left;
-        color: #687284;
-        font-size: 12px;
-    }
+.user_div-data > div > p {
+  float: left;
+  color: #687284;
+  font-size: 12px;
+}
+.user_div-data li{
+    cursor: pointer;
+}
+.time-active {
+  font-size: 24px;
+}
 
-    .time-active {
-        font-size: 24px;
-    }
+.user_div-data > div {
+  padding-top: 25px;
+  width: 770px;
+  height: 16px;
+}
 
-    .user_div-data > div {
-        padding-top: 25px;
-        width: 770px;
-        height: 16px;
-    }
+.user_div-data > div:last-child {
+  padding-top: 12px;
+}
 
-    .user_div-data > div:last-child {
-        padding-top: 12px;
-    }
+.user_div-data > div ul li {
+  float: left;
+  width: 66px;
+  height: 18px;
+  text-align: center;
+  color: #adb3c1;
+  margin-right: 5px;
+  font-size: 12px;
+}
 
-    .user_div-data > div ul li {
-        float: left;
-        width: 66px;
-        height: 18px;
-        text-align: center;
-        color: #adb3c1;
-        margin-right: 5px;
-        font-size: 12px;
-    }
+.user_div-header {
+  width: 770px;
+  height: 137px;
+  border-bottom: 3px dashed #dcdee3;
+}
 
-    .user_div-header {
-        width: 770px;
-        height: 137px;
-        border-bottom: 3px dashed #dcdee3;
-    }
+.user_div-header > div {
+  float: left;
+  width: 192.5px;
+  height: 140px;
+  text-align: center;
+}
 
-    .user_div-header > div {
-        float: left;
-        width: 192.5px;
-        height: 140px;
-        text-align: center;
-    }
+.user_div-data {
+  height: 96px;
+  width: 770px;
+}
 
-    .user_div-data {
-        height: 96px;
-        width: 770px;
-    }
+.user_div-header > div span {
+  font-size: 28px;
+  color: #e26042;
+  font-family: sans-serif;
+  padding-top: 51px;
+  font-weight: 700;
+  display: inline-block;
+}
 
-    .user_div-header > div span {
-        font-size: 28px;
-        color: #e26042;
-        font-family: sans-serif;
-        padding-top: 51px;
-        font-weight: 700;
-        display: inline-block;
-    }
-
-    .user_div-header > div p {
-        font-size: 14px;
-        padding-top: 11px;
-    }
+.user_div-header > div p {
+  font-size: 14px;
+  padding-top: 11px;
+}
 </style>

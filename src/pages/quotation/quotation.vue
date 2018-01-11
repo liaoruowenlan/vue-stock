@@ -19,7 +19,7 @@
                         <span class="refresh" @click="openFullScreen" v-loading.fullscreen.lock="fullscreenLoading">
                             刷新
                         </span>
-                        <span class="buy-btn" @click="buy">
+                        <span class="buy-btn" @click="pointBuy(pcode)">
                             点买
                         </span>
                     </div>
@@ -122,6 +122,7 @@ export default {
       hot: null,
       market: {},
       code: "000001",
+      pcode:'000001',
       seo_stock_open: false,
       rawData: [],
       serchList: [],
@@ -204,8 +205,8 @@ export default {
       this.dataList = []
       this.listTitle= []
       this.upLimitPrice=''
-      this.name=''
-      this.instrumentId=''
+      // this.name=''
+      // this.instrumentId=''
       this.amountValues=[]
     },
     pointBuy(code){
@@ -259,6 +260,7 @@ export default {
         this.canSearch = false;//控制搜索按钮
         this.seo_stock_open = false;//显示模糊搜索列表
         this.keyword ='';//清空搜索关键字
+        this.pcode =code;
         this.shares(code);
         this.retriveMarket(code);
     },
@@ -327,14 +329,18 @@ export default {
             var data = response.data.result
             this.market =data;
             this.market.upDropSpeed = (this.market.upDropSpeed * 100).toFixed(2) + "%";
-            this.fullscreenLoading = false; 
+            setTimeout(()=>{
+              this.fullscreenLoading = false; 
+            },500)
             this.upLimitPrice =data.upLimitPrice
             this.name =data.name  
             this.instrumentId =data.instrumentId  
           }.bind(this)
         )
-        .catch(function(error) {
-            this.fullscreenLoading = false;  
+        .catch(function(error) {  
+            setTimeout(()=>{
+              this.fullscreenLoading = false; 
+            },500)
           console.log(error);
         });
     },
@@ -597,6 +603,9 @@ export default {
 </script>
 
 <style scoped>
+a{
+  cursor: pointer;
+}
 .title-main {
   height: 100%;
   height: 40px;

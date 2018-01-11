@@ -54,14 +54,12 @@
         },
         created(){
             var _this = this;
-            console.log(sessionStorage.getItem("token"))
             axios.get('/strategist/capitalAccount/', {
                 headers: {
                     'Authorization': sessionStorage.getItem("token")
                 }
             })
             .then(function(res){
-                console.log(res.data.result);
                 _this.User = res.data.result;
 
             })
@@ -74,8 +72,6 @@
                 }
             })
                 .then(function(res){
-                    console.log(res.data);
-                    console.log(res.data.result.length)
                     _this.BlankLength = res.data.result.length;
                 })
                 .catch(function(err){

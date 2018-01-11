@@ -2,7 +2,7 @@
     <div>
         <top-header></top-header>
         <swiper></swiper>
-
+        <Pay :centerDialogVisible="centerDialogVisible"></Pay>
         <div class="width100">
             <div class="news">
                 <img src="../../assets/img/sy-gonggao copy@2x.png" />
@@ -39,24 +39,74 @@
     import TopHeader from '../../components/header.vue'
     import FooterNav from '../../components/footer.vue'
     import Swiper from '../../components/swiper.vue'
+    import Pay from '../../components/paypassword.vue'
+    
     export default {
         name: "home",
         components:{
             TopHeader,
             FooterNav,
-            Swiper
+            Swiper,
+            Pay
         },
         data(){
             return {
                 money1:'36890',
-                money2:'12690'
+                money2:'12690',
+                centerDialogVisible: false,
             }
+        },
+        methods: {
+            getpw(){
+                var _this = this
+                this.$axios.get('/strategist/publisher/getSettingRemind',{
+                    headers: {
+                        'Authorization': sessionStorage.getItem("token")
+                    }
+                }).then((response)=>{
+                    var data = response.data
+                    if(data.code==200){
+                        if(!data.result.settingPaymentPassword){
+                            _this.centerDialogVisible =  true
+                        }
+                    }
+                })
+
+            }
+        },
+        mounted () {
+            this.getpw()
         }
     }
 </script>
 
 <style scoped>
-
+.dialogg {
+  width: 408px !important;
+  margin-top: 26vh !important;
+  height: 236px !important;
+  border-radius: 10px;
+}
+.payPasw {
+  width: 286px;
+  height: 42px;
+  margin: 0 auto;
+  display: block;
+  letter-spacing: 40px;
+  text-indent: 25px;
+  background: url("../../assets/img/passWborder.png") no-repeat;
+}
+.paypassword {
+  width: 300px;
+  height: 40px;
+  background: #f9d9cb;
+  color: #fff;
+  text-align: center;
+  line-height: 40px;
+  margin: 0 auto;
+  font-size: 16px;
+  cursor: pointer;
+}
 .news{
     height: 42px;
     background: #ffffff;

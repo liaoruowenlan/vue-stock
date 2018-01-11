@@ -108,12 +108,13 @@
                     .then(function(res){
                         if(res.data.code!=200){
                             _this.password.PwdReg = true;
-                            console.log(res.data);
                             _this.AuCode.AuCodeReg=true;
                             return false;
                         }else if(res.data.code==200){
-                            _this.$router.push({ path: 'myaccount' });
-                            sessionStorage.setItem("token",res.data.result.token);
+                            _this.$router.push({ path: 'home' });
+							sessionStorage.setItem("token",res.data.result.token);
+							sessionStorage.setItem("phone", _this.phone.UserPhone);
+
 						}
                         console.log(res.data);
                     })
