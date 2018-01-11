@@ -8,6 +8,7 @@
                         <div class="stock-text">
                             <span class="text">{{market.name}}</span>
                             <span class="number">{{market.instrumentId}}</span>
+                            <i class="el-icon-circle-plus addIcon" v-show="canAdd" @click="addIcon"></i>
                         </div>
                         <div class="stock-number">{{market.lastPrice}}</div>
                         <div class="stock-rose">
@@ -137,7 +138,8 @@ export default {
       amountValues:[],
       upLimitPrice:'',
       name:'',
-      instrumentId:''
+      instrumentId:'',
+      canAdd:true
     };
   },
   components: {
@@ -200,6 +202,18 @@ export default {
       });
   },
   methods: {
+    addIcon(){
+      this.$axios.post('/strategist/favoriteStock/addFavoriteStock?stockCode='+this.pcode).then((res)=>{
+        if(res.data.code == 200){
+          this.$message({
+              showClose: true,
+              message: '加入成功',
+              type: 'success',
+            });
+            this.canAdd = false
+        }
+      })
+    },
     close(){
       this.show=false;
       this.dataList = []
@@ -335,6 +349,7 @@ export default {
             this.upLimitPrice =data.upLimitPrice
             this.name =data.name  
             this.instrumentId =data.instrumentId  
+            this.canAdd = !data.favorite;
           }.bind(this)
         )
         .catch(function(error) {  
@@ -603,6 +618,16 @@ export default {
 </script>
 
 <style scoped>
+.number{
+display: inline-block;
+margin-right: 5px;
+}
+.addIcon{
+    font-size: 22px;
+    color: #e26042;
+    position: absolute;
+    bottom: -2px;
+}
 a{
   cursor: pointer;
 }
@@ -778,6 +803,7 @@ a{
 .stock-text {
   color: #fff;
   font-size: 14px;
+  position: relative;
   padding-top: 42px;
 }
 .stock-number {

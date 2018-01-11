@@ -44,3 +44,9 @@ input:-webkit-autofill {
 .fr{
 	float:right;
 }
+.flex{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}

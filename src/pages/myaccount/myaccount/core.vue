@@ -40,6 +40,8 @@
              <el-table
             :data="tableData"
             style="width: 100%"
+            v-loading="loading"
+            element-loading-background="#fff"
             :class-name="active">
             <el-table-column
             prop="name"
@@ -61,7 +63,7 @@
             align="center">
             </el-table-column>
             <el-table-column
-            prop="address"
+            prop="remarks"
             label="备注"
             width="180"
             align="center">
@@ -71,7 +73,7 @@
         <el-pagination
             layout="prev, pager, next"
             :total="totalPage" v-show="tableData.length>0"
-            :page-size='2'
+            :page-size='size'
             @current-change="currentPage">
         </el-pagination>
     </div>
@@ -85,13 +87,19 @@ export default {
   name: "core",
   data() {
     return {
+    loading:true,
       User: {},
       active: "",
       times: [
         {
           time: "今天",
-          range: 10,
+          range: 5,
           active: true
+        },
+        {
+          time: "全部",
+          range: 1,
+          active: false
         },
         {
           time: "最近一周",
@@ -117,49 +125,60 @@ export default {
       types: [
         {
           type: "全部",
+          flowType: 0,
           active: true
         },
         {
           type: "充值",
+          flowType: 1,
           active: false
         },
         {
           type: "提现",
+          flowType: 2,
           active: false
         },
         {
-          type: "冻结资金",
+          type: "服务费",
+          flowType: 3,
           active: false
         },
         {
-          type: "卖出结算",
+          type: "冻结履约保证金",
+          flowType: 4,
           active: false
         },
         {
           type: "递延费",
+          flowType: 5,
           active: false
         },
         {
-          type: "扣除管理费",
+          type: "退回履约保证金",
+          flowType: 6,
           active: false
         },
         {
-          type: "推广分红",
+          type: "卖出结算",
+          flowType: 7,
           active: false
         },
         {
-          type: "支付管理费",
+          type: "推广佣金",
+          flowType: 8,
           active: false
         }
       ],
       tableData: [],
-      range: 10,
+      range: 5,
       totalPage: 0,
-      page: 0
+      page: 0,
+      size: 4,
+      flowType: 0
     };
   },
   created() {
-      this.getList()
+    this.getList();
     var _this = this;
     var token = sessionStorage.getItem("token");
     axios
@@ -178,18 +197,19 @@ export default {
   methods: {
     currentPage(val) {
       console.log(val);
-      this.page = val-1
-      this.getList()
+      this.page = val - 1;
+      this.getList();
     },
     getList() {
-        var _this =this
+      var _this = this;
       axios
         .get(
           "/strategist/capitalFlow/pages?" +
             qs.stringify({
               page: this.page,
-              size: 4,
-              range: this.range
+              size: this.size,
+              range: this.range,
+              flowType: this.flowType
             }),
           {
             headers: {
@@ -200,14 +220,49 @@ export default {
         .then(function(res) {
           if (res.data.code == 200) {
             var data = res.data.result,
-                list = data.content,
-                arr = [];
-            for(let i = 0;i<list.length;i++){
-                var obj = {}
-                obj.name = list[i].name
+              list = data.content,
+              arr = [],
+              phone = sessionStorage.getItem("phone");
+            for (let i = 0; i < list.length; i++) {
+              var obj = {};
+              if (list[i].type == "Recharge") {
+                obj.name = "充值";
+              } else if (list[i].type == "Withdrawals") {
+                obj.name = "提现";
+              } else if (list[i].type == "ServiceFee") {
+                obj.name = "服务费";
+              } else if (list[i].type == "ReserveFund") {
+                obj.name = "冻结履约保证金";
+              } else if (list[i].type == "DeferredCharges") {
+                obj.name = "递延费";
+              } else if (list[i].type == "ReturnReserveFund") {
+                obj.name = "退回履约保证金";
+              } else if (list[i].type == "Loss") {
+                obj.name = "亏损";
+              } else if (list[i].type == "Profit") {
+                obj.name = "盈利";
+              } else if (list[i].type == "Promotion") {
+                obj.name = "推广佣金";
+              }
+              obj.occurrenceTime = list[i].occurrenceTime;
+              obj.amount = list[i].amount + " 元";
+              if (
+                list[i].type != "Recharge" ||
+                list[i].type != "Withdrawals" ||
+                list[i].type != "Promotion"
+              ) {
+                obj.remarks =
+                  list[i].stockName + "( " + list[i].stockCode + " )";
+              } else {
+                obj.remarks = phone;
+              }
+              arr.push(obj);
             }
-            _this.tableData = data.content;
+            _this.tableData = arr;
             _this.totalPage = data.totalElements;
+            setTimeout(()=>{
+                _this.loading = false
+            },400)
           }
           console.log(res.data);
           // _this.User = res.data.result;
@@ -218,24 +273,32 @@ export default {
     },
 
     TimeClick: function(currentItem) {
-      this.range = currentItem.range
+        this.loading = true
+      this.range = currentItem.range;
       for (var i = 0; i < this.times.length; i++) {
         this.times[i].active = false;
       }
       currentItem.active = true;
-      this.getList()
+      this.getList();
     },
     TypeClick: function(currentItem) {
+        this.loading = true
+        
+      this.flowType = currentItem.flowType;
       for (var i = 0; i < this.types.length; i++) {
         this.types[i].active = false;
       }
       currentItem.active = true;
+      this.getList();      
     }
   }
 };
 </script>
 
 <style scoped>
+.el-table{
+    height: 240px;
+}
 .el-pagination {
   padding: 20px 5px;
   text-align: center;
@@ -263,8 +326,8 @@ export default {
   color: #687284;
   font-size: 12px;
 }
-.user_div-data li{
-    cursor: pointer;
+.user_div-data li {
+  cursor: pointer;
 }
 .time-active {
   font-size: 24px;
@@ -282,7 +345,7 @@ export default {
 
 .user_div-data > div ul li {
   float: left;
-  width: 66px;
+  padding: 0 10px;
   height: 18px;
   text-align: center;
   color: #adb3c1;

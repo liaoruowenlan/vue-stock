@@ -37,13 +37,13 @@
 
 <style scoped>
     .price-list{
-        margin-bottom: 20px;
         background: #fff;
+        padding: 10px 0 ;
     }
     .topNav{
         width:884px;
         height: 52px;
-        border-bottom: 1px solid #f7f7f7;
+        border-bottom: 1px solid #ddd;
         background: #fff;
     }
     .topNav>li.topNav-div{
