@@ -2,7 +2,7 @@
     <div>
         <top-header></top-header>
         <swiper></swiper>
-        <Pay :centerDialogVisible="centerDialogVisible"></Pay>
+        <Pay :centerDialogVisible="centerDialogVisible" @close="close"></Pay>
         <div class="width100">
             <div class="news">
                 <img src="../../assets/img/sy-gonggao copy@2x.png" />
@@ -72,6 +72,9 @@
                     }
                 })
 
+            },
+            close(){
+                this.centerDialogVisible = false
             }
         },
         mounted () {

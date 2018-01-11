@@ -43,7 +43,8 @@ export default {
         userWithd(){
             if(this.payPass.length<6) return ;
             this.$axios.post('/strategist/publisher/initPaymentPassword',qs.stringify({paymentPassword:this.payPass})).then((response)=>{
-                console.log(response.data)
+                this.$emit('close')
+                    // this.centerDialogVisible = false
             })
         },
     }
