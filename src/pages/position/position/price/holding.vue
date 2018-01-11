@@ -30,14 +30,14 @@
                     <span class="r">{{parseInt(item.applyAmount*item.lossPoint)}}元</span>&nbsp;&nbsp;
                     <span class="space"></span>
                     <span class="l">点买类型</span>&nbsp;&nbsp;
-                    <span class="r">即时买入</span>&nbsp;&nbsp;{{new Date().toLocaleDateString().replace(/\//g,'-')}}{{item.createTime.split(' ')[0]}}
+                    <span class="r">即时买入</span>&nbsp;&nbsp;
                 </p>   
             </div>
             <div class="right flex">
                 <el-tag  size="medium" type="info" disable-transitions>
                     {{item.state=="POSTED"||item.state=="BUYLOCK"?'买入中':item.state=="HOLDPOSITION"?'持仓中':item.state=="SELLAPPLY"?"卖出申请":'卖出锁定'}}
                 </el-tag>
-                <el-button type="warning" :disabled="item.state!='HOLDPOSITION' && new Date().toLocaleDateString().replace(/\//g,'-') != item.createTime.split(' ')[0]?false:false">卖 出</el-button>
+                <el-button type="warning" :disabled="item.state!='HOLDPOSITION'" @click="sellOut(item.state,item.createTime)">卖 出</el-button>
             </div>      
         </div>
     </div>
@@ -57,6 +57,9 @@ export default {
     this.getList();
   },
   methods: {
+    sellOut(state,time) {
+
+    },
     getList() {
       this.$axios
         .get(
@@ -112,7 +115,7 @@ export default {
 }
 .holding-list .right {
   flex-direction: column;
-  padding: 20px 0;
+  padding: 32px 0;
   justify-content: space-between;
 }
 .holding-list .middle {
