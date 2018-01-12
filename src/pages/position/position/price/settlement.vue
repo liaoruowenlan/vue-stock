@@ -56,7 +56,6 @@ export default {
 <style scoped>
 .main{
     min-height: 600px;
-
 }
 .settlement {
     padding: 10px 100px;

@@ -31,7 +31,7 @@
             </div>
             <div class="blank" v-if="blank">
                 <ul :class="list1?'margin1':''">
-                    <li class="blank-list" v-for="(item,index) in blankdata" @click="setActive(index)" :class="{'Clickactive':item.blankActive}">
+                    <li class="blank-list" v-for="(item,index) in blankdata" @click="setActive(index)" :class="{'Clickactive':item.blankActive}" :key="index">
                         <img :src="item.bankIconLink" />
                         <div>
                             <p>{{item.bankName}}</p>
@@ -142,7 +142,7 @@
              myBlank:'',
              list1:'',
              userMoneyReg:'',
-             userMoneyText:'*提现金额不能大于用户余额。',
+             userMoneyText:'',
              abcdefghijk:null,
              activeIdx: 0,
              btnadd:false,
@@ -236,7 +236,9 @@
         },
         computed:{
             spanbalue:function(){
-                 this.btnadd = this.moneyOne>=1;
+                  if(this.moneyOne>=1){//用户银行卡数小于1的时候。btn无法加
+                    this.btnadd = true;
+                  }
                  this.cascadeDisabled =  /^([1-9]{1})(\d{14}|\d{18})$/.test(this.ruleForm.BlankCard)?false:true;
             }
         },
@@ -270,7 +272,6 @@
                 this.myBlank = true;
                 this.addBlank.BlankOpen = false;
                 this.addBlank.myblank1 = false;
-                this.moneyOne = '*提现金额需为整数';
             },
             userWithd(){
 

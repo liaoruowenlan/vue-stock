@@ -15,7 +15,7 @@
                 <i class="el-icon-arrow-down" ref="rowwer"></i>
             </div>
         </div>
-        <div class="bottom" ref="bottom" v-if="index == showNum">
+        <div class="bottom" ref="bottom" v-show="index == showNum">
             <p class="title">交易明细&nbsp;&nbsp;&nbsp;{{item.tradeNo}}</p>
             <div class="bottom-box">
                 <div class="flex bottom-item clearfix">
@@ -131,9 +131,13 @@ export default {
     seeDel(event, index) {
       if (this.$refs.rowwer.className == "el-icon-arrow-down") {
         this.$refs.rowwer.className = "el-icon-arrow-up";
+        this.$refs.bottom.setAttribute("class", "animation");
       } else {
         this.$refs.rowwer.className = "el-icon-arrow-down";
       }
+      //   this.$refs.bottom.setAttribute('className','bottom')
+
+      console.log(this.$refs.bottom);
       if (this.showNum != index) {
         this.showNum = index;
       } else {
@@ -145,7 +149,30 @@ export default {
 };
 </script>
 <style scoped>
-
+.animation {
+  -webkit-animation: fadeInDown 0.1s 0.1s ease both;
+  -moz-animation: fadeInDown 0.1s 0.1s ease both;
+}
+@-webkit-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+  }
+}
+@-moz-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -moz-transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: translateY(0);
+  }
+}
 .title {
   line-height: 60px;
 }
