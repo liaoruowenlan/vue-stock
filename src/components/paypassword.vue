@@ -1,9 +1,12 @@
 <template>
     <el-dialog
-            title="请设置支付密码"
+            title="首次请设置支付密码"
             :visible.sync="centerDialogVisible"
             width="30%"
             custom-class="dialogg"
+            :close-on-press-escape='false'
+            :show-close="false"
+            :close-on-click-modal="false"
             center>
         <div>
             <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass"/>
@@ -43,7 +46,8 @@ export default {
         userWithd(){
             if(this.payPass.length<6) return ;
             this.$axios.post('/strategist/publisher/initPaymentPassword',qs.stringify({paymentPassword:this.payPass})).then((response)=>{
-                console.log(response.data)
+                this.$emit('close')
+                    // this.centerDialogVisible = false
             })
         },
     }

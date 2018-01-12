@@ -34,10 +34,10 @@
                 </p>   
             </div>
             <div class="right flex">
-                <el-tag  size="medium" type="info">
+                <el-tag  size="medium" type="info" disable-transitions>
                     {{item.state=="POSTED"||item.state=="BUYLOCK"?'买入中':item.state=="HOLDPOSITION"?'持仓中':item.state=="SELLAPPLY"?"卖出申请":'卖出锁定'}}
                 </el-tag>
-                <el-button type="warning" >卖 出</el-button>
+                <el-button type="warning" :disabled="item.state!='HOLDPOSITION'" @click="sellOut(item.state,item.createTime)">卖 出</el-button>
             </div>      
         </div>
     </div>
@@ -46,75 +46,99 @@
 <script>
 export default {
   name: "holding",
-  data(){
-      return{
-          page:0,
-          size:4,
-          dataList:[]
-      }
+  data() {
+    return {
+      page: 0,
+      size: 4,
+      dataList: []
+    };
   },
-  mounted () {
-    this.getList()
+  mounted() {
+    this.getList();
   },
   methods: {
-      getList(){
-          this.$axios.get('strategist/buyRecord/pagesHoldPosition?page='+this.page+'&size='+this.size,{
-              headers:{
-                  'Authorization':sessionStorage.getItem('token')
-              }
-          }).then((res)=>{
-              if(res.data.code==200){
-                  this.dataList = res.data.result.content
-              }
-          })
-      }
+    sellOut(state,time) {
+
+    },
+    getList() {
+      this.$axios
+        .get(
+          "strategist/buyRecord/pagesHoldPosition?page=" +
+            this.page +
+            "&size=" +
+            this.size,
+          {
+            headers: {
+              Authorization: sessionStorage.getItem("token")
+            }
+          }
+        )
+        .then(res => {
+          if (res.data.code == 200) {
+            this.dataList = res.data.result.content;
+          }
+        });
+    }
   }
 };
 </script>
 
 <style scoped>
-.el-button+.el-button{
-    margin-left: 0 !important;
+.el-tag--medium {
+  height: 30px;
+  width: 100px;
+  line-height: 26px;
+  text-align: center;
+  background: #b2b0b3;
+  color: #fff;
+}
+.el-button {
+  padding: 7px 20px;
+}
+.el-button + .el-button {
+  margin-left: 0 !important;
 }
 
-.holding-list{
-    display: flex;
-    justify-content: space-between;
+.holding-list {
+  display: flex;
+  justify-content: space-between;
 }
-.greenmoney{
-    color: #47c233;
+.greenmoney {
+  color: #47c233;
 }
-.redmoney{
-    color: #e26042;
+.redmoney {
+  color: #e26042;
 }
-.space{
-    width: 40px;
-    display: inline-block;
+.space {
+  width: 40px;
+  display: inline-block;
 }
-.holding-list .right{
-    flex-direction: column;
-    padding: 20px 0;
-    justify-content: space-between;
+.holding-list .right {
+  flex-direction: column;
+  padding: 32px 0;
+  justify-content: space-between;
 }
-.holding-list .middle{
-    padding-left: 27px;
-    font-size: 14px;
-    color: #687284;
-    line-height: 50px;
+.holding-list .middle {
+  padding-left: 27px;
+  font-size: 14px;
+  color: #687284;
+  line-height: 50px;
 }
-.holding-list .middle1,.holding-list .bottom{
-    padding-left: 27px;
-    line-height: 32px;
-    font-size: 14px;
-    color:#818081;
+.holding-list .middle1,
+.holding-list .bottom {
+  padding-left: 27px;
+  line-height: 32px;
+  font-size: 14px;
+  color: #818081;
 }
-.holding-list .middle1 .r,.holding-list .bottom .r{
-    color: #1e242e;
-    display: inline-block;
-    width: 66px;
+.holding-list .middle1 .r,
+.holding-list .bottom .r {
+  color: #1e242e;
+  display: inline-block;
+  width: 66px;
 }
 .holding > div.holding-list {
-padding: 30px 0;
+  padding: 30px 0;
   width: 683px;
   margin: 0 auto;
   border-bottom: 1px solid #dee0e4;
@@ -140,7 +164,7 @@ padding: 30px 0;
 .blue {
   background: #3e59a7;
 }
-.orange{
-    color: #ee8354;
+.orange {
+  color: #ee8354;
 }
 </style>

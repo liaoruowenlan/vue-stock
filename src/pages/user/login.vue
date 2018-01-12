@@ -17,10 +17,10 @@
                     </div>
                     <div class="passworld">
                         <p>登陆密码</p>
-                        <input type="password" v-model="Pwd.UserPwd" @keyup="change()" autocomplete="off"/>
+                        <input type="password" v-model="Pwd.UserPwd" @keyup="change($event)" autocomplete="off"/>
                         <div v-if="Pwd.PwdReg">{{Pwd.PwdMsg}}</div>
                     </div>
-                    <input :class="btnUp?'addColor':''" type="button" value="登陆" class="login-btn" @click="login"/>
+                    <input id="user-login" :class="btnUp?'addColor':''" type="button" value="登陆" class="login-btn" @click="login"/>
                     <div class="login-operation">
                         <a href="#/reset">
                             忘记密码
@@ -68,25 +68,33 @@
         },
         computed: {
           spanValue: function() {
-              if(this.phone.UserPhone.length > 0 && this.Pwd.UserPwd.length > 0){
+              if (this.phone.UserPhone.length > 0 && this.Pwd.UserPwd.length > 0) {
                   this.btnUp = true;
               } else {
                   this.btnUp = false;
-              }
+              };
               //值改变，所有验证开关，为false
               this.phone.PhoneReg = false;
               this.Pwd.PwdReg = false;
+
           }
         },
         methods: {
-            change() {
+            change(event) {
                 this.phone.PhoneReg = false;
-            },
+                if (event.keyCode==13){
+                    this.login();
+                }
+                    },
             blur() {
                 this.phone.PhoneReg = this.phone.UserPhone.trim() != '' && !(/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.UserPhone));
             },
             login(){
                 var _this = this;
+                if(_this.Pwd.UserPwd.length<6){
+                    _this.Pwd.PwdReg = true;
+                    return false;
+                }
                 axios.post('/strategist/login', qs.stringify({
                     phone: this.phone.UserPhone,
                     password: this.Pwd.UserPwd
@@ -94,7 +102,6 @@
                 .then(function(res){
                     if(res.data.code!=200){
                         _this.Pwd.PwdReg = true;
-                        
                         return false;
                     }
                     sessionStorage.setItem("token",res.data.result.token);

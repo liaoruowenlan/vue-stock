@@ -111,10 +111,10 @@
                             _this.AuCode.AuCodeReg=true;
                             return false;
                         }else if(res.data.code==200){
-                            _this.$router.push({ path: 'home' });
 							sessionStorage.setItem("token",res.data.result.token);
-							sessionStorage.setItem("phone", _this.phone.UserPhone);
-
+							sessionStorage.setItem("phone", _this.phone.userPhone);
+                            sessionStorage.setItem("id",res.data.result.id);
+                             _this.$router.push({ path: 'home' });
 						}
                         console.log(res.data);
                     })

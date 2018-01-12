@@ -16,10 +16,10 @@
             </div>
             <div class="user_text">
                 <p>提现金额</p>
-                <input type="text" class="winmoney" v-model="moneyOne"/>
+                <input type="text" class="winmoney" v-model="moneyOne" @keyup="userMoneyC"/>
                 <p class="uesrmoney">可用金额：<span>{{userMoney}}</span></p>
                 <div v-show="userMoneyReg" class="user_text_red">
-                    *提现金额不能大于用户余额、
+                    {{userMoneyText}}
                 </div>
             </div>
             <div v-if="!blank" class="no_blank">
@@ -117,10 +117,10 @@
                 custom-class="dialogg"
                 center>
             <div>
-                <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass"/>
+                <input type="password"  class="payPasw" maxlength="6" @keyup="showTime($event)" ref="paymentPwdInput"  v-model="payPass"/>
             </div>
             <span slot="footer" class="dialog-footer">
-            <div @click="userWithd" class="paypassword">
+            <div @click="userWithd" :class="PostPay?'addColor':''" class="paypassword">
                 确定
             </div>
                 <input type="text"  style="display: none;"/>
@@ -142,9 +142,11 @@
              myBlank:'',
              list1:'',
              userMoneyReg:'',
+             userMoneyText:'*提现金额不能大于用户余额。',
              abcdefghijk:null,
              activeIdx: 0,
              btnadd:false,
+             PostPay:false,
              blank:false,
              cascadeDisabled: true,
              blankdata:{},
@@ -234,20 +236,30 @@
         },
         computed:{
             spanbalue:function(){
-                 this.btnadd = this.moneyOne>=1&&this.moneyOne<=this.userMoney&&this.lengths>=1;
+                 this.btnadd = this.moneyOne>=1;
                  this.cascadeDisabled =  /^([1-9]{1})(\d{14}|\d{18})$/.test(this.ruleForm.BlankCard)?false:true;
-                  this.userMoneyReg = this.moneyOne>this.userMoney;
-                console.log(this.ruleForm.BlankCard)
-                console.log(this.cascadeDisabled)
             }
         },
         methods:{
             /**
+             * 提现金额失去焦点
+             **/
+            userMoneyC(){
+                this.userMoneyReg = false;
+            },
+            /**
              * 支付密码失去焦点
              **/
-            showTime(){
+            showTime(event){
+                this.payPass = this.payPass.replace(/[^\d]/g,'');
+                if (event.keyCode==13){
+                    alert('1');
+                }
                 if(this.payPass.length===6){
                     this.$refs.paymentPwdInput.blur();
+                    this.PostPay = true ;
+                }else{
+                    this.PostPay = false ;
                 }
                 console.log(this.payPass.length)
             },
@@ -258,13 +270,31 @@
                 this.myBlank = true;
                 this.addBlank.BlankOpen = false;
                 this.addBlank.myblank1 = false;
-                this.moneyOne = '';
+                this.moneyOne = '*提现金额需为整数';
             },
             userWithd(){
 
             },
+            /**
+             * 用户点击我要提现
+             **/
             userPaypass(){
-                this.centerDialogVisible = this.btnadd?true:false;
+                if(this.moneyOne < 500){
+                    this.userMoneyReg = true;
+                    this.userMoneyText = '*提现金额需大于或等于500';
+                    return false;
+                }
+                if(this.moneyOne>this.userMoney){ //。
+                    this.userMoneyReg=true;
+                    this.userMoneyText = '*提现金额不得大于用户余额';
+                    return false;
+                }
+                if(!(/^[0-9]+$/.test(this.moneyOne))){
+                    this.userMoneyReg = true;
+                    this.userMoneyText = '*提现金额需为整数。'
+                    return false;
+                }
+                this.centerDialogVisible = this.btnadd;
             },
             /**
              * 处理没有输入银行银行卡的情况
