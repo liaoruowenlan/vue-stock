@@ -4,7 +4,7 @@
             <div class="left ">
                 <p class="one">
                     <span :class="[item.profitOrLoss>0?'square orange':'square blue']"></span>
-                    <span class="name">{{item.stockName}}</span>
+                    <span class="name">{{item.stockName}}  ( {{item.stockCode}} )</span>
                 </p>
                 <p class="middle">
                     <span class="data">{{item.createTime}}</span>&nbsp;&nbsp;
@@ -37,27 +37,56 @@
                 <el-tag  size="medium" type="info" disable-transitions>
                     {{item.state=="POSTED"||item.state=="BUYLOCK"?'买入中':item.state=="HOLDPOSITION"?'持仓中':item.state=="SELLAPPLY"?"卖出申请":'卖出锁定'}}
                 </el-tag>
-                <el-button type="warning" :disabled="item.state!='HOLDPOSITION'" @click="sellOut(item.state,item.createTime)">卖 出</el-button>
-            </div>      
+                <el-button type="warning"  @click="sellOut(item)">卖 出</el-button>
+            </div>   
+             
         </div>
+        <el-pagination
+            layout="prev, pager, next"
+            :total="total"
+            v-if="dataList.length>0"
+            :page-size='size'
+            @current-change="currentPage">
+        </el-pagination>
+        <Confirm :maskInfo="maskInfo" :show="show" :createTime="createTime" @close="close"/>
     </div>
 </template>
 
 <script>
+import Confirm from '../../../../components/querySell'
 export default {
   name: "holding",
   data() {
     return {
       page: 0,
       size: 4,
-      dataList: []
+      dataList: [],
+      maskInfo:{},
+      show:false,
+      createTime:'',
+      pageSizes:[4],
+      total:10,
     };
+  },
+  components: {
+      Confirm
   },
   mounted() {
     this.getList();
   },
   methods: {
-    sellOut(state,time) {
+    close(){
+      this.show=false
+    },
+    currentPage(val){
+      this.page =  val - 1
+      this.getList()
+    },
+    sellOut(item) {
+        //:disabled="item.state!='HOLDPOSITION'"
+        this.show = true
+        this.maskInfo = item
+        this.createTime = Math.floor((Date.parse(new Date())-Date.parse(item.createTime.split(' ')[0]))/(1000*60*60*24))
 
     },
     getList() {
@@ -76,6 +105,7 @@ export default {
         .then(res => {
           if (res.data.code == 200) {
             this.dataList = res.data.result.content;
+            this.total = res.data.result.totalElements
           }
         });
     }
@@ -84,6 +114,7 @@ export default {
 </script>
 
 <style scoped>
+
 .el-tag--medium {
   height: 30px;
   width: 100px;

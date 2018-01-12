@@ -5,6 +5,8 @@
               :visible.sync="centerDialogVisible"
               width="30%"
               custom-class="dialogg"
+              :modal="false"
+              @close = "clear"
               center>
           <div>
               <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass"/>
@@ -141,6 +143,9 @@ export default {
     };
   },
   methods: {
+    clear(){
+      this.payPass = ''
+    },
     showTime() {
       if (this.payPass.length > 5) {
         this.$refs.paymentPwdInput.blur();
@@ -225,7 +230,7 @@ export default {
 }
 .dialogg {
   width: 408px !important;
-  margin-top: 26vh !important;
+  margin-top: 30vh !important;
   height: 236px !important;
   border-radius: 10px;
 }

@@ -74,7 +74,7 @@
                                         <span>{{item.stockCode}}</span>
                                     </div>
                                     <div>
-                                        {{item.tradeType}}价格{{item.tradePrice}}
+                                        {{item.tradeType}}价格{{item.tradePrice || '暂无'}}
                                     </div>
                                 </li>
                             </ul>
@@ -122,24 +122,24 @@ export default {
       transaction: null,
       hot: null,
       market: {},
-      code: "000001",
-      pcode:'000001',
+      code: this.$route.params.code || "000001",
+      pcode: this.$route.params.code || "000001",
       seo_stock_open: false,
       rawData: [],
       serchList: [],
       canSearch: false,
-      keyword:'',
-      first:[],
-      dayormonth:0,
-      fullscreenLoading:false,
-      show:false,
-      dataList:[],
-      listTitle:[],
-      amountValues:[],
-      upLimitPrice:'',
-      name:'',
-      instrumentId:'',
-      canAdd:true
+      keyword: "",
+      first: [],
+      dayormonth: 0,
+      fullscreenLoading: false,
+      show: false,
+      dataList: [],
+      listTitle: [],
+      amountValues: [],
+      upLimitPrice: "",
+      name: "",
+      instrumentId: "",
+      canAdd: true
     };
   },
   components: {
@@ -148,6 +148,7 @@ export default {
     BuyMask
   },
   created() {
+    console.log(this.$route.params);
     this.retriveMarket(this.code);
     this.shares(this.code);
     let _this = this;
@@ -175,13 +176,11 @@ export default {
         _this.transaction = res.data.result.content; //拿到所有数据
         for (var i = 0; i < _this.transaction.length; i++) {
           //循环所有数据，找到type数据，然后修改值
-          _this.transaction[i].tradeType =
-            _this.transaction[i].tradeType == 1 ? "买入" : "卖出";
-          _this.transaction[i].tradeTime = _this.transaction[
-            i
-          ].tradeTime.substring(11, 16);
+          _this.transaction[i].tradeType =_this.transaction[i].tradeType == 1 ? "买入" : "卖出";
+          _this.transaction[i].tradeTime = _this.transaction[i].tradeTime?_this.transaction[i].tradeTime.substring(11, 16):'无法获取';
         }
         _this.transaction = Object.assign({}, _this.transaction);
+        console.log(_this.transaction)
       })
       .catch(function(err) {
         console.log(err);
@@ -202,96 +201,103 @@ export default {
       });
   },
   methods: {
-    addIcon(){
-      this.$axios.post('/strategist/favoriteStock/addFavoriteStock?stockCode='+this.pcode).then((res)=>{
-        if(res.data.code == 200){
-          this.$message({
+    addIcon() {
+      this.$axios
+        .post(
+          "/strategist/favoriteStock/addFavoriteStock?stockCode=" + this.pcode
+        )
+        .then(res => {
+          if (res.data.code == 200) {
+            this.$message({
               showClose: true,
-              message: '加入成功',
-              type: 'success',
+              message: "加入成功",
+              type: "success"
             });
-            this.canAdd = false
-        }
-      })
+            this.canAdd = false;
+          }
+        });
     },
-    close(){
-      this.show=false;
-      this.dataList = []
-      this.listTitle= []
-      this.upLimitPrice=''
+    close() {
+      this.show = false;
+      this.dataList = [];
+      this.listTitle = [];
+      this.upLimitPrice = "";
       // this.name=''
       // this.instrumentId=''
-      this.amountValues=[]
+      this.amountValues = [];
     },
-    pointBuy(code){
+    pointBuy(code) {
       axios
         .get("/strategist/stock/market/" + code)
         .then(
           function(response) {
-            var data = response.data.result
-            this.upLimitPrice =data.upLimitPrice
-            this.name =data.name  
-            this.instrumentId =data.instrumentId  
-            this.buy()
+            var data = response.data.result;
+            this.upLimitPrice = data.upLimitPrice;
+            this.name = data.name;
+            this.instrumentId = data.instrumentId;
+            this.buy();
           }.bind(this)
         )
-        .catch(function(error) { 
+        .catch(function(error) {
           console.log(error);
         });
     },
-    buy(){
-      this.show = true
-      var _this = this
-      var listTitle = this.listTitle
-      var amountValues = this.amountValues
-      axios.get('/strategist/strategytype/lists').then((response)=>{
-        if(response.data.code==200){
-          var data = response.data.result
-          _this.dataList =data
-          for(let i=0;i<data.length;i++){
-            listTitle.push(data[i].name)
-            amountValues.push(data[i].amountValues)
+    buy() {
+      this.show = true;
+      var _this = this;
+      var listTitle = this.listTitle;
+      var amountValues = this.amountValues;
+      axios
+        .get("/strategist/strategytype/lists")
+        .then(response => {
+          if (response.data.code == 200) {
+            var data = response.data.result;
+            _this.dataList = data;
+            for (let i = 0; i < data.length; i++) {
+              listTitle.push(data[i].name);
+              amountValues.push(data[i].amountValues);
+            }
           }
-        }
-      }).catch((error)=>{
-            console.log(error);        
-      })
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-    search(code,event){
-        if(this.keyword===''){
-            return
+    search(code, event) {
+      if (this.keyword === "") {
+        return;
+      }
+      if (event.target.className === "canSearch seo-btn") {
+        if (this.first.length > 0) {
+          code = this.first[0].code;
+        } else {
+          this.$alert("请输入正确的股票代码", "提示", {
+            confirmButtonText: "确定"
+          });
+          return;
         }
-        if(event.target.className === 'canSearch seo-btn'){
-            if(this.first.length>0){
-                code = this.first[0].code
-            }else{
-                this.$alert('请输入正确的股票代码', '提示', {
-                    confirmButtonText: '确定',
-                });
-                return
-            }
-        }
-        this.canSearch = false;//控制搜索按钮
-        this.seo_stock_open = false;//显示模糊搜索列表
-        this.keyword ='';//清空搜索关键字
-        this.pcode =code;
-        this.shares(code);
-        this.retriveMarket(code);
+      }
+      this.canSearch = false; //控制搜索按钮
+      this.seo_stock_open = false; //显示模糊搜索列表
+      this.keyword = ""; //清空搜索关键字
+      this.pcode = code;
+      this.shares(code);
+      this.retriveMarket(code);
     },
-    shares(code){
-        var _this = this
-        axios
-        .get("/strategist/stock/timeLine/"+code)
+    shares(code) {
+      var _this = this;
+      axios
+        .get("/strategist/stock/timeLine/" + code)
         .then(
-            function(response) {
+          function(response) {
             if (response.data.code == 200) {
-                _this.rawData = response.data.result;
-                _this.drawK();
+              _this.rawData = response.data.result;
+              _this.drawK();
             }
-            }.bind(this)
+          }.bind(this)
         )
         .catch(function(error) {
-            console.log(error);
+          console.log(error);
         });
     },
     seo_stock(event) {
@@ -301,17 +307,17 @@ export default {
         _this.seo_stock_open = false;
         this.canSearch = false;
         // console.log(this.canSearch)
-        
+
         return;
       }
       this.canSearch = true;
       axios
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {
-           if (response.data.code == 200) {
-              var data = response.data.result;
+          if (response.data.code == 200) {
+            var data = response.data.result;
             _this.serchList = data;
-            _this.first = data.slice(0,1);
+            _this.first = data.slice(0, 1);
           }
         })
         .catch(function(error) {
@@ -320,18 +326,21 @@ export default {
       _this.seo_stock_open = true;
     },
     openFullScreen() {
-        this.fullscreenLoading = true;
-        this.retriveMarket(this.code);
+      this.fullscreenLoading = true;
+      this.retriveMarket(this.code);
     },
-    kLine(code,type,index){
-        this.dayormonth = index
-        var _this = this
-        axios.get('/strategist/stock/kLine?stockCode='+code+'&type='+type).then((response)=>{
-            if(response.data.code==200){
-                _this.rawData =response.data.result
-                _this.drawK();
-            }
-        }).catch(function(error) {
+    kLine(code, type, index) {
+      this.dayormonth = index;
+      var _this = this;
+      axios
+        .get("/strategist/stock/kLine?stockCode=" + code + "&type=" + type)
+        .then(response => {
+          if (response.data.code == 200) {
+            _this.rawData = response.data.result;
+            _this.drawK();
+          }
+        })
+        .catch(function(error) {
           console.log(error);
         });
     },
@@ -340,27 +349,28 @@ export default {
         .get("/strategist/stock/market/" + code)
         .then(
           function(response) {
-            var data = response.data.result
-            this.market =data;
-            this.market.upDropSpeed = (this.market.upDropSpeed * 100).toFixed(2) + "%";
-            setTimeout(()=>{
-              this.fullscreenLoading = false; 
-            },500)
-            this.upLimitPrice =data.upLimitPrice
-            this.name =data.name  
-            this.instrumentId =data.instrumentId  
+            var data = response.data.result;
+            this.market = data;
+            this.market.upDropSpeed =
+              (this.market.upDropSpeed * 100).toFixed(2) + "%";
+            setTimeout(() => {
+              this.fullscreenLoading = false;
+            }, 500);
+            this.upLimitPrice = data.upLimitPrice;
+            this.name = data.name;
+            this.instrumentId = data.instrumentId;
             this.canAdd = !data.favorite;
           }.bind(this)
         )
-        .catch(function(error) {  
-            setTimeout(()=>{
-              this.fullscreenLoading = false; 
-            },500)
+        .catch(function(error) {
+          setTimeout(() => {
+            this.fullscreenLoading = false;
+          }, 500);
           console.log(error);
         });
     },
     changeMap(value) {
-        this.dayormonth=0
+      this.dayormonth = 0;
       this.shares(this.code);
     },
     drawK(value) {
@@ -582,13 +592,12 @@ export default {
       var categoryData = [];
       var values = [];
       var volumes = [];
-      var dm = this.dayormonth
+      var dm = this.dayormonth;
       for (var i = 0; i < rawData.length; i++) {
-        if(dm===0){
-            categoryData.push(rawData[i].time.split(" ")[1].slice(0, 5));
-        }else if(dm===1){
-            categoryData.push(rawData[i].time.split(" ")[0].slice(5, 10));
-            
+        if (dm === 0) {
+          categoryData.push(rawData[i].time.split(" ")[1].slice(0, 5));
+        } else if (dm === 1) {
+          categoryData.push(rawData[i].time.split(" ")[0].slice(5, 10));
         }
         values.push([
           rawData[i].openPrice,
@@ -618,17 +627,17 @@ export default {
 </script>
 
 <style scoped>
-.number{
-display: inline-block;
-margin-right: 5px;
+.number {
+  display: inline-block;
+  margin-right: 5px;
 }
-.addIcon{
-    font-size: 22px;
-    color: #e26042;
-    position: absolute;
-    bottom: -2px;
+.addIcon {
+  font-size: 22px;
+  color: #e26042;
+  position: absolute;
+  bottom: -2px;
 }
-a{
+a {
   cursor: pointer;
 }
 .title-main {
@@ -661,8 +670,8 @@ a{
   line-height: 32px;
   padding: 0 8px;
 }
-.seo-list li:hover{
-    background: #ddd;
+.seo-list li:hover {
+  background: #ddd;
 }
 .canSearch.seo-btn {
   background: #f30;
@@ -824,7 +833,7 @@ a{
 .buy {
   margin-left: 60px;
 }
-.buy span{
+.buy span {
   cursor: pointer;
 }
 .refresh {

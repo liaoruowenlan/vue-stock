@@ -62,6 +62,8 @@ export default {
   margin-top: 26vh !important;
   height: 236px !important;
   border-radius: 10px;
+  z-index: 8999 !important;
+  
 }
 .payPasw {
   width: 286px;
