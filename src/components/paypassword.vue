@@ -38,7 +38,7 @@ export default {
         showTime(){
             if (this.payPass.length > 5) {
                 this.$refs.paymentPwdInput.blur();
-                this.$refs.btn.style.backgroundColor="#ee8354"        
+                this.$refs.btn.style.backgroundColor="#ee8354"
             }else{
                 this.$refs.btn.style.backgroundColor="#f9d9cb" 
             }

@@ -66,7 +66,7 @@
                 }).then((response)=>{
                     var data = response.data
                     if(data.code==200){
-                        if(!data.result.settingPaymentPassword){
+                        if(!data.result.settingPaymentPassword){//确定后无法关闭。判断语句有问题。
                             _this.centerDialogVisible =  true
                         }
                     }

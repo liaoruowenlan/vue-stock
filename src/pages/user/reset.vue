@@ -97,10 +97,10 @@
                         _this.AuCode.AuCodeReg=true;
                         return false;
                     }else if(res.data.code==200){
-                        _this.$router.push({ path: 'home' });
                         sessionStorage.setItem("token",res.data.result.token);
-                        sessionStorage.setItem("phone", _this.phone.UserPhone);
-
+                        sessionStorage.setItem("phone", _this.phone.userPhone);
+                        sessionStorage.setItem('id',res.data.result.id);
+                         _this.$router.push({ path: 'home' });
                     }
                 })
                 .catch(function(err){
@@ -128,6 +128,21 @@
                     type:2
                 }))
                     .then(function(res){
+                        if(res.data.code==2004){
+                            _this.phone.phoneMsg = '该用户尚未注册。正在跳转注册页面中';
+                            _this.phone.phoneReg = true;
+                            _this.$message({
+                                message: '该用户尚未注册。正在跳转注册页面中',
+                                type: 'warning',
+                                customClass:'noreset',
+                                center:true,
+                                duration:'3000',
+                                onClose:function(){
+                                    _this.$router.push({ path: 'register' });
+                                }
+                            });
+                            return false;
+                        }
                         const TIME_COUNT = 60;
                         if (!_this.timer) {
                             _this.count = TIME_COUNT;
@@ -151,6 +166,9 @@
 </script>
 
 <style scoped>
+    .noreset{
+        margin-top: 20% !important;
+    }
     section {
         background: url("../../assets/img/bg.png") no-repeat;
         background-size: 100% 100%;
