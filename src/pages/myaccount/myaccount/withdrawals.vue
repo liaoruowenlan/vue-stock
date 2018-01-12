@@ -236,7 +236,7 @@
         },
         computed:{
             spanbalue:function(){
-                 this.btnadd = this.moneyOne>=1;
+                    this.btnadd = this.moneyOne>=1;
                  this.cascadeDisabled =  /^([1-9]{1})(\d{14}|\d{18})$/.test(this.ruleForm.BlankCard)?false:true;
             }
         },
@@ -270,7 +270,6 @@
                 this.myBlank = true;
                 this.addBlank.BlankOpen = false;
                 this.addBlank.myblank1 = false;
-                this.moneyOne = '*提现金额需为整数';
             },
             userWithd(){
 
@@ -279,6 +278,11 @@
              * 用户点击我要提现
              **/
             userPaypass(){
+                if(!this.blank){
+                    this.userMoneyReg = true;
+                    this.userMoneyText = '*请先绑定银行卡！';
+                    return false;
+                }
                 if(this.moneyOne < 500){
                     this.userMoneyReg = true;
                     this.userMoneyText = '*提现金额需大于或等于500';
