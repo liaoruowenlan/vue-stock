@@ -1,5 +1,7 @@
 <template>
     <div class="holding">
+        <div v-if="dataList.length<1" style="textAlign:center">暂无数据</div>
+      
         <div class="holding-list flex" v-for="(item,index) in dataList" :key="index">
             <div class="left ">
                 <p class="one">

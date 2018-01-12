@@ -58,6 +58,41 @@
                             <a :class="dayormonth===1?'active':''" @click="kLine(code,2,1)">日K</a>
                         </div>
                         <div id="main" style="width: 594px; height: 411px;">
+
+                        </div>
+                        <div class="buysell">
+                            <ul class="clearfix">
+                              <li class="fl">
+                                <span>买</span> <span class="circur">1</span> <span>{{market.askPrice}}</span> <span class="shares">{{market.askVolume}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>卖</span> <span class="circur">1</span> <span>{{market.bidPrice}}</span> <span class="shares">{{market.bidVolume}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>买</span> <span class="circur">2</span> <span>{{market.askPrice2}}</span> <span class="shares">{{market.askVolume2}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>卖</span> <span class="circur">2</span> <span>{{market.bidPrice2}}</span> <span class="shares">{{market.bidVolume2}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>买</span> <span class="circur">3</span> <span>{{market.askPrice3}}</span> <span class="shares">{{market.askVolume3}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>卖</span> <span class="circur">3</span> <span>{{market.bidPrice3}}</span> <span class="shares">{{market.bidVolume3}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>买</span> <span class="circur">4</span> <span>{{market.askPrice4}}</span> <span class="shares">{{market.askVolume4}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>卖</span> <span class="circur">4</span> <span>{{market.bidPrice4}}</span> <span class="shares">{{market.bidVolume4}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>买</span> <span class="circur">5</span> <span>{{market.askPrice5}}</span> <span class="shares">{{market.askVolume5}}</span>
+                              </li>
+                              <li class="fl">
+                                <span>卖</span> <span class="circur">5</span> <span>{{market.bidPrice5}}</span> <span class="shares">{{market.bidVolume5}}</span>
+                              </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="stock-right">
@@ -176,11 +211,14 @@ export default {
         _this.transaction = res.data.result.content; //拿到所有数据
         for (var i = 0; i < _this.transaction.length; i++) {
           //循环所有数据，找到type数据，然后修改值
-          _this.transaction[i].tradeType =_this.transaction[i].tradeType == 1 ? "买入" : "卖出";
-          _this.transaction[i].tradeTime = _this.transaction[i].tradeTime?_this.transaction[i].tradeTime.substring(11, 16):'无法获取';
+          _this.transaction[i].tradeType =
+            _this.transaction[i].tradeType == 1 ? "买入" : "卖出";
+          _this.transaction[i].tradeTime = _this.transaction[i].tradeTime
+            ? _this.transaction[i].tradeTime.substring(11, 16)
+            : "无法获取";
         }
         _this.transaction = Object.assign({}, _this.transaction);
-        console.log(_this.transaction)
+        console.log(_this.transaction);
       })
       .catch(function(err) {
         console.log(err);
@@ -627,6 +665,40 @@ export default {
 </script>
 
 <style scoped>
+.circur{
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: #e26042;
+  line-height: 16px;
+  text-align: center;
+  margin: 0 20px 0 10px;
+  color: #fff;
+  font-size: 12px;
+}
+.shares{
+  color: #687284;
+  font-size: 14px;
+  margin-left: 20px;
+}
+.buysell{
+  width: 594px;
+  padding: 20px;
+  box-sizing: border-box;
+  line-height: 48px;
+  background: #fff;
+  height: 321px;;
+}
+.buysell li {
+  width: 50%;
+  color: #e26042;
+  /* text-align: center; */
+  padding-left: 20px;box-sizing: border-box;
+}
+.buysell li span:nth-child(3){
+  display: inline-block;
+  width: 42px;
+}
 .number {
   display: inline-block;
   margin-right: 5px;
