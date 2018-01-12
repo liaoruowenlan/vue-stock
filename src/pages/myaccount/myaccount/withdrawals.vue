@@ -61,7 +61,7 @@
                     <el-input v-model="ruleForm.ID"></el-input>
                 </el-form-item>
                 <el-form-item label="银行卡" prop="BlankCard">
-                    <el-input v-model="ruleForm.BlankCard"></el-input>
+                    <el-input v-model="ruleForm.BlankCard"></el-input> 
                 </el-form-item>
                 <el-form-item label="手机号" prop="Phone">
                     <el-input v-model="ruleForm.Phone"></el-input>
@@ -100,7 +100,7 @@
             </div>
             <div class="blank">
                 <ul :class="list1?'margin1':''">
-                    <li class="blank-list no-bg" v-for="(item,index) in blankdata">
+                    <li class="blank-list no-bg" v-for="(item,index) in blankdata" :key="index">
                         <img :src="item.bankIconLink" />
                         <div>
                             <p>{{item.bankName}}</p>
@@ -151,6 +151,7 @@
              cascadeDisabled: true,
              blankdata:{},
              lengths:"",
+             BBlank:'',
              userMoney:'',
              centerDialogVisible: false,
              token:sessionStorage.getItem('token'),
@@ -210,6 +211,7 @@
                 _this.list1 = res.data.result.length===1;
                 _this.blankdata = res.data.result;
                 _this.lengths = res.data.result.length;
+                _this.BBlank =  res.data.result.length>0?res.data.result[0].bankCard:''
                 for (var i = 0; i < _this.blankdata.length; i++) {
                     _this.blankdata[i].blankActive = (i == 0);
                     _this.activeIdx = 0;
@@ -236,9 +238,7 @@
         },
         computed:{
             spanbalue:function(){
-                  if(this.moneyOne>=1){//用户银行卡数小于1的时候。btn无法加
-                    this.btnadd = true;
-                  }
+                    this.btnadd = this.moneyOne>=1;
                  this.cascadeDisabled =  /^([1-9]{1})(\d{14}|\d{18})$/.test(this.ruleForm.BlankCard)?false:true;
             }
         },
@@ -273,13 +273,37 @@
                 this.addBlank.BlankOpen = false;
                 this.addBlank.myblank1 = false;
             },
-            userWithd(){
+            userWithd(){ //用户点击提现;moneyOne payPass BBlank
+                this.$axios.post('/strategist/payment/withdrawals',qs.stringify({
+                   amount:this. moneyOne,
+                   paymentPassword:this. payPass,
+                   bindCardId:this.BBlank
+                })).then((res)=>{
+                    if(res.data.code == 200){
+                        // this.$alert('已提交提现申请', '提示', {
+                            // confirmButtonText: '我知道了',})
+                        this.$message({
+                            message: '已提交提现申请',
+                            type: 'success'
+                        });
+                    }else{
+                         this.$message({
+                            message: res.data.message,
+                            type: 'warning'
+                        });
+                    }
+                })
 
             },
             /**
              * 用户点击我要提现
              **/
             userPaypass(){
+                if(!this.blank){
+                    this.userMoneyReg = true;
+                    this.userMoneyText = '*请先绑定银行卡！';
+                    return false;
+                }
                 if(this.moneyOne < 500){
                     this.userMoneyReg = true;
                     this.userMoneyText = '*提现金额需大于或等于500';
@@ -502,6 +526,7 @@
                     this.blankdata[this.activeIdx].blankActive = false;
                 }
                 this.activeIdx = index;
+                this.BBlank = this.blankdata[index].bankCard; 
                 this.blankdata[index].blankActive = true;
                 this.blankdata = Object.assign({},this.blankdata);
             }

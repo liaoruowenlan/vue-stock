@@ -37,9 +37,10 @@
                 <el-tag  size="medium" type="info" disable-transitions>
                     {{item.state=="POSTED"||item.state=="BUYLOCK"?'买入中':item.state=="HOLDPOSITION"?'持仓中':item.state=="SELLAPPLY"?"卖出申请":'卖出锁定'}}
                 </el-tag>
-                <el-button type="warning"  @click="sellOut(item)">卖 出</el-button>
+                <el-button type="warning"
+                :disabled="item.state=='HOLDPOSITION'&&item.createTime.split(' ')[0]!=new Date().toLocaleDateString().replace(/\//g,'-')?false:true"
+                  @click="sellOut(item)">卖 出</el-button>
             </div>   
-             
         </div>
         <el-pagination
             layout="prev, pager, next"
