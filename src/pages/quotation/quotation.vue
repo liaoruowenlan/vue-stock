@@ -688,6 +688,7 @@ export default {
   line-height: 48px;
   background: #fff;
   height: 321px;;
+  padding-top: 40px;
 }
 .buysell li {
   width: 50%;
