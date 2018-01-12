@@ -50,3 +50,6 @@ input:-webkit-autofill {
 	display: -ms-flexbox;
 	display: flex;
 }
+.el-pagination{
+  text-align: center;
+}

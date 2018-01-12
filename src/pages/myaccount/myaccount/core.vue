@@ -49,7 +49,6 @@
             width="180"
             align="center">
             </el-table-column>
-
             <el-table-column
             prop="amount"
             label="交易金额"
@@ -68,7 +67,7 @@
             width="180"
             align="center">
             </el-table-column>
-            </el-table> 
+            </el-table>  
         </div>
         <el-pagination
             layout="prev, pager, next"
@@ -173,7 +172,7 @@ export default {
       range: 5,
       totalPage: 0,
       page: 0,
-      size: 4,
+      size: 10,
       flowType: 0
     };
   },
@@ -297,7 +296,7 @@ export default {
 
 <style scoped>
 .el-table{
-    height: 240px;
+    min-height: 240px;
 }
 .el-pagination {
   padding: 20px 5px;

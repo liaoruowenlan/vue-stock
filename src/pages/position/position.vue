@@ -72,6 +72,7 @@
     margin-left: 9px;
     background: #fff;
     min-height: 626px;
+    margin-bottom: 20px;
 }
 
 .position-left ul li {
