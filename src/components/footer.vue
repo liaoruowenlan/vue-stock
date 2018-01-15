@@ -3,49 +3,49 @@
         <div class="footer-nav">
             <p>新手指引</p>
             <ul>
-                <li>
+                <router-link tag="li" :to="{path:'/footerL',query:{l:'one'}}">
                     点买交易
-                </li>
-                <li>
+                </router-link>
+                <router-link tag="li" :to="{path:'/footerL',query:{l:'two'}}">
                     履约保证金
-                </li>
-                <li>
+                </router-link >
+                <router-link tag="li" :to="{path:'/footerL',query:{l:'three'}}">
                     递延费
-                </li>
-                <li>
+                </router-link >
+                <router-link tag="li" :to="{path:'/footerL',query:{l:'fore'}}">
                     递延条件
-                </li>
+                </router-link >
             </ul>
         </div>
         <div class="footer-nav">
-            <p>常见时间</p>
+            <p>常见问题</p>
             <ul>
-                <li>
+                <router-link tag="li" :to="{path:'/footerM',query:{M:'one'}}">
                     禁止股票
-                </li>
-                <li>
+                </router-link >
+                <router-link tag="li" :to="{path:'/footerM',query:{M:'two'}}">
                     收费说明
-                </li>
-                <li>
+                </router-link >
+                <router-link tag="li" :to="{path:'/footerM',query:{M:'three'}}">
                     操作止损
-                </li>
-                <li>
+                </router-link  >
+                <router-link tag="li" :to="{path:'/footerM',query:{M:'fore'}}">
                     操作时间
-                </li>
+                </router-link >
             </ul>
         </div>
         <div class="footer-nav">
             <p>了解我们</p>
             <ul>
-                <li>
+                <router-link tag="li"  :to="{path:'/footerR',query:{R:'one'}}">
                     公司介绍
-                </li>
-                <li>
+                </router-link >
+                <router-link tag="li"  :to="{path:'/footerR',query:{R:'two'}}">
                     网站公告
-                </li>
-                <li>
+                </router-link>
+                <router-link tag="li"  :to="{path:'/footerR',query:{R:'three'}}">
                     联系我们
-                </li>
+                </router-link >
             </ul>
 
         </div>
@@ -67,6 +67,9 @@
 </script>
 
 <style scoped>
+li{
+    cursor: pointer;
+}
     footer {
         height: 208px;
         width: 1024px;

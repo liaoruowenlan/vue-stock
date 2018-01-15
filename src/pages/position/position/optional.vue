@@ -171,7 +171,7 @@ export default {
         });
     },
     point(code) {
-      this.$router.push({ name: "Quotation", params: { code: code.code } });
+      this.$router.push({ name: "Quotation", query: { code: code.code } });
     },
     getList() {
       this.loading = true;

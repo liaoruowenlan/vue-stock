@@ -8,7 +8,7 @@
             </el-breadcrumb>
         </div>
         <div class="width100">
-            <el-tabs :tab-position="tabPosition">
+            <el-tabs :tab-position="tabPosition" >
                 <el-tab-pane label="什么是点买人">
                     <div>
                         <img src="../../assets/img/wen@2x.png"/>什么是点买人？
@@ -198,93 +198,93 @@
 </template>
 
 <script>
-    import TopHeader from '../../components/header.vue'
-    import FooterNav from '../../components/footer.vue'
+import TopHeader from "../../components/header.vue";
+import FooterNav from "../../components/footer.vue";
 
-    export default {
-        name: "help",
-        components: {
-            TopHeader,
-            FooterNav
-        },
-        data() {
-            return {
-                tabPosition: 'left'
-            };
-        }
-    }
+export default {
+  name: "help",
+  components: {
+    TopHeader,
+    FooterNav
+  },
+  data() {
+    return {
+      tabPosition: "left",
+    };
+  }
+};
 </script>
 
 <style scoped>
-    .el-breadcrumb {
-        width: 1004px;
-        margin: 0 auto;
-        font-size: 16px;
-        padding: 10px 10px;
-    }
+.el-breadcrumb {
+  width: 1004px;
+  margin: 0 auto;
+  font-size: 16px;
+  padding: 10px 10px;
+}
 
-    .el-tabs {
-        width: 1024px;
-        margin: 0 auto;
-        margin-bottom: 20px;
-    }
+.el-tabs {
+  width: 1024px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
 
-    .el-tabs--left .el-tabs__item {
-        width: 196px !important;
-        text-align: center !important;
-        height: 70px !important;
-        line-height: 70px;
-    }
+.el-tabs--left .el-tabs__item {
+  width: 196px !important;
+  text-align: center !important;
+  height: 70px !important;
+  line-height: 70px;
+}
 
-    .el-tabs--left .el-tabs__header {
-        background: #fff !important;
-    }
+.el-tabs--left .el-tabs__header {
+  background: #fff !important;
+}
 
-    .border {
-        width: 725px;
-        height: 1px;
-        background: #f7f7f7;
-        margin: 0 auto;
-    }
+.border {
+  width: 725px;
+  height: 1px;
+  background: #f7f7f7;
+  margin: 0 auto;
+}
 
-    .el-tab-pane {
-        width: 767px;
-        margin-left: 10px;
-        background: #fff;
-        padding: 37px 32px 37px 10px;
-    }
+.el-tab-pane {
+  width: 767px;
+  margin-left: 10px;
+  background: #fff;
+  padding: 37px 32px 37px 10px;
+}
 
-    .el-tab-pane img {
-        width: 22px;
-        height: 20px;
-        display: inline-block;
-        vertical-align: -4px;
-        margin-right: 10px;
-        margin-left: 16px;
-    }
+.el-tab-pane img {
+  width: 22px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: -4px;
+  margin-right: 10px;
+  margin-left: 16px;
+}
 
-    .el-tab-pane > div:first-child {
-        margin-bottom: 13px;
-        font-size: 16px;
-        color: #1e242e;
-    }
+.el-tab-pane > div:first-child {
+  margin-bottom: 13px;
+  font-size: 16px;
+  color: #1e242e;
+}
 
-    .el-tab-pane > div:last-child {
-        margin-top: 20px;
-        font-size: 14px;
-        color: #687284;
-        position: relative;
-    }
+.el-tab-pane > div:last-child {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #687284;
+  position: relative;
+}
 
-    .el-tab-pane > div:last-child img {
-        position: absolute;
-    }
+.el-tab-pane > div:last-child img {
+  position: absolute;
+}
 
-    .el-tab-pane > div:last-child div {
-        padding-left: 48px;
-    }
-    .is-active{
-        background: #ee8354;
-        color: #fff !important;
-    }
+.el-tab-pane > div:last-child div {
+  padding-left: 48px;
+}
+.is-active {
+  background: #ee8354;
+  color: #fff !important;
+}
 </style>

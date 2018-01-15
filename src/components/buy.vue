@@ -1,5 +1,5 @@
 <template>
-  <div class="mask" v-if="show">
+  <div class="mask" v-show="show">
       <el-dialog
               title="请输入支付密码"
               :visible.sync="centerDialogVisible"
@@ -9,7 +9,7 @@
               @close = "clear"
               center>
           <div>
-              <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass"/>
+              <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="PwdInput"  v-model="payPass"/>
           </div>
           <span slot="footer" class="dialog-footer">
             <div @click="userWithd" class="paypassword" ref="btn">
@@ -148,7 +148,6 @@ export default {
     },
     showTime() {
       if (this.payPass.length > 5) {
-        this.$refs.paymentPwdInput.blur();
         this.$refs.btn.style.backgroundColor="#ee8354"        
       }else{
         this.$refs.btn.style.backgroundColor="#f9d9cb" 
@@ -183,9 +182,14 @@ export default {
         this.centerDialogVisible=false;
         this.payPass='';
         this.$refs.btn.style.backgroundColor="#f9d9cb";   
-        if(response.data.code==200){
-          this.$alert('已开启自动支付，在到期日期之后的交易日下午14:40自动扣除递延费18元/天,不出现止盈、止损、延期费扣除失败的情况下可以继续持有策略之下个交易日！', '购买成功', {
-          confirmButtonText: '我知道了',})
+        if(response.data.code==200&&localStorage.getItem('askAgain')){
+          this.$alert('点买成功', '购买提示', ) 
+        }else if(response.data.code==200 && !localStorage.getItem('askAgain')){
+            this.$confirm('已开启自动支付，在到期日期之后的交易日下午14:40自动扣除递延费18元/天,不出现止盈、止损、延期费扣除失败的情况下可以继续持有策略之下个交易日！', '购买成功', {
+            confirmButtonText: '我知道了',
+            cancelButtonText: '不在提示'}).catch(()=>{
+              localStorage.setItem('askAgain',1)
+            })
         }else if(response.data.code==6008){          
           this.$alert(response.data.message, '点买通知', {
           confirmButtonText: '去设置支付密码',
