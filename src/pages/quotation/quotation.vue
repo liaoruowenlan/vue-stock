@@ -281,13 +281,13 @@ export default {
         });
     },
     buy() {
-      this.show = true;
       var _this = this;
       var listTitle = this.listTitle;
       var amountValues = this.amountValues;
       axios
         .get("/strategist/strategytype/lists")
         .then(response => {
+          this.show = true;
           if (response.data.code == 200) {
             var data = response.data.result;
             _this.dataList = data;
@@ -425,7 +425,7 @@ export default {
           legend: {
             top: 10,
             left: "center",
-            data: ["日K", "MA5", "MA10", "MA20", "MA30"]
+            data: ["日K", "MA5", "MA10", "MA20", "MA30"],
           },
           tooltip: {
             trigger: "axis",
@@ -470,13 +470,14 @@ export default {
           grid: [
             //调整两个图的位置
             {
-              left: "0",
-              right: "0",
+              left: "8%",
+              right: "5%",
+              padding: '8px',
               height: "65%"
             },
             {
-              left: "0%",
-              right: "0%",
+              left: "8%",
+              right: "5%",
               bottom: "0",
               height: "15%"
             }
@@ -521,9 +522,9 @@ export default {
               splitArea: {
                 show: true
               },
-              axisLabel: { show: false }, //###隐藏Y轴的刻度值
-              axisLine: { show: false }, //###隐藏Y轴线
-              show: true
+              axisLabel: { show: true }, //###隐藏Y轴的刻度值
+              axisLine: { show: true }, //###隐藏Y轴线
+              show: true,
             },
             {
               scale: true,
@@ -540,7 +541,7 @@ export default {
               type: "inside",
               xAxisIndex: [0, 1],
               start: 50,
-              end: 100
+              end: 100,
             }
           ],
           series: [

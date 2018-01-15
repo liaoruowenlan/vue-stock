@@ -66,24 +66,24 @@ const router = new Router({
             name: 'Position',
             component: Position,
             children: [
+                // {
+                //     path: '/',
+                //     component: Price,
+                //     redirect: '/position/price'
+                // },
                 {
                     path: '/',
-                    component: Price,
-                    redirect: '/position/price'
-                },
-                {
-                    path: '/position/price',
+                    redirect:'/position/price',
                     component: Price,
                     children:[
                         {
                             path: '/',
+                            redirect: '/position/price/holding',
                             component: Holding,
-                            redirect: '/position/price/holding'
                         },
                         {
                             component: Holding,
                             name:'holding',
-                            
                             path: '/position/price/holding'
                         },
                         {
@@ -98,7 +98,7 @@ const router = new Router({
         {
 
             path: '/myaccount',
-            name:Myaccount,
+            // name:'Myaccount',
             component: Myaccount,
             children: [
                 {path: '/', component: Capital, redirect: '/myaccount/capital'},
@@ -112,9 +112,9 @@ const router = new Router({
 })
 router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
     const Token = sessionStorage.getItem("token");
-    if(  to.name == 'Quotation' || to.name == 'Position'|| to.name == 'capital'|| to.name == 'holding' ){
+    // console.log(to)
+    if(  to.name == 'Quotation' || to.name == 'holding'|| to.name == 'capital'|| to.name == 'holding' ){
         if(!Token){
-            // alert('您还没有登录，请先登录')
             MessageBox.alert('您还没有登录，请先登录','提示',{confirmButtonText: '确定',})
             next('/login')
         }else{

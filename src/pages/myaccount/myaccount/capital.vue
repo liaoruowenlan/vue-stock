@@ -4,14 +4,14 @@
             <div class="frozen1">
                 <div>
                     <span>¥</span>
-                    <span>{{User.frozenCapital}}</span>
+                    <span>{{User.frozenCapital||'0.00'}}</span>
                 </div>
                 <p>冻结履约保证金</p>
             </div>
             <div class="frozen1">
                 <div>
                     <span>¥</span>
-                    <span>{{User.availableBalance}}</span>
+                    <span>{{User.availableBalance||'0.00'}}</span>
                 </div>
                 <p>可用资金</p>
             </div>

@@ -51,5 +51,6 @@ input:-webkit-autofill {
 	display: flex;
 }
 .el-pagination{
-  text-align: center;
+	text-align: center;
+	padding: 6px 0;
 }

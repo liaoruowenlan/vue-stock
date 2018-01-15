@@ -10,6 +10,8 @@ import axios from 'axios';
 Vue.prototype.$axios=axios;
 
 Vue.use(ElementUI)
+axios.defaults.headers['Authorization']=sessionStorage.getItem('token')||' '
+axios.defaults.headers.post['Content-Type']='application/x-www-form-urlencoded;charset=UTF-8';
 Vue.config.$axios = axios
 Vue.config.productionTip = false
 

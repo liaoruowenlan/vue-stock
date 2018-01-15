@@ -174,7 +174,11 @@ export default {
         deferred: this.checked, //选择框
         paymentPassword:this.payPass//支付密码
       };
-      axios.post('/strategist/buyRecord/buy',qs.stringify(requestObj)).then((response)=>{
+      axios.post('/strategist/buyRecord/buy',qs.stringify(requestObj), {
+        headers:{
+          'Authorization':sessionStorage.getItem('token')
+        }
+      }).then((response)=>{
         _this.canBuy = true
         this.centerDialogVisible=false;
         this.payPass='';
