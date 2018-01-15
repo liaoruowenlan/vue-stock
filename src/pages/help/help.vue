@@ -154,7 +154,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="卖出时会部分成交">
+                <el-tab-pane label="卖出部分成交">
                     <div>
                         <img src="../../assets/img/wen@2x.png"/>为什么卖出时会部分成交，怎么结算？
                     </div>
@@ -166,7 +166,7 @@
                         </div>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="清算资金返还账户">
+                <el-tab-pane label="清算返还账户">
                     <div>
                         <img src="../../assets/img/wen@2x.png"/>卖出清算后资金何时返还账户余额？
                     </div>
@@ -200,7 +200,6 @@
 <script>
 import TopHeader from "../../components/header.vue";
 import FooterNav from "../../components/footer.vue";
-
 export default {
   name: "help",
   components: {
@@ -216,10 +215,13 @@ export default {
 </script>
 
 <style scoped>
+    .el-tabs__nav{
+        background: #fff !important;
+    }
 .el-breadcrumb {
   width: 1004px;
   margin: 0 auto;
-  font-size: 16px;
+  font-size: 14px;
   padding: 10px 10px;
 }
 
@@ -229,12 +231,6 @@ export default {
   margin-bottom: 20px;
 }
 
-.el-tabs--left .el-tabs__item {
-  width: 196px !important;
-  text-align: center !important;
-  height: 70px !important;
-  line-height: 70px;
-}
 
 .el-tabs--left .el-tabs__header {
   background: #fff !important;
@@ -282,9 +278,5 @@ export default {
 
 .el-tab-pane > div:last-child div {
   padding-left: 48px;
-}
-.is-active {
-  background: #ee8354;
-  color: #fff !important;
 }
 </style>

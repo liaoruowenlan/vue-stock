@@ -27,14 +27,23 @@ input:-webkit-autofill {
 .clearfix { 
 	*zoom: 1; 
   } 
-   
+   .el-tabs__nav{
+	   min-height: 624px;
+	   background: #fff;
+   }
   .clearfix:before, 
   .clearfix:after { 
 	display: table; 
 	line-height: 0; 
 	content: ""; 
-  } 
-   
+  }
+.el-tabs--left .el-tabs__active-bar.is-left{
+	width: 6px;
+	height: 20px !important;
+	background-color: #ee8354;
+	left: 0 !important;
+    top: 15px!important;
+}
   .clearfix:after { 
 	clear: both; 
   }
@@ -53,4 +62,21 @@ input:-webkit-autofill {
 .el-pagination{
 	text-align: center;
 	padding: 6px 0;
+}
+.el-tabs:after {
+	content: ".";
+	clear: both;
+	display: block;
+	overflow: hidden;
+	font-size: 0;
+	height: 0;
+}
+.el-tabs--left .el-tabs__item {
+	width: 131px !important;
+	text-align: center !important;
+	height: 50px !important;
+	line-height: 50px;
+}
+.el-tabs--left .el-tabs__item.is-left{
+	background: #fff !important;
 }
