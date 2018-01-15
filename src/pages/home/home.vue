@@ -17,15 +17,91 @@
                 </div>
             </div>
             <div class="buy">
-                <a href="#">
-                    查看详情>
-                </a>
-                <a href="#">我要点买</a>
+                <div class="buy-img">
+                    <img src="../../assets/img/headerworld.png" />
+                </div>
+                <div>
+                    <p class="buy-header">什么是点买A股?</p>
+                    <p class="bug-title">点买人提供交易策略，投资人提供资金，优股网平台撮合双方完成交易。风险共担，收益共享 &nbsp;<router-link to="">查看详情></router-link></p>
+                    <ul>
+                        <li>
+                            <img src="../../assets/img/dian.png" />
+                            寻找股神合作：入市资金低，收益高，投资1250元即可点买；
+                        </li>
+                        <li>
+                            <img src="../../assets/img/dian.png" />
+                            快速短频交易：A股市场，合作选股，T+1、T+5交易，快速盈利；
+                        </li>
+                        <li>
+                            <img src="../../assets/img/dian.png" />
+                            低门槛高收益：股票获利9成归您，投资人助您成股神；
+                        </li>
+                    </ul>
+                    <img class="user-buyH" src="../../assets/img/user-buy.png" />
+                </div>
             </div>
-            <div class="qrcode">
+            <div class="qCcode">
+                <div class="qCcode-left">
 
+                </div>
+                <div class="qCcode-right">
+                    <img class="YG-logo" src="../../assets/img/YGlogo.png" />
+                    <p class="qCcode-text">
+                        实时行情数据，随时看行情，随手发布策略，投资机会不容错过！
+                    </p>
+                    <p class="qsCode-title">
+                        扫一扫，就能下载优股网APP！
+                    </p>
+                    <div class="qCode-bg">
+
+                    </div>
+                </div>
             </div>
             <div class="introduce">
+                <div>
+                    <div>
+                        <img src="../../assets/img/icon01.png" />
+                    </div>
+                    <h3>
+                        三方监管，保障资金
+                    </h3>
+                    <p>
+                        每一笔资金均有担保，资金由第三方机构监管，最大力度保障用户资金安全
+                    </p>
+                </div>
+                <div>
+                    <div>
+                        <img src="../../assets/img/icon02.png" />
+                    </div>
+                    <h3>
+                        操作便捷，一键平仓
+                    </h3>
+                    <p>
+                        自由选股，自定义下单，操作简单，快速交易，一键平仓，止盈止损
+                    </p>
+                </div>
+                <div>
+                    <div>
+                        <img src="../../assets/img/icon03.png" />
+                    </div>
+                    <h3>
+                        投资灵活，快速获益
+                    </h3>
+                    <p>
+                        杠杆灵活调配，入市资金低，最低1250，资金快捷流转，低风险超高收益
+                    </p>
+                </div>
+                <div>
+                    <div>
+                        <img src="../../assets/img/icon04.png" />
+                    </div>
+                    <h3>
+                        快速注册，短频交易
+                    </h3>
+                    <p>
+                        快速注册，省去繁琐开户，快速短频交易A股市场
+                    </p>
+                </div>
 
             </div>
         </div>
@@ -84,7 +160,126 @@
 </script>
 
 <style scoped>
-.dialogg {
+    .introduce>div>div{
+        height: 143px;
+        position: relative;
+    }
+    .introduce>div>div>img{
+        position: absolute;
+        bottom: 20%;
+        left: 36%;
+    }
+    .introduce>div>h3{
+        text-align: center;
+        font-size: 16px;
+        color: #3e59a7;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    .introduce>div>p{
+        margin: 0 auto;
+        width: 222px;
+        height: 32px;
+        font-size: 12px;
+        color: #adb3c1;
+        text-align: center;
+    }
+    .user-buyH{
+        margin-top: 31px;
+        width: 192px;
+        height: 36px;
+    }
+    .buy ul{
+        margin-top: 24px;
+    }
+    .buy ul li{
+        font-size: 12px;
+        color: #687284;
+        margin-bottom: 8px;
+    }
+    .buy ul li img{
+        display: inline-block;
+        vertical-align: 2px;
+    }
+    .buy-header{
+        width: 173px;
+        height: 26px;
+        font-size: 22px;
+        color:#3E59A7;
+        font-weight: 700;
+        margin-top: 93px;
+    }
+    .bug-title{
+        margin-top: 8px;
+        height: 42px;
+        width: 512px;
+        font-size: 14px;
+        line-height: 1.57;
+        color: #1e242e;
+    }
+    .bug-title>a{
+        font-size: 12px;
+        color: #e26042;
+    }
+    .buy{
+        height: 420px;
+        background: #fff;
+        margin: 20px auto;
+        width: 1024px;
+    }
+    .buy>div{
+        float: left;
+        height: 100%;
+    }
+    .buy>div.buy-img{
+        width:410px;
+    }
+    .buy>div.buy-img img{
+        margin:60px 0 0 114px;
+    }
+    .qCcode{
+        height: 540px;
+        width: 1024px;
+        background: #fff;
+        margin: 20px auto;
+    }
+    .qCcode>div{
+        float: left;
+        height: 100%;
+    }
+    .qCcode>div.qCcode-right{
+        width: 560px;
+    }
+    .qCcode-text{
+        font-size: 14px;
+        text-align: center;
+        color: #1e242e;
+        padding-top: 9px;
+    }
+    .qCcode>div.qCcode-left{
+        width:464px;
+        background: #000;
+    }
+    .YG-logo{
+        width: 100px;
+        height: 130px;
+        margin: 92px auto 0 auto;
+    }
+    .qsCode-title{
+     text-align: center;
+        color: #ee8354;
+        font-size: 14px;
+        text-align: center;
+        margin-top:35px;
+    }
+    .qCode-bg{
+        width: 142px;
+        height: 142px;
+        background: url("../../assets/img/qCode-bg.png") no-repeat;
+        background-size: 100%;
+        margin: 20px auto 0 auto;
+    }
+    .dialogg {
   width: 408px !important;
   margin-top: 26vh !important;
   height: 236px !important;
@@ -129,8 +324,6 @@
         font-size: 14px;
         margin-left: 27px;
         float: left;
-
-    ;
     }
     .news>p a{
         color: #687284;
@@ -156,55 +349,18 @@
     padding-left: 20px;
     padding-right: 8px;
 }
-    .buy{
-        height: 420px;
-        width: 1024px;
-        margin: 20px auto;
-        background: url("../../assets/img/Rectangle5@2x.png") no-repeat;
-        background-size: 100% 100%;
-        margin-bottom: 20px;
-        position: relative;
-    }
     .width100{
         padding-bottom: 1px;
-    }
-    .buy>a:first-child{
-        width: 64px;
-        height: 16px;
-        font-size: 12px;
-        color: #e26042;
-        display: block;
-        text-align: justify;
-        position: absolute;
-        top: 149px;
-        left: 502px;
-    }
-    .buy>a:last-child{
-        width: 192px;
-        height: 36px;
-        background-image: linear-gradient(259deg, #ff622d, #ffa255);
-        display: block;
-        text-align: center;
-        line-height: 36px;
-        font-size: 14px;
-        color: #fff;
-        letter-spacing: 1px;
-        position: absolute;
-        left: 411px;
-        top: 284px;
-    }
-    .qrcode{
-        height: 540px;
-        width: 1024px;
-        background: url("../../assets/img/Rectangle6@2x.png") no-repeat;
-        background-size: 100% 100%;
-        margin: 20px auto;
     }
     .introduce{
         height: 254px;
         width: 1024px;
-        background: url("../../assets/img/Rectangle7@2x.png") no-repeat;
-        background-size: 100% 100%;
         margin: 20px auto;
+        background:#fff;
+    }
+    .introduce>div{
+        float: left;
+        width: 25%;
+        height: 100%;
     }
 </style>

@@ -710,6 +710,7 @@ export default {
   color: #e26042;
   position: absolute;
   bottom: -2px;
+  cursor: pointer;
 }
 a {
   cursor: pointer;
