@@ -148,6 +148,7 @@
              btnadd:false,
              PostPay:false,
              blank:false,
+             blankId:'',
              cascadeDisabled: true,
              blankdata:{},
              lengths:"",
@@ -212,6 +213,7 @@
                 _this.blankdata = res.data.result;
                 _this.lengths = res.data.result.length;
                 _this.BBlank =  res.data.result.length>0?res.data.result[0].bankCard:''
+                _this.blankId = res.data.result[0].id;
                 for (var i = 0; i < _this.blankdata.length; i++) {
                     _this.blankdata[i].blankActive = (i == 0);
                     _this.activeIdx = 0;
@@ -274,17 +276,22 @@
                 this.addBlank.myblank1 = false;
             },
             userWithd(){ //用户点击提现;moneyOne payPass BBlank
+                var _this = this;
                 this.$axios.post('/strategist/payment/withdrawals',qs.stringify({
                    amount:this. moneyOne,
                    paymentPassword:this. payPass,
-                   bindCardId:this.BBlank
+                   bindCardId:this.blankId
                 })).then((res)=>{
                     if(res.data.code == 200){
                         // this.$alert('已提交提现申请', '提示', {
                             // confirmButtonText: '我知道了',})
                         this.$message({
                             message: '已提交提现申请',
-                            type: 'success'
+                            type: 'success',
+                            duration:'1500',
+                            onClose:function(){
+                                _this.$router.push({ path: '/myaccount/capital'});
+                            }
                         });
                     }else{
                          this.$message({
@@ -304,11 +311,11 @@
                     this.userMoneyText = '*请先绑定银行卡！';
                     return false;
                 }
-                if(this.moneyOne < 500){
-                    this.userMoneyReg = true;
-                    this.userMoneyText = '*提现金额需大于或等于500';
-                    return false;
-                }
+                // if(this.moneyOne < 500){
+                //     this.userMoneyReg = true;
+                //     this.userMoneyText = '*提现金额需大于或等于500';
+                //     return false;
+                // }
                 if(this.moneyOne>this.userMoney){ //。
                     this.userMoneyReg=true;
                     this.userMoneyText = '*提现金额不得大于用户余额';
@@ -526,7 +533,8 @@
                     this.blankdata[this.activeIdx].blankActive = false;
                 }
                 this.activeIdx = index;
-                this.BBlank = this.blankdata[index].bankCard; 
+                this.BBlank = this.blankdata[index].bankCard;
+                this.blankId =this.blankdata[index].id;
                 this.blankdata[index].blankActive = true;
                 this.blankdata = Object.assign({},this.blankdata);
             }
