@@ -39,7 +39,7 @@
         <div class="user_div-table">
              <el-table
             :data="tableData"
-            style="width: 100%"
+            style="width: 100%"       
             v-loading="loading"
             element-loading-background="#fff"
             :class-name="active">
@@ -66,6 +66,9 @@
             label="备注"
             width="180"
             align="center">
+            <!-- <template slot-scope="scope">
+              <span></span>
+            </template> -->
             </el-table-column>
             </el-table>  
         </div>
@@ -250,10 +253,9 @@ export default {
                 list[i].type != "Withdrawals" ||
                 list[i].type != "Promotion"
               ) {
-                obj.remarks =
-                  list[i].stockName + "( " + list[i].stockCode + " )";
-              } else {
                 obj.remarks = phone;
+                } else {
+                obj.remarks = list[i].stockName + "( " + list[i].stockCode + " )";
               }
               arr.push(obj);
             }

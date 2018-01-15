@@ -157,8 +157,8 @@ export default {
       transaction: null,
       hot: null,
       market: {},
-      code: this.$route.params.code || "000001",
-      pcode: this.$route.params.code || "000001",
+      code: this.$route.query.code || "000001",
+      pcode: this.$route.query.code || "000001",
       seo_stock_open: false,
       rawData: [],
       serchList: [],
@@ -374,7 +374,7 @@ export default {
         .get("/strategist/stock/kLine?stockCode=" + code + "&type=" + type)
         .then(response => {
           if (response.data.code == 200) {
-            _this.rawData = response.data.result;
+            _this.rawData = response.data.result.reverse();
             _this.drawK();
           }
         })
@@ -688,7 +688,7 @@ export default {
   box-sizing: border-box;
   line-height: 48px;
   background: #fff;
-  height: 321px;;
+  height: 321px;
   padding-top: 40px;
 }
 .buysell li {

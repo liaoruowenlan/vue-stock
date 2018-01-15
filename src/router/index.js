@@ -21,6 +21,9 @@ import Holding from '@/pages/position/position/price/holding.vue'
 import Settlement from '@/pages/position/position/price/settlement.vue'
 
 import Optional from '@/pages/position/position/optional.vue'
+import FooterL from '@/pages/footer/footerL'
+import FooterM from '@/pages/footer/footerM'
+import FooterR from '@/pages/footer/footerR'
 import { MessageBox } from 'element-ui';
 
 Vue.use(Router)
@@ -107,7 +110,22 @@ const router = new Router({
                 {path: '/myaccount/recharge', component: Recharge},
                 {path: '/myaccount/setup', component: Setup},
                 {path: '/myaccount/withdrawals', component: Withdrawals}]
-        }
+        },
+        {
+            path:'/footerL',
+            name:'footerL',
+            component:FooterL
+        },
+        {
+            path:'/footerM',
+            name:'footerM',
+            component:FooterM
+        },
+        {
+            path:'/footerR',
+            name:'footerR',
+            component:FooterR
+        },
     ]
 })
 router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
