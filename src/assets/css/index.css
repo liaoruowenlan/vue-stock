@@ -80,3 +80,9 @@ input:-webkit-autofill {
 .el-tabs--left .el-tabs__item.is-left{
 	background: #fff !important;
 }
+.el-tabs__item.is-active{
+	color: #ee8354;
+}
+.el-tabs__item:hover{
+	color: #ee8354;	
+}

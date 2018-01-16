@@ -1,6 +1,5 @@
 <template>
   <div>
-      <top-header></top-header>
         <div class="width100">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -16,9 +15,9 @@
                     
                     <div class="fontcolor">
                         深圳市惠普优选科技有限公司致力为广大股民提供方便快捷安全的互联网股票配资实盘交易服务。惠普优选拥有健全的风控、运营、产品、财务以及客户服务体系，是一家高效的创新型平台。
-                        <br/>
+                        <br/><br/>
 我们秉持“合规、安全、透明、优质服务”的理念，把极致的互联网体验带入到投资，摆脱了传统线下模式中：超高的利息、地域的限制、繁杂的操作、低效死板的风控，从而助力投资方取得安全、高效的资金回报。
-<br/>
+<br/><br/>
 依托行业经验及资源，提供多样化的点买方案为不同需求的用户解决炒股需要，极低的投入可为用户带来高收益的效益，用户交易资金由第三方证券监管平台托管，保证用户权益，资金交易账户由银行监管，交易全程也都由第三方证券监管机构进行监管，用户可在惠普优选上根据实时的大盘动态进行点买交易，极简的操作和体验能为您快速实现交易买卖，收益尽在瞬息之间。
                     </div>
                 </el-tab-pane>
@@ -46,40 +45,35 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <FooterNav/>
   </div>
 </template>
 <script>
-import TopHeader from "../../components/header";
-import FooterNav from "../../components/footer";
 export default {
-  components: {
-    TopHeader,
-    FooterNav
+  data() {
+    return {
+      witch: this.$route.query.R || "one"
+    };
   },
-  data () {
-      return {
-          witch:this.$route.query.R || 'one'
-      }
-  },
-  watch:{
-      $route(){
-          this.witch = this.$route.query.R
-      }
+  watch: {
+    $route() {
+      this.witch = this.$route.query.R;
+    }
   }
 };
 </script>
 <style scoped>
-.fontcolor{
-    color: #1e242e;
-    font-size: 14px;
+.fontcolor {
+  color: #1e242e;
+  font-size: 14px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
-.fontcolor p{
-    line-height: 24px;
+.fontcolor p {
+  line-height: 24px;
 }
-.tel{
-    color: #3e59a7;
-    font-size: 16px;
+.tel {
+  color: #3e59a7;
+  font-size: 16px;
 }
 .el-breadcrumb {
   width: 1004px;
@@ -112,12 +106,12 @@ export default {
 }
 
 .el-tab-pane {
-  width: 767px;
+  width: 884px;
   margin-left: 10px;
   background: #fff;
-  padding: 37px 32px 37px 40px;
+  padding: 0px 0px 37px 0px;
   margin-bottom: 20px !important;
-    min-height: 550px !important;
+  min-height: 550px !important;
 }
 .el-tab-pane img {
   width: 100%;
@@ -129,9 +123,9 @@ export default {
   font-size: 16px;
   color: #1e242e;
 }
-.el-tabs__header.is-left{
-    min-height: 550px !important;
-    background: #fff;
+.el-tabs__header.is-left {
+  min-height: 550px !important;
+  background: #fff;
 }
 .el-tab-pane > div:last-child {
   margin-top: 20px;

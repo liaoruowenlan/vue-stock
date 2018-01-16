@@ -146,7 +146,8 @@ import FooterNav from "../../components/footer.vue";
 import BuyMask from "../../components/buy.vue";
 import axios from "axios";
 import qs from "qs";
-
+import SockJS from "../../assets/websoket/sockjs.min.js";
+import web from "../../assets/websoket/stomp.js";
 import echarts from "echarts";
 
 export default {
@@ -174,7 +175,12 @@ export default {
       upLimitPrice: "",
       name: "",
       instrumentId: "",
-      canAdd: true
+      canAdd: true,
+      searchArr: [],
+      stompClient: null,
+      stompSubscribe: null,
+      stockTimeLineWs: null,
+      open:true
     };
   },
   components: {
@@ -183,7 +189,6 @@ export default {
     BuyMask
   },
   created() {
-    console.log(this.$route.params);
     this.retriveMarket(this.code);
     this.shares(this.code);
     let _this = this;
@@ -218,7 +223,6 @@ export default {
             : "无法获取";
         }
         _this.transaction = Object.assign({}, _this.transaction);
-        console.log(_this.transaction);
       })
       .catch(function(err) {
         console.log(err);
@@ -319,6 +323,12 @@ export default {
       this.seo_stock_open = false; //显示模糊搜索列表
       this.keyword = ""; //清空搜索关键字
       this.pcode = code;
+      this.code = code;
+      // this.stompSubscribe = null
+      if(this.open){
+        this.resubscribe(code);
+
+      }
       this.shares(code);
       this.retriveMarket(code);
     },
@@ -330,7 +340,7 @@ export default {
           function(response) {
             if (response.data.code == 200) {
               _this.rawData = response.data.result;
-              _this.drawK();
+              _this.drawK(1);
             }
           }.bind(this)
         )
@@ -341,26 +351,39 @@ export default {
     seo_stock(event) {
       var val = this.keyword;
       var _this = this;
+      var nowArr = [];
       if (val === "") {
         _this.seo_stock_open = false;
         this.canSearch = false;
-        // console.log(this.canSearch)
-
         return;
       }
       this.canSearch = true;
+
+      // if(this.searchArr.length>0){
+      //   for(let i = 0;i<this.searchArr.length;i++){
+      //     if(this.searchArr[i].code.indexOf(val)!=-1||this.searchArr[i].name.indexOf(val)!=-1){
+      //       nowArr.push(this.searchArr[i])
+      //     }
+      //   }
+      //   this.serchList=nowArr
+      // }else{
+
+      //   }
+
       axios
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {
           if (response.data.code == 200) {
             var data = response.data.result;
             _this.serchList = data;
+            _this.searchArr = data;
             _this.first = data.slice(0, 1);
           }
         })
         .catch(function(error) {
           console.log(error);
         });
+
       _this.seo_stock_open = true;
     },
     openFullScreen() {
@@ -368,6 +391,10 @@ export default {
       this.retriveMarket(this.code);
     },
     kLine(code, type, index) {
+      this.open = false
+      if(this.stompSubscribe){
+        this.stompSubscribe.unsubscribe(this.stockTimeLineWs);      
+      }
       this.dayormonth = index;
       var _this = this;
       axios
@@ -375,7 +402,7 @@ export default {
         .then(response => {
           if (response.data.code == 200) {
             _this.rawData = response.data.result.reverse();
-            _this.drawK();
+            _this.drawK(2);
           }
         })
         .catch(function(error) {
@@ -408,15 +435,22 @@ export default {
         });
     },
     changeMap(value) {
+      this.open = true
+      var _this = this
       this.dayormonth = 0;
       this.shares(this.code);
+      this.stockTimeLineWs = "/user/"+this.code+"/stockTimeLine";
+      this.stompSubscribe = this.stompClient.subscribe(this.stockTimeLineWs, function(data) {
+        _this.rawData = JSON.parse(data.body)
+        _this.drawK();
+      });
     },
     drawK(value) {
       this.charts = echarts.init(document.getElementById("main"));
       var upColor = "#00da3c";
       var downColor = "#ec0000";
       var rawData = this.rawData;
-      //               var rawData = value === 0 ? timeData : dayData; //分 时k和 日K
+      var val = value ? (value == 1 ? "时k" : "日k") : "时k";
       var data = this.splitData(rawData);
       this.charts.setOption(
         {
@@ -425,7 +459,7 @@ export default {
           legend: {
             top: 10,
             left: "center",
-            data: ["日K", "MA5", "MA10", "MA20", "MA30"],
+            data: [val, "MA5", "MA10", "MA20", "MA30"]
           },
           tooltip: {
             trigger: "axis",
@@ -472,7 +506,7 @@ export default {
             {
               left: "8%",
               right: "5%",
-              padding: '8px',
+              padding: "8px",
               height: "65%"
             },
             {
@@ -524,7 +558,7 @@ export default {
               },
               axisLabel: { show: true }, //###隐藏Y轴的刻度值
               axisLine: { show: true }, //###隐藏Y轴线
-              show: true,
+              show: true
             },
             {
               scale: true,
@@ -541,12 +575,12 @@ export default {
               type: "inside",
               xAxisIndex: [0, 1],
               start: 50,
-              end: 100,
+              end: 100
             }
           ],
           series: [
             {
-              name: "日K",
+              name: val,
               type: "candlestick",
               data: data.values,
               itemStyle: {
@@ -655,18 +689,42 @@ export default {
         values: values,
         volumes: volumes
       };
-    }
+    },
+    resubscribe(code){
+      var _this = this;
+      this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
+      this.stockTimeLineWs = "/user/"+code+"/stockTimeLine";
+      this.stompSubscribe = this.stompClient.subscribe(this.stockTimeLineWs, function(data) {
+        _this.rawData = JSON.parse(data.body)
+        _this.drawK();
+      });
+    },
   },
   mounted() {
-    this.$nextTick(function() {
-      this.drawK();
+      var _this = this;
+      var s = new SockJS("http://10.0.0.48:8084/socket");
+      this.stompClient = Stomp.over(s);
+      this.stompClient.connect({}, function() { 
+        _this.stockTimeLineWs = "/user/"+_this.code+"/stockTimeLine";
+        _this.stompSubscribe = _this.stompClient.subscribe(_this.stockTimeLineWs , function(data) {
+          _this.rawData = JSON.parse(data.body)
+          _this.drawK();
+        });
+        // 监听断开连接
+        s.onclose = function(event) {
+          console.log("a:" + event);
+        };
     });
+  },
+  beforeRouteLeave(to,from,next){
+    this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
+    next()
   }
 };
 </script>
 
 <style scoped>
-.circur{
+.circur {
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -677,12 +735,12 @@ export default {
   color: #fff;
   font-size: 12px;
 }
-.shares{
+.shares {
   color: #687284;
   font-size: 14px;
   margin-left: 20px;
 }
-.buysell{
+.buysell {
   width: 594px;
   padding: 20px;
   box-sizing: border-box;
@@ -695,9 +753,10 @@ export default {
   width: 50%;
   color: #e26042;
   /* text-align: center; */
-  padding-left: 20px;box-sizing: border-box;
+  padding-left: 20px;
+  box-sizing: border-box;
 }
-.buysell li span:nth-child(3){
+.buysell li span:nth-child(3) {
   display: inline-block;
   width: 42px;
 }

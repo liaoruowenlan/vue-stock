@@ -1,6 +1,5 @@
 <template>
   <div>
-      <top-header></top-header>
         <div class="width100">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -13,8 +12,7 @@
                     <div>
                         <img src="../../assets/img/topbanner.png"/>
                     </div>
-                    
-                    <div>
+                    <div class="fontcolor">
                             禁止投资ST 、*ST股票等，当该方案的股票在持仓过程中遇到停牌，点买人可以选择继续拥有（一直缴纳递延费直到复盘）或者放弃所有收益（当点买人的待缴纳递延费大于履约保证金时， 股票复盘后任何盈利或者亏损都与点买人无关，由投资人全部自行承担；当复盘时点买人待缴纳递延费小于等于保证金时，复盘后有盈利继续按协议约定分成）， 股票复盘之前点买人不可申请提前结算。
                     </div>
                 </el-tab-pane>
@@ -22,8 +20,7 @@
                     <div>
                         <img src="../../assets/img/topbanner.png"/>
                     </div>
-                    
-                    <div>
+                    <div class="fontcolor">
                         <ul>
                             <li>1、服务费：信息服务费指点买人需要支付给平台的费用，一般标准为45元/万（数据仅供参考，以实际平台公布为准）。</li>
                             <li>2、保证金：用于方案亏损时的赔付金额，如盈利，全额返还。如亏损，按实际亏损赔付，且履约保证金为赔付上限，超出亏损部分由投资人自己承担。</li>
@@ -35,8 +32,7 @@
                     <div>
                         <img src="../../assets/img/topbanner.png"/>
                     </div>
-                    
-                    <div>
+                    <div class="fontcolor">
                           止损是该方案的亏损线，平台目前止损线分别设有:17.5%、14%、10%三挡，当达到预设的止损点时，系统会自动发起卖出指令。
                     </div>
                 </el-tab-pane>
@@ -44,24 +40,17 @@
                     <div>
                         <img src="../../assets/img/topbanner.png"/>
                     </div>
-                    
-                    <div>
+                    <div class="fontcolor">
                         投资人接受点买人合作的时段为T日的09:30:00-11:30,13:00-14:50；投资人接受点买人平仓申请的时段为09:30:00-11:30,13:00-14:50。例如：本次合作中T日指交易日2017-11-08，T+1日指2017-11-09，T+5日指2017-11-15。
                     </div>
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <FooterNav/>
   </div>
 </template>
 <script>
-import TopHeader from "../../components/header";
-import FooterNav from "../../components/footer";
 export default {
-  components: {
-    TopHeader,
-    FooterNav
-  },
+
   data() {
     return {
       witch: this.$route.query.M || "one"
@@ -83,6 +72,9 @@ export default {
 .fontcolor {
   color: #1e242e;
   font-size: 14px;
+      padding: 0 20px;
+    box-sizing: border-box;
+    word-break: break-all;
 }
 
 .el-breadcrumb {
@@ -114,14 +106,13 @@ export default {
   background: #f7f7f7;
   margin: 0 auto;
 }
-
 .el-tab-pane {
-  width: 767px;
+  width: 884px;
   margin-left: 10px;
   background: #fff;
-  padding: 37px 32px 37px 40px;
+  padding: 0px 0px 37px 0px;
   margin-bottom: 20px !important;
-  min-height: 550px !important;
+    min-height: 550px !important;
 }
 
 .el-tab-pane img {

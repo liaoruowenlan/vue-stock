@@ -1,10 +1,9 @@
 <template>
   <div>
-      <top-header></top-header>
         <div class="width100">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-                <el-breadcrumb-item>了解我们</el-breadcrumb-item>
+                <el-breadcrumb-item>新手指引</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="width100">
@@ -47,17 +46,10 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <FooterNav/>
   </div>
 </template>
 <script>
-import TopHeader from "../../components/header";
-import FooterNav from "../../components/footer";
 export default {
-  components: {
-    TopHeader,
-    FooterNav
-  },
   data () {
       return {
           witch:this.$route.query.l  || 'one'
@@ -79,6 +71,8 @@ export default {
 .fontcolor{
     color: #1e242e;
     font-size: 14px;
+        padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .el-breadcrumb {
@@ -112,10 +106,10 @@ export default {
 }
 
 .el-tab-pane {
-  width: 767px;
+  width: 884px;
   margin-left: 10px;
   background: #fff;
-  padding: 37px 32px 37px 40px;
+  padding: 0px 0px 37px 0px;
   margin-bottom: 20px !important;
     min-height: 550px !important;
 }
