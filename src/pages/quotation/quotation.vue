@@ -348,7 +348,7 @@ export default {
           console.log(error);
         });
     },
-    seo_stock(event) {
+    seo_stock:_.debounce( function(){
       var val = this.keyword;
       var _this = this;
       var nowArr = [];
@@ -358,18 +358,6 @@ export default {
         return;
       }
       this.canSearch = true;
-
-      // if(this.searchArr.length>0){
-      //   for(let i = 0;i<this.searchArr.length;i++){
-      //     if(this.searchArr[i].code.indexOf(val)!=-1||this.searchArr[i].name.indexOf(val)!=-1){
-      //       nowArr.push(this.searchArr[i])
-      //     }
-      //   }
-      //   this.serchList=nowArr
-      // }else{
-
-      //   }
-
       axios
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {
@@ -385,7 +373,7 @@ export default {
         });
 
       _this.seo_stock_open = true;
-    },
+    },300),
     openFullScreen() {
       this.fullscreenLoading = true;
       this.retriveMarket(this.code);
