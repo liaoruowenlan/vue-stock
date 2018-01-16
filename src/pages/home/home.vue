@@ -137,7 +137,7 @@
                 var _this = this
                 this.$axios.get('/strategist/publisher/getSettingRemind',{
                     headers: {
-                        'Authorization': sessionStorage.getItem("token")
+                        'Authorization': sessionStorage.getItem("token") || ' '
                     }
                 }).then((response)=>{
                     var data = response.data
