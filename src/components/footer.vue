@@ -3,16 +3,16 @@
         <div class="footer-nav">
             <p>新手指引</p>
             <ul>
-                <router-link tag="li" :to="{path:'/footerL',query:{l:'one'}}">
+                <router-link tag="li" :to="{path:'/FooterIndex/footerL',query:{l:'one'}}">
                     点买交易
                 </router-link>
-                <router-link tag="li" :to="{path:'/footerL',query:{l:'two'}}">
+                <router-link tag="li" :to="{path:'/FooterIndex/footerL',query:{l:'two'}}">
                     履约保证金
                 </router-link >
-                <router-link tag="li" :to="{path:'/footerL',query:{l:'three'}}">
+                <router-link tag="li" :to="{path:'/FooterIndex/footerL',query:{l:'three'}}">
                     递延费
                 </router-link >
-                <router-link tag="li" :to="{path:'/footerL',query:{l:'fore'}}">
+                <router-link tag="li" :to="{path:'/FooterIndex/footerL',query:{l:'fore'}}">
                     递延条件
                 </router-link >
             </ul>
@@ -20,16 +20,16 @@
         <div class="footer-nav">
             <p>常见问题</p>
             <ul>
-                <router-link tag="li" :to="{path:'/footerM',query:{M:'one'}}">
+                <router-link tag="li" :to="{path:'/FooterIndex/footerM',query:{M:'one'}}">
                     禁止股票
                 </router-link >
-                <router-link tag="li" :to="{path:'/footerM',query:{M:'two'}}">
+                <router-link tag="li" :to="{path:'/FooterIndex/footerM',query:{M:'two'}}">
                     收费说明
                 </router-link >
-                <router-link tag="li" :to="{path:'/footerM',query:{M:'three'}}">
+                <router-link tag="li" :to="{path:'/FooterIndex/footerM',query:{M:'three'}}">
                     操作止损
                 </router-link  >
-                <router-link tag="li" :to="{path:'/footerM',query:{M:'fore'}}">
+                <router-link tag="li" :to="{path:'/FooterIndex/footerM',query:{M:'fore'}}">
                     操作时间
                 </router-link >
             </ul>
@@ -37,13 +37,13 @@
         <div class="footer-nav">
             <p>了解我们</p>
             <ul>
-                <router-link tag="li"  :to="{path:'/footerR',query:{R:'one'}}">
+                <router-link tag="li"  :to="{path:'/FooterIndex/footerR',query:{R:'one'}}">
                     公司介绍
                 </router-link >
-                <router-link tag="li"  :to="{path:'/footerR',query:{R:'two'}}">
+                <router-link tag="li"  :to="{path:'/FooterIndex/footerR',query:{R:'two'}}">
                     网站公告
                 </router-link>
-                <router-link tag="li"  :to="{path:'/footerR',query:{R:'three'}}">
+                <router-link tag="li"  :to="{path:'/FooterIndex/footerR',query:{R:'three'}}">
                     联系我们
                 </router-link >
             </ul>

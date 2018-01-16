@@ -1,29 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/pages/home/home.vue'
-import Login from '@/pages/user/login.vue'
-import Reset from '@/pages/user/reset.vue'
-import Register from '@/pages/user/register.vue'
-import Help from '@/pages/help/help.vue'
-import Myaccount from '@/pages/myaccount/myaccount.vue'
-import Position from '@/pages/position/position.vue'
 
-import Capital from '@/pages/myaccount/myaccount/capital.vue'
-import Core from '@/pages/myaccount/myaccount/core.vue'
-import Recharge from '@/pages/myaccount/myaccount/recharge.vue'
-import Setup from '@/pages/myaccount/myaccount/setup.vue'
-import Withdrawals from '@/pages/myaccount/myaccount/withdrawals.vue'
-import Quotation from '@/pages/quotation/quotation.vue'
-
-import Price from '@/pages/position/position/price.vue'
-
-import Holding from '@/pages/position/position/price/holding.vue'
-import Settlement from '@/pages/position/position/price/settlement.vue'
-
-import Optional from '@/pages/position/position/optional.vue'
-import FooterL from '@/pages/footer/footerL'
-import FooterM from '@/pages/footer/footerM'
-import FooterR from '@/pages/footer/footerR'
 import { MessageBox } from 'element-ui';
 
 Vue.use(Router)
@@ -37,37 +14,37 @@ const router = new Router({
         {
             path: '/home',
             name: 'Home',
-            component: Home
+            component: resolve => require(['@/pages/home/home.vue'], resolve)
         },
         {
             path: '/login',
             name: 'Login',
-            component: Login
+            component:  resolve => require([ '@/pages/user/login.vue'], resolve)
         },
         {
             path: '/reset',
             name: 'Reset',
-            component: Reset
+            component:  resolve => require([ '@/pages/user/reset.vue'], resolve)
         },
         {
             path: '/register',
             name: 'Register',
-            component: Register
+            component:  resolve => require(['@/pages/user/register.vue'], resolve)
         },
         {
             path: '/help',
             name: 'Help',
-            component: Help
+            component: resolve => require(['@/pages/help/help.vue'], resolve)
         },
         {
             path: '/quotation',
             name: 'Quotation',
-            component: Quotation
+            component:  resolve => require(['@/pages/quotation/quotation.vue'], resolve)
         },
         {
             path: '/position',
             name: 'Position',
-            component: Position,
+            component: resolve => require(['@/pages/position/position.vue'], resolve),
             children: [
                 // {
                 //     path: '/',
@@ -77,55 +54,63 @@ const router = new Router({
                 {
                     path: '/',
                     redirect:'/position/price',
-                    component: Price,
+                    component: resolve => require(['@/pages/position/position/price.vue'], resolve),
                     children:[
                         {
                             path: '/',
                             redirect: '/position/price/holding',
-                            component: Holding,
+                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve),
                         },
                         {
-                            component: Holding,
+                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve),
                             name:'holding',
                             path: '/position/price/holding'
                         },
                         {
-                            component: Settlement,
+                            component: resolve => require(['@/pages/position/position/price/settlement.vue'], resolve) ,
                             path: '/position/price/settlement'
                         }
                     ]
                 },
-                {path: '/position/optional', component: Optional}
+                {path: '/position/optional', component:  resolve => require(['@/pages/position/position/optional.vue'], resolve) }
             ]
         },
         {
 
             path: '/myaccount',
             // name:'Myaccount',
-            component: Myaccount,
+            component:resolve => require(['@/pages/myaccount/myaccount.vue'], resolve),
             children: [
-                {path: '/', component: Capital, redirect: '/myaccount/capital'},
-                {path: '/myaccount/capital', component: Capital,name:'capital'},
-                {path: '/myaccount/core', component: Core},
-                {path: '/myaccount/recharge', component: Recharge},
-                {path: '/myaccount/setup', component: Setup},
-                {path: '/myaccount/withdrawals', component: Withdrawals}]
+                {path: '/', component:resolve => require(['@/pages/myaccount/myaccount/capital.vue'], resolve) , redirect: '/myaccount/capital'},
+                {path: '/myaccount/capital', component: resolve => require(['@/pages/myaccount/myaccount/capital.vue'], resolve) ,name:'capital'},
+                {path: '/myaccount/core', component: resolve => require(['@/pages/myaccount/myaccount/core.vue'], resolve) },
+                {path: '/myaccount/recharge', component: resolve => require(['@/pages/myaccount/myaccount/recharge.vue'], resolve) },
+                {path: '/myaccount/setup', component: resolve => require(['@/pages/myaccount/myaccount/setup.vue'], resolve) },
+                {path: '/myaccount/withdrawals', component: resolve => require(['@/pages/myaccount/myaccount/withdrawals.vue'], resolve) }]
         },
         {
-            path:'/footerL',
-            name:'footerL',
-            component:FooterL
+            path:'/FooterIndex',
+            component:resolve => require(['@/pages/footer/footerIndex'], resolve),
+            name:'FooterIndex',
+            children:[
+                {
+                    path:'/FooterIndex/footerL',
+                    name:'footerL',
+                    component: resolve => require(['@/pages/footer/footerL'], resolve)
+                },
+                {
+                    path:'/FooterIndex/footerM',
+                    name:'footerM',
+                    component:resolve => require(['@/pages/footer/footerM'], resolve)
+                },
+                {
+                    path:'/FooterIndex/footerR',
+                    name:'footerR',
+                    component:resolve => require(['@/pages/footer/footerR'], resolve)
+                }
+            ]
         },
-        {
-            path:'/footerM',
-            name:'footerM',
-            component:FooterM
-        },
-        {
-            path:'/footerR',
-            name:'footerR',
-            component:FooterR
-        },
+        
     ]
 })
 router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
