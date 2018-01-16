@@ -42,7 +42,7 @@
             </div>
             <div class="qCcode">
                 <div class="qCcode-left">
-
+                    <img src="../../assets/img/phone-ti.png" />
                 </div>
                 <div class="qCcode-right">
                     <img class="YG-logo" src="../../assets/img/YGlogo.png" />
@@ -105,7 +105,7 @@
 
             </div>
         </div>
-        <div class="width100">
+        <div class="width100-bg">
             <footer-nav></footer-nav>
         </div>
     </div>
@@ -168,6 +168,10 @@
         position: absolute;
         bottom: 20%;
         left: 36%;
+    }
+    .width100-bg{
+        width: 100%;
+        background: #fff;
     }
     .introduce>div>h3{
         text-align: center;
@@ -258,7 +262,10 @@
     }
     .qCcode>div.qCcode-left{
         width:464px;
-        background: #000;
+    }
+    .qCcode-left>img{
+        margin-top: 56px;
+        margin-left: 126px;
     }
     .YG-logo{
         width: 100px;

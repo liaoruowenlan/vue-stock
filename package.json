@@ -12,9 +12,11 @@
   "dependencies": {
     "echarts": "^3.8.5",
     "element-ui": "^2.0.7",
-    "vue": "^2.5.2",
+    "express": "^4.16.2",
+    "vue": "^2.5.13",
     "vue-awesome-swiper": "^3.0.4",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-server-renderer": "^2.5.13"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

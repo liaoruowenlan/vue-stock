@@ -50,12 +50,35 @@
 
         </div>
         <div class="tel">
-            <p class="Customer">
-            <img class="footer-phone" src="../assets/img/phone.png"/>
-                客户热线
+            <!--<p class="Customer">-->
+            <!--<img class="footer-phone" src="../assets/img/phone.png"/>-->
+                <!--客户热线-->
+            <!--</p>-->
+            <!--<p class="Customer-tel">0755-23065340</p>-->
+            <!--<p class="Customer-time">服务时间 8：00-21：00</p>-->
+            <div class="continuity">
+                <div class="continuity-left">
+                    <img src="../assets/img/kf-tel.png" />
+                </div>
+                <div class="continuity-right">
+                    <p class="continuity-onep">
+                        <img class="footer-phone" src="../assets/img/phone.png"/>
+                        客户热线
+                    </p>
+                    <p class="continuity-twop">
+                        0755-23065340
+                    </p>
+                    <p class="continuity-threep">
+                        服务时间 8:00-21:00
+                    </p>
+                </div>
+            </div>
+            <p class="YG-Show">
+                优股网 ©2018    深圳市惠普优选科技有限公司
             </p>
-            <p class="Customer-tel">0755-23065340</p>
-            <p class="Customer-time">服务时间 8：00-21：00</p>
+            <p class="YG-Show">
+                备案/许可证号: 粤ICP备17160831号
+            </p>
         </div>
     </footer>
 </template>
@@ -67,7 +90,45 @@
 </script>
 
 <style scoped>
-li{
+    .continuity-threep{
+        font-size: 12px;
+        color: #687284;
+    }
+    .YG-Show{
+        font-size: 14px;
+        color: #687284;
+        margin-bottom: 6px;
+    }
+    .continuity-twop{
+        color: #3e59a7;
+        font-size: 16px;
+        line-height: 28px;
+        font-weight: 700;
+    }
+    .continuity-onep{
+        color: #1c242f;
+        font-size: 14px;
+        height: 21px;
+    }
+    .continuity-onep>img{
+
+    }
+    .continuity{
+        height:80px;
+        margin-top:10px;
+    }
+    .continuity>div{
+        float: left;
+        height: 100%;
+    }
+    .continuity-left>img{
+        width:132px;
+        height: 64px;
+    }
+    .continuity-right{
+        margin-left: 23px;
+    }
+    li{
     cursor: pointer;
 }
     footer {
@@ -86,7 +147,7 @@ li{
     }
 
     footer>.footer-nav p {
-        font-size: 14px;
+        font-size: 16px;
         color: #1e242e;
         text-align: center;
     }
@@ -98,7 +159,7 @@ li{
 
     footer>div ul li {
         color: #687284;
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .tel {
