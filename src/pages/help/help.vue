@@ -7,7 +7,7 @@
                 <el-breadcrumb-item>帮助</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="width100">
+        <div class="acdd123 width100">
             <el-tabs :tab-position="tabPosition" >
                 <el-tab-pane label="什么是点买人">
                     <div>
@@ -242,7 +242,10 @@ export default {
   background: #f7f7f7;
   margin: 0 auto;
 }
-
+.acdd123{
+    margin-bottom: 20px;
+    height: 100%;
+}
 .el-tab-pane {
   width: 767px;
   margin-left: 10px;
