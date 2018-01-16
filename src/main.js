@@ -5,8 +5,6 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
-// import sockjs from "./assets/websoket/sockjs.min.js";
-// import web from "./assets/websoket/stomp.js";
 import './assets/css/index.css'
 import axios from 'axios';
 Vue.prototype.$axios=axios;

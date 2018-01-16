@@ -149,7 +149,6 @@ import qs from "qs";
 import SockJS from "../../assets/websoket/sockjs.min.js";
 import web from "../../assets/websoket/stomp.js";
 import echarts from "echarts";
-
 export default {
   name: "quotation",
   data() {
