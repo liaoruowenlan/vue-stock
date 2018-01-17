@@ -3,7 +3,7 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-
+const PrerenderSpaPlugin = require('prerender-spa-plugin')
 
 module.exports = {
   dev: {
@@ -57,7 +57,6 @@ module.exports = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
   },
-
   build: {
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
@@ -87,5 +86,13 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
-  }
+  },
+    plugins: [
+        new PrerenderSpaPlugin(
+            // Absolute path to compiled SPA
+            path.join(__dirname, '../dist'),
+            // List of routes to prerender
+            ['/']
+        )
+    ]
 }
