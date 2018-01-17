@@ -13,6 +13,7 @@
     "echarts": "^3.8.5",
     "element-ui": "^2.0.7",
     "express": "^4.16.2",
+    "prerender-spa-plugin": "^2.1.0",
     "vue": "^2.5.13",
     "vue-awesome-swiper": "^3.0.4",
     "vue-router": "^3.0.1",
