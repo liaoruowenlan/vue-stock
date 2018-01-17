@@ -704,7 +704,9 @@ export default {
     });
   },
   beforeRouteLeave(to,from,next){
-    this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
+    if(this.stompSubscribe){
+      this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
+    }
     next()
   }
 };

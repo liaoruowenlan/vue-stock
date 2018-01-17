@@ -6,7 +6,9 @@
 	text-decoration: none;
 	font-family: "Microsoft Yahei";
 }
-
+#app::-webkit-scrollbar {
+	 display:none 
+}
 img {
 	display: block;
 }
