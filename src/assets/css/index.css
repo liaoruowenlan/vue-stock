@@ -94,3 +94,11 @@ input:-webkit-autofill {
 .el-message--warning{
 	border: 1px solid #f00;
 }
+.dialogg {
+	width: 408px !important;
+	margin-top: 26vh !important;
+	height: 236px !important;
+	border-radius: 10px;
+	z-index: 8999 !important;
+	
+  }
