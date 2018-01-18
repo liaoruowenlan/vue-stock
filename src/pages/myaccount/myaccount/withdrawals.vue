@@ -44,7 +44,7 @@
                 我要提现
             </div>
         </div>
-        <div class="adblank" v-show="addBlank.myblank1">
+        <div class="adblank" v-if="addBlank.myblank1">
             <div>
                 <span class="Fzcolor" @click="hide">提现</span>
                 <span class="mar5">></span>
@@ -67,7 +67,7 @@
                     <el-input v-model="ruleForm.Phone"></el-input>
                 </el-form-item>
                 <el-form-item label="支行信息" >
-                    <el-cascader :clearable="true" :disabled="cascadeDisabled" :options="provinces" @active-item-change="handleCascadeChange" :props="props" v-model="ruleForm.cnaps" ></el-cascader>
+                    <el-cascader :clearable="true" :disabled="cascadeDisabled" :options="provinces" @active-item-change="handleCascadeChange" :props="props" v-model="ruleForm.cnaps"></el-cascader>
                 </el-form-item>
             </el-form>
             <section>
@@ -167,6 +167,7 @@
                  BlankCard:'',
                  BlankTitle:'',
                  Phone:'',
+                 cnaps:[]
              },
              rules: {
                  userBlank: [
@@ -460,12 +461,12 @@
                     console.log(err);
                 });
             },
-            cleear(){
+            clear(){
                 this.ruleForm.userBlank = '';
                 this.ruleForm.ID = '';
                 this.ruleForm.BlankCard = '';
-                this.ruleForm.cnaps = '';
                 this.ruleForm.Phone= '';
+                this.ruleForm.cnaps= [];
             },
             submitdata(){
                 var _this = this;
@@ -508,8 +509,7 @@
                             customClass:'ablout',
                             type: 'warning',
                             onClose:function(){
-                                _this.cleear()
-
+                                _this.clear()
                             }
                         });
                     }
@@ -517,7 +517,10 @@
                          _this.$message({
                             message: res.data.message,
                             customClass:'ablout',
-                            type: 'warning'
+                            type: 'warning',
+                            onClose:function(){
+                                _this.clear()
+                            }
                         });
                     }
 
@@ -541,6 +544,7 @@
                 this.addBlank.BlankOpen = true;
                 this.addBlank.myblank1 = false;
                 this.myBlank = false;
+                this.clear()
             },
             // submitForm(formName) {
             //     this.$refs[formName].validate((valid) => {

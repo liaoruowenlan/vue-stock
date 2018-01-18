@@ -43,7 +43,6 @@ const router = new Router({
         },
         {
             path: '/position',
-            name: 'pos',
             component: resolve => require(['@/pages/position/position.vue'], resolve),
             children: [
                 // {

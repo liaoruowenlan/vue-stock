@@ -185,12 +185,14 @@ export default {
         this.$refs.btn.style.backgroundColor="#f9d9cb";   
         if(response.data.code==200&&localStorage.getItem('askAgain')){
           this.$alert('点买成功', '购买提示', ) 
-        }else if(response.data.code==200 && !localStorage.getItem('askAgain')){
+        }else if(response.data.code==200 && !localStorage.getItem('askAgain')&&this.checked){
             this.$confirm('已开启自动支付，在到期日期之后的交易日下午14:40自动扣除递延费18元/天,不出现止盈、止损、延期费扣除失败的情况下可以继续持有策略之下个交易日！', '购买成功', {
             confirmButtonText: '我知道了',
             cancelButtonText: '不在提示'}).catch(()=>{
               localStorage.setItem('askAgain',1)
             })
+        }else if(response.data.code==200 && !localStorage.getItem('askAgain')){
+            this.$alert('点买成功', '购买提示', ) 
         }else if(response.data.code==6008){          
           this.$alert(response.data.message, '点买通知', {
           confirmButtonText: '去设置支付密码',

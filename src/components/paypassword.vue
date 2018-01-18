@@ -58,14 +58,14 @@ export default {
 .v-modal {
   z-index: 89 !important;
 }
-.dialogg {
+/* .dialogg {
   width: 408px !important;
   margin-top: 26vh !important;
   height: 236px !important;
   border-radius: 10px;
   z-index: 8999 !important;
   
-}
+} */
 .payPasw {
   width: 286px;
   height: 42px;
