@@ -24,7 +24,9 @@
                     <div class="passworld">
                         <p>登陆密码</p>
                         <input type="password" v-model="password.userPwd" ref="passwordInput" maxlength="12" />
-                        <img :src="imgSrc"  @click="changePasswordType()"/>
+                        <img v-if="imgSrc" src="../../assets/img/dl-yincang@2x.png"  @click="changePasswordType()"/>
+                        <img v-else="!imgSrc" src="../../assets/img/show@2x.png"  @click="changePasswordType()"/>
+
                         <div v-if="password.Pwdreg">{{password.phoneMsg}}</div>
                     </div>
                     <input type="button" value="确定" class="login-btn"  :class="btnUp?'addColor':''" @click="resetPwd()"  />
@@ -68,7 +70,7 @@
                 count:"",
                 show: true,
                 timer: null,
-                imgSrc:'../src/assets/img/dl-yincang@2x.png'
+                imgSrc:true
             }
         },
         computed:{
@@ -110,7 +112,8 @@
             changePasswordType() {
                 var origin = this.$refs.passwordInput.type;
                 this.$refs.passwordInput.type = origin == "password" ? "text" : "password";
-                this.imgSrc = this.imgSrc=="../src/assets/img/dl-yincang@2x.png"?this.imgSrc="../src/assets/img/show@2x.png":this.imgSrc="../src/assets/img/dl-yincang@2x.png";
+                // this.imgSrc = this.imgSrc=="../src/assets/img/dl-yincang@2x.png"?this.imgSrc="../src/assets/img/show@2x.png":this.imgSrc="../src/assets/img/dl-yincang@2x.png";
+                this.imgSrc = !this.imgSrc
             },
             blur(){
                 this.phone.phoneReg = this.phone.userPhone.trim() != '' && !(/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone));
