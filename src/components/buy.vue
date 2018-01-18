@@ -147,6 +147,7 @@ export default {
       this.payPass = ''
     },
     showTime() {
+      this.payPass = this.payPass.replace(/[^\d]/g,'');
       if (this.payPass.length > 5) {
         this.$refs.btn.style.backgroundColor="#ee8354"        
       }else{

@@ -24,7 +24,7 @@
 					</div>
 					<div class="passworld">
 						<p>登陆密码</p>
-						<input type="password" v-model="password.userPwd" ref="passwordInput" />
+						<input type="password" v-model="password.userPwd" ref="passwordInput" maxlength="12" @keyup="UserPass" />
 						<img :src="imgSrc"  @click="changePasswordType()"/>
 						<div v-if="password.Pwdreg">{{password.phoneMsg}}</div>
 					</div>
@@ -60,7 +60,7 @@
 			 },
 			  password:{
                   userPwd:"",
-                  PwdReg:"",
+                  Pwdreg:"",
                   phoneMsg:"*账号或密码错误，请仔细核对"
 			  },
 			  AuCode:{
@@ -81,8 +81,9 @@
                 this.btnUp = this.phone.userPhone.length > 0 && this.password.userPwd.length > 0 && this.AuCode.userAcd.length > 0;
                 this.AuCode.AuCodeUp = /^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone);
                 this.AuCode.AuCodeReg = false;
-                this.password.PwdReg = false;
+                this.password.Pwdreg = false;
                 this.phone.phoneReg = false;
+
             }
 		},
         components: {
@@ -90,6 +91,13 @@
             FooterNav
         },
         methods:{
+            UserPass(){
+                // if(this.password.userPwd.length==12){
+                 //    this.password.Pwdreg = true;
+                 //    this.password.phoneMsg = "密码长度不能大于12位" ;
+				// }
+                // this.password.userPwd = this.password.userPwd.replace(/[]/g,'');
+            },
             changePasswordType() {
                 var origin = this.$refs.passwordInput.type;
                 this.$refs.passwordInput.type = origin == "password" ? "text" : "password";
@@ -99,6 +107,21 @@
                 this.phone.phoneReg = this.phone.userPhone.trim() != '' && !(/^1[3|4|5|7|8][0-9]{9}$/.test(this.phone.userPhone));
 			},
             register(){
+                if((/^[0-9A-Za-z]{6,10}$/.test(this.phone.userPhone))){
+                    this.phone.phoneReg = true;
+                    this.phone.phoneMsg = "*请检查手机号码格式";
+                    return;
+                }
+                if(this.AuCode.userAcd.length!=4){
+                    this.AuCode.AuCodeReg = true;
+                    this.AuCode.AuCodeMeg = "*检查验证码长度";
+                    return false;
+                }
+                if(!(/^[0-9A-Za-z]{6,10}$/.test(this.password.userPwd))){
+                    this.password.Pwdreg = true;
+                    this.password.phoneMsg = "*注册密码必须为6-12位数字或字母";
+                    return;
+                }
                 var _this = this;
                 axios.post('/strategist/publisher/register', qs.stringify({
                     phone: this.phone.userPhone,
@@ -106,15 +129,17 @@
                     verificationCode:this.AuCode.userAcd
                 }))
                     .then(function(res){
-                        if(res.data.code!=200){
-                            _this.password.PwdReg = true;
-                            _this.AuCode.AuCodeReg=true;
+                        if(res.data.code == 1007){
+                            _this.AuCode.AuCodeReg = true;
+                            _this.AuCode.AuCodeMeg = res.data.message;
                             return false;
-                        }else if(res.data.code==200){
-							sessionStorage.setItem("token",res.data.result.token);
-							sessionStorage.setItem("phone", _this.phone.userPhone);
+						}else if(res.data.code==200){
+                            sessionStorage.setItem("token",res.data.result.token);
+                            sessionStorage.setItem("phone", _this.phone.userPhone);
                             sessionStorage.setItem("id",res.data.result.id);
-                             _this.$router.push({ path: 'home' });
+                            _this.$router.push({ path: 'home' });
+                        }else if(res.data.code==2001){
+
 						}
                         console.log(res.data);
                     })
@@ -132,6 +157,17 @@
                     type:1
                 }))
                     .then(function(res){
+                        if(res.data.code==2001){
+                            _this.$message({
+                                message: '您的号码已注册，正在跳转登录中。',
+                                type: 'warning',
+                                duration:1500,
+                                onClose:function(){
+                                    _this.$router.push({ path: 'login' });
+                                }
+                            });
+                            return false;
+						}
                         console.log(res.data);
                         const TIME_COUNT = 60;
                         if (!_this.timer) {

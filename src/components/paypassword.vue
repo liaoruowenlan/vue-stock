@@ -9,7 +9,7 @@
             :close-on-click-modal="false"
             center>
         <div>
-            <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass" :class="addCSs?'adss':''" />
+            <input type="password"  class="payPasw" maxlength="6" @keyup="showTime($event)" ref="paymentPwdInput"  v-model="payPass" :class="addCSs?'adss':''" />
         </div>
         <span slot="footer" class="dialog-footer">
         <div @click="userWithd" class="paypassword" ref="btn">
@@ -27,19 +27,23 @@ export default {
         centerDialogVisible:{
             type:Boolean,
             default:false,
-            addCSs:false
         },
     },
     data(){
         return{
-            payPass:''
+            payPass:'',
+            addCSs:false
         }
     },
     methods: {
-        showTime(){
+        showTime(event){
+            this.payPass = this.payPass.replace(/[^\d]/g,'');
             if (this.payPass.length > 5) {
                 // this.$refs.paymentPwdInput.blur();
                 this.addCSs =true;
+                if(event.keyCode == 13){
+                    this.userWithd()
+                }
                 this.$refs.btn.style.backgroundColor="#ee8354"
             }else{
                 this.$refs.btn.style.backgroundColor="#f9d9cb" 
@@ -49,7 +53,13 @@ export default {
         userWithd(){
             if(this.payPass.length<6) return ;
             this.$axios.post('/strategist/publisher/initPaymentPassword',qs.stringify({paymentPassword:this.payPass})).then((response)=>{
-                this.$emit('close')
+                 this.$alert('这是一段内容', '标题名称', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$emit('close')
+                    }
+                });
+
                     // this.centerDialogVisible = false
             })
         },
