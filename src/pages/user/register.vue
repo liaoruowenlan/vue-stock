@@ -25,7 +25,7 @@
 					<div class="passworld">
 						<p>登陆密码</p>
 						<input type="password" v-model="password.userPwd" ref="passwordInput" maxlength="12" @keyup="UserPass" />
-						<img :src="imgSrc"  @click="changePasswordType()"/>
+						<img :src="imgSrc=='../src/assets/img/dl-yincang@2x.png'?'../src/assets/img/show@2x.png':'../src/assets/img/dl-yincang@2x.png'"  @click="changePasswordType()"/>
 						<div v-if="password.Pwdreg">{{password.phoneMsg}}</div>
 					</div>
 					<input type="button" value="注册" class="login-btn"  :class="btnUp?'addColor':''" @click="register()" />
