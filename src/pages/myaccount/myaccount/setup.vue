@@ -133,16 +133,19 @@
             setPass() {
                 var _this = this;
                 axios.post("/strategist/publisher/resetPassword", qs.stringify({
-                    phone: this.newPay.Phone,
-                    paymentPassword: this.newPay.PassWorld,
-                    verificationCode:this.newPay.Aucode
+                    oldPassword: this.oldpassworld.loginpass,
+                    newPassword:this.oldpassworld.newloginpass
                 }), {
                     headers: {
                         'Authorization': sessionStorage.getItem("token")
                     }
                 })
                     .then(function (err) {
-                        console.log(err.data)
+                        if(err.data.code==200){
+                            this.$alert('密码修改成功', '提示', {
+                                confirmButtonText: '确定',
+                            });
+                        }
                     })
                     .catch(function (err) {
                         console.log(err);
@@ -152,12 +155,17 @@
                 var _this = this;
                 axios.post("/strategist/publisher/modifyPaymentPassword", qs.stringify({
                     phone: _this.newPay.Phone,
-                    type: 5
+                    paymentPassword:_this.newPay.PassWorld,
+                    verificationCode:_this.newPay.Aucode
                 }))
                     .then(function (res) {
                         console.log(res.data);
                         if(res.data.code!=200){
                             _this.newPay.AuCode1 = true;
+                        }else if(err.data.code==200){
+                            this.$alert('密码修改成功', '提示', {
+                                confirmButtonText: '确定',
+                            });
                         }
 
                     }).catch(function (err) {
