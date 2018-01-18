@@ -199,6 +199,6 @@ export default {
   background: #3e59a7;
 }
 .orange {
-  color: #ee8354;
+  background: #ee8354;
 }
 </style>

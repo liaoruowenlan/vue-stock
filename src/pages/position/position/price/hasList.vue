@@ -15,7 +15,7 @@
                 <i class="el-icon-arrow-down" ref="rowwer"></i>
             </div>
         </div>
-        <div class="bottom" ref="bottom" v-show="index == showNum">
+        <div class="bottom" ref="bottom" v-show="index == showNum" style="paddingLeft:20px;">
             <p class="title">交易明细&nbsp;&nbsp;&nbsp;{{item.tradeNo}}</p>
             <div class="bottom-box">
                 <div class="flex bottom-item clearfix">
