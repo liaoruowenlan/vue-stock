@@ -36,7 +36,7 @@
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">股  &nbsp;&nbsp;数</span>
-                  <div>{{parseInt(marketValue/upLimitPrice)%100>0?parseInt(marketValue/upLimitPrice)-parseInt(marketValue/upLimitPrice)%100:'不足购买一手'}}</div>
+                  <div>{{parseInt(marketValue/upLimitPrice)%100>0?parseInt(marketValue/upLimitPrice)-parseInt(marketValue/upLimitPrice)%100:'不足购买一手'}}股</div>
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">资金使用率</span>

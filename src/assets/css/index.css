@@ -88,3 +88,9 @@ input:-webkit-autofill {
 .el-tabs__item:hover{
 	color: #ee8354;	
 }
+.el-message{
+	top: 24%;
+}
+.el-message--warning{
+	border: 1px solid #f00;
+}

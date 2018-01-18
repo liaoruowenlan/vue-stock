@@ -37,7 +37,7 @@
                 <div class="pass1">
                     <div>手机号码</div>
                     <div>
-                        <input v-model="newPay.Phone" type="text" placeholder="请输入手机号码" @blur="blur()"/>
+                        <input v-model="newPay.Phone" type="text" :disabled="newPay.Phone.length==11" placeholder="请输入手机号码" @blur="blur()"/>
                     </div>
                     <div v-show="newPay.PhoneReg">*请检查账号格式</div>
                 </div>
@@ -85,7 +85,7 @@
                     passOpen: ''
                 },
                 newPay: {
-                    Phone: '',
+                    Phone: sessionStorage.getItem('phone'),
                     Aucode: '',
                     AuCodeAdd: '',
                     payOen: '',
@@ -142,7 +142,11 @@
                 })
                     .then(function (err) {
                         if(err.data.code==200){
-                            this.$alert('密码修改成功', '提示', {
+                            _this.$alert('密码修改成功', '提示', {
+                                confirmButtonText: '确定',
+                            });
+                        }else{
+                            _this.$alert(err.data.message, '提示', {
                                 confirmButtonText: '确定',
                             });
                         }
@@ -161,9 +165,12 @@
                     .then(function (res) {
                         console.log(res.data);
                         if(res.data.code!=200){
+                            _this.$alert(res.data.message, '提示', {
+                                confirmButtonText: '确定',
+                            });
                             _this.newPay.AuCode1 = true;
-                        }else if(err.data.code==200){
-                            this.$alert('密码修改成功', '提示', {
+                        }else if(res.data.code==200){
+                            _this.$alert('密码修改成功', '提示', {
                                 confirmButtonText: '确定',
                             });
                         }

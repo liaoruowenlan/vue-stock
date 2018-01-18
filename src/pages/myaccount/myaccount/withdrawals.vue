@@ -67,7 +67,7 @@
                     <el-input v-model="ruleForm.Phone"></el-input>
                 </el-form-item>
                 <el-form-item label="支行信息" >
-                    <el-cascader :disabled="cascadeDisabled" :options="provinces" @active-item-change="handleCascadeChange" :props="props" v-model="ruleForm.cnaps"></el-cascader>
+                    <el-cascader :clearable="true" :disabled="cascadeDisabled" :options="provinces" @active-item-change="handleCascadeChange" :props="props" v-model="ruleForm.cnaps" ></el-cascader>
                 </el-form-item>
             </el-form>
             <section>
@@ -260,7 +260,8 @@
                     alert('1');
                 }
                 if(this.payPass.length===6){
-                    this.$refs.paymentPwdInput.blur();
+
+                    // this.$refs.paymentPwdInput.blur();
                     this.PostPay = true ;
                 }else{
                     this.PostPay = false ;
@@ -277,18 +278,20 @@
             },
             userWithd(){ //用户点击提现;moneyOne payPass BBlank
                 var _this = this;
+
                 this.$axios.post('/strategist/payment/withdrawals',qs.stringify({
                    amount:this. moneyOne,
                    paymentPassword:this. payPass,
                    bindCardId:this.blankId
                 })).then((res)=>{
+                    this.centerDialogVisible = false ;
                     if(res.data.code == 200){
                         // this.$alert('已提交提现申请', '提示', {
                             // confirmButtonText: '我知道了',})
                         this.$message({
                             message: '已提交提现申请',
                             type: 'success',
-                            duration:'1500',
+                            duration:'2000',
                             onClose:function(){
                                 _this.$router.push({ path: '/myaccount/capital'});
                             }
@@ -296,9 +299,15 @@
                     }else{
                          this.$message({
                             message: res.data.message,
-                            type: 'warning'
+                            type: 'warning',
+                            duration:'2000',
+                            onClose:function(){
+                                _this.$router.push({ path: '/myaccount/capital'});
+                            }
                         });
                     }
+                }).catch(()=>{
+                    this.$router.push({path:'/myaccount/capital'})                    
                 })
 
             },
@@ -451,6 +460,13 @@
                     console.log(err);
                 });
             },
+            cleear(){
+                this.ruleForm.userBlank = '';
+                this.ruleForm.ID = '';
+                this.ruleForm.BlankCard = '';
+                this.ruleForm.cnaps = '';
+                this.ruleForm.Phone= '';
+            },
             submitdata(){
                 var _this = this;
                 // 请求数据对象
@@ -475,22 +491,33 @@
                 // 发送绑卡请求
                 axios.post('/strategist/bindCard/bindBankCard', qs.stringify(requestObj))
                 .then(function(res){
-                    if(res.data.code!=200){
-                        _this.$message({
-                            message: res.data.message,
-                            customClass:'ablout',
-                            type: 'warning'
-                        });
-                            console.log(res.data)
-                        return false;
-                    }else{
-                        _this.$message({
+                    if(res.data.code==200){
+                         _this.$message({
                             message: '绑定成功，正在跳转中。',
                             type: 'success',
                             customClass:'ablout',
                             onClose:function(){
-                                location.reload()
+                                location.reload()//刷新当前页面。
                             }
+                        });
+                        console.log(res.data)
+                        return false;
+                    }else if(res.data.code == 2005){
+                        _this.$message({
+                            message: res.data.message,
+                            customClass:'ablout',
+                            type: 'warning',
+                            onClose:function(){
+                                _this.cleear()
+
+                            }
+                        });
+                    }
+                    else{
+                         _this.$message({
+                            message: res.data.message,
+                            customClass:'ablout',
+                            type: 'warning'
                         });
                     }
 
