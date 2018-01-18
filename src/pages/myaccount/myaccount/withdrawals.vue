@@ -257,8 +257,8 @@
              **/
             showTime(event){
                 this.payPass = this.payPass.replace(/[^\d]/g,'');
-                if (event.keyCode==13){
-                    alert('1');
+                if (this.payPass.length>5&&event.keyCode==13){
+                    this.userWithd()
                 }
                 if(this.payPass.length===6){
 
@@ -267,7 +267,6 @@
                 }else{
                     this.PostPay = false ;
                 }
-                console.log(this.payPass.length)
             },
             /**
             * 用户点击我的银行卡
@@ -279,7 +278,6 @@
             },
             userWithd(){ //用户点击提现;moneyOne payPass BBlank
                 var _this = this;
-
                 this.$axios.post('/strategist/payment/withdrawals',qs.stringify({
                    amount:this. moneyOne,
                    paymentPassword:this. payPass,
