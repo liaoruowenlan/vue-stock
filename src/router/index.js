@@ -57,6 +57,11 @@ const router = new Router({
                     component: resolve => require(['@/pages/position/position/price.vue'], resolve),
                     children:[
                         {
+                            path: '/position/price',
+                            redirect:'/position/price/holding',
+                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve)
+                        },
+                        {
                             path: '/position/price/holding',
                             component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve)
                         },
