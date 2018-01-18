@@ -9,7 +9,7 @@
             :close-on-click-modal="false"
             center>
         <div>
-            <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass"/>
+            <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="paymentPwdInput"  v-model="payPass" :class="addCSs?'adss':''" />
         </div>
         <span slot="footer" class="dialog-footer">
         <div @click="userWithd" class="paypassword" ref="btn">
@@ -26,7 +26,8 @@ export default {
     props:{
         centerDialogVisible:{
             type:Boolean,
-            default:false
+            default:false,
+            addCSs:false
         },
     },
     data(){
@@ -37,10 +38,12 @@ export default {
     methods: {
         showTime(){
             if (this.payPass.length > 5) {
-                this.$refs.paymentPwdInput.blur();
+                // this.$refs.paymentPwdInput.blur();
+                this.addCSs =true;
                 this.$refs.btn.style.backgroundColor="#ee8354"
             }else{
                 this.$refs.btn.style.backgroundColor="#f9d9cb" 
+                this.addCSs = false;
             }
         },
         userWithd(){
@@ -54,6 +57,9 @@ export default {
 };
 </script>
 <style scoped>
+.adss{
+    text-indent: 30px !important;
+}
 .v-modal {
   z-index: 89 !important;
 }
