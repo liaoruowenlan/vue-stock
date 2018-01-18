@@ -5,7 +5,7 @@
             <div class="position">
                 <div class="position-left">
                     <ul>
-                        <li v-for="(item,index) in navLists" :key="index"><router-link :to="item.url"><i></i>{{item.text}}</router-link></li>
+                        <li v-for="(item,index) in navLists" :key="index"><router-link :to="item.url" active-class="overas1"><i></i>{{item.text}}</router-link></li>
                     </ul>
                 </div>
                 <div class="position-right">
@@ -33,7 +33,7 @@
                 navLists:[
                     {
                         "text":"持仓",
-                        "url":"/position/price/holding"
+                        "url":"/position/price"
                     },
                     {
                         "text":"自选股",
@@ -53,9 +53,8 @@
 .position{
     width: 1024px;
     min-height: 656px;
-    margin: 0 auto;
+    margin: 0 auto 20px auto;
     padding-top: 10px;
-    margin-bottom: 20px;
     background: #f7f7f7;
 }
 .position:after{
@@ -89,7 +88,7 @@
 .position-left li:hover a{
     color: #ee8354;
 }
-.router-link-active{
+.overas1{
     color: #ee8354 !important;
     background: url("../../assets/img/border-bg@2x.png") no-repeat;
     display: block;

@@ -3,27 +3,27 @@
         <div class="logo">
             <img src="../assets/img/logo.png" />
         </div>
-        <div class="logo-nav">
+        <div class="Tlogo-nav">
             <ul id="warp">
-                <li class="" v-for="(item,index) in navLists" :key="index"><router-link :to="item.url">{{item.text}}</router-link></li>
+                <li class="" v-for="(item,index) in navLists" :key="index"><router-link :to="item.url" active-class="bote">{{item.text}}</router-link></li>
             </ul>
         </div>
         <div class="nav-login">
             <ul v-if="!loginOpen">
                 <li>
-                    <a href="#/register">注册</a>
+                    <router-link to="/register">注册</router-link>
                 </li>
                 <li class="border"></li>
                 <li>
-                    <a href="#/login">登录</a>
+                    <router-link to="/login">登录</router-link>
                 </li>
             </ul>
             <div v-if="loginOpen">
-                    欢迎回来，<a href="#/myaccount">{{phone}}</a>
+                欢迎回来，<router-link to="/myaccount">{{phone}}</router-link>
             </div>
             <div>
                     <img src="../assets/img/help.png" class="help-img" />
-                    <a to="/help" class="help">帮助中心</a>
+                &nbsp;<router-link class="help" to="/help">帮助中心</router-link>
             </div>
         </div>
     </header>
@@ -99,17 +99,17 @@ export default {
   height: 44px;
 }
 
-.logo-nav {
+.Tlogo-nav {
   float: left;
   margin-left: 68px;
 }
 
-.logo-nav ul {
+.Tlogo-nav ul {
   margin: 25px 0;
   height: 30px;
 }
 
-.logo-nav ul li {
+.Tlogo-nav ul li {
   float: left;
   width: 72px;
   text-align: center;
@@ -117,20 +117,12 @@ export default {
   color: #687284;
   margin-left: 10px;
 }
-.logo-nav ul li a {
+.Tlogo-nav ul li a {
   color: #687284;
 }
-.router-link-exact-active {
+.bote {
   color: #3e59a7;
   border-bottom: 4px solid #3e59a7;
-  padding: 0 18px;
-}
-.router-link-active {
-  color: #3e59a7;
-  border-bottom: 4px solid #3e59a7;
-}
-.router-link-exact-active {
-  color: #3e59a7 !important;
 }
 .logo-nav ul li:hover {
   color: #3e59a7 !important;

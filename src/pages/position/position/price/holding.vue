@@ -95,7 +95,7 @@ export default {
     getList() {
       this.$axios
         .get(
-          "strategist/buyRecord/pagesHoldPosition?page=" +
+          "/strategist/buyRecord/pagesHoldPosition?page=" +
             this.page +
             "&size=" +
             this.size,

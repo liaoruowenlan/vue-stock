@@ -32,9 +32,9 @@
 					<input type="button" value="注册" class="login-btn"  :class="btnUp?'addColor':''" @click="register()" />
 					<div class="login-operation">
 						<a href="#"></a>
-						<a href="#/login">
+						<router-link to="/login">
 							已有账号，直接登录
-						</a>
+						</router-link>
 					</div>
 				</div>
 			</div>
