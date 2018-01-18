@@ -23,7 +23,7 @@
                     </div>
                     <div class="passworld">
                         <p>登陆密码</p>
-                        <input type="password" v-model="password.userPwd" ref="passwordInput" />
+                        <input type="password" v-model="password.userPwd" ref="passwordInput" maxlength="12" />
                         <img :src="imgSrc"  @click="changePasswordType()"/>
                         <div v-if="password.Pwdreg">{{password.phoneMsg}}</div>
                     </div>
