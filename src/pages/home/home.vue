@@ -37,7 +37,7 @@
                             低门槛高收益：股票获利9成归您，投资人助您成股神；
                         </li>
                     </ul>
-                    <img class="user-buyH" src="../../assets/img/user-buy.png" />
+                    <img class="user-buyH" @click="go" src="../../assets/img/user-buy.png" />
                 </div>
             </div>
             <div class="qCcode">
@@ -133,6 +133,9 @@
             }
         },
         methods: {
+            go(){
+                this.$router.push({path:'/quotation'})
+            },
             getpw(){
                 var _this = this
                 this.$axios.get('/strategist/publisher/getSettingRemind',{

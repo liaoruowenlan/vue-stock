@@ -67,7 +67,8 @@
             width="180"
             align="center">
             <!-- <template slot-scope="scope">
-              <span></span>
+              {{scope.row}}
+               <span>{{scope.row.stockName}} ({{scope.row.stockCode}})</span>
             </template> -->
             </el-table-column>
             </el-table>  
@@ -191,9 +192,12 @@ export default {
       })
       .then(function(res) {
         _this.User = res.data.result;
+        _this.loading=false
       })
       .catch(function(err) {
         console.log(err);
+        _this.loading=false
+        
       });
   },
   methods: {
@@ -253,18 +257,18 @@ export default {
                 list[i].type != "Withdrawals" ||
                 list[i].type != "Promotion"
               ) {
-                obj.remarks = phone;
-                } else {
                 obj.remarks = list[i].stockName + "( " + list[i].stockCode + " )";
+                } else {
+                obj.remarks = phone;
               }
               arr.push(obj);
             }
             _this.tableData = arr;
             _this.totalPage = data.totalElements;
-            setTimeout(()=>{
-                _this.loading = false
-            },400)
           }
+          setTimeout(()=>{
+              _this.loading = false
+          },400)
           console.log(res.data);
           // _this.User = res.data.result;
         })

@@ -29,7 +29,7 @@
                     <span class="r">{{item.lastPrice}}</span>&nbsp;&nbsp;
                     <span class="space"></span>
                     <span class="l">止损金额</span>&nbsp;&nbsp;
-                    <span class="r">{{parseInt(item.applyAmount*item.lossPoint)}}元</span>&nbsp;&nbsp;
+                    <span class="r">{{parseInt(item.applyAmount*item.lossPoint).toFixed(2)}}</span>&nbsp;&nbsp;
                     <span class="space"></span>
                     <span class="l">点买类型</span>&nbsp;&nbsp;
                     <span class="r">即时买入</span>&nbsp;&nbsp;

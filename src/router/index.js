@@ -43,12 +43,12 @@ const router = new Router({
         },
         {
             path: '/position',
-            name: 'Position',
+            name: 'pos',
             component: resolve => require(['@/pages/position/position.vue'], resolve),
             children: [
                 // {
                 //     path: '/',
-                //     component: Price,
+                //     component: resolve => require(['@/pages/position/position/price.vue'], resolve),
                 //     redirect: '/position/price'
                 // },
                 {
@@ -62,9 +62,9 @@ const router = new Router({
                             component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve),
                         },
                         {
-                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve),
+                            path: '/position/price/holding',
                             name:'holding',
-                            path: '/position/price/holding'
+                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve)
                         },
                         {
                             component: resolve => require(['@/pages/position/position/price/settlement.vue'], resolve) ,

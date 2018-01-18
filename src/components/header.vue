@@ -15,7 +15,7 @@
                 </li>
                 <li class="border"></li>
                 <li>
-                    <a href="#/login">登陆</a>
+                    <a href="#/login">登录</a>
                 </li>
             </ul>
             <div v-if="loginOpen">
@@ -23,7 +23,7 @@
             </div>
             <div>
                     <img src="../assets/img/help.png" class="help-img" />
-                    <a href="#/help">帮助中心</a>
+                    <a to="/help" class="help">帮助中心</a>
             </div>
         </div>
     </header>
@@ -84,7 +84,9 @@ export default {
   height: 80px;
   background: #fff;
 }
-
+.help{
+  font-size:14px;
+}
 .logo {
   float: left;
   width: 338px;
@@ -166,7 +168,7 @@ export default {
 .nav-login > div:last-child {
   float: right;
   height: 80px;
-  line-height: 80px;
+  line-height: 75px;
   margin-left: 20px;
 }
 .nav-login > div:first-child {
@@ -183,7 +185,7 @@ export default {
 }
 .help-img {
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: text-bottom;
   margin-top: -3px;
 }
 .logo-nav ul li:last-child a {

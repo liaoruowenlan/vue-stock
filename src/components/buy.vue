@@ -62,7 +62,7 @@
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">递 延 费</span>
-                  <div>{{item.deferred}}/天</div>
+                  <div>{{item.deferred*(marketValue)/10000}}/天</div>
               </li>
           </ul>
           <ul class="secondUl">
@@ -278,6 +278,7 @@ export default {
   z-index: 99;
   top: 0;
   left: 0;
+  z-index: 899;
 }
 .mask .main {
   width: 800px;

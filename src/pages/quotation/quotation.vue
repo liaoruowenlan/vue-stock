@@ -26,8 +26,8 @@
                     </div>
                     <div class="stock-seo-div">
                         <div class="seo-text">
-                            <input type="text" maxlength="6" placeholder="输入股票名称／代码／简拼" class="seo-val" @keyup="seo_stock($event)" v-model="keyword"/>
-                            <input type="button" value="搜索" :class="canSearch?'canSearch seo-btn':'seo-btn'" @click="search(first,$event)"/>
+                            <input type="text" maxlength="6" placeholder="输入股票名称／代码／简拼" class="seo-val" @focus="focus($event)" @blur="blur" @keyup="seo_stock($event)" v-model="keyword"/>
+                            <input type="button" value="搜索" :class="canSearch?'canSearch seo-btn':'seo-btn'"  @click="search(first,$event)"/>
                             <div class="seo-list" v-show= "seo_stock_open">
                                 <ul>
                                     <li v-for="(item,index) in serchList" :key="index" @click="search(item.code,$event)">
@@ -41,9 +41,9 @@
                             <div v-for="(text,index) in message" :key="index">
                                 <p class="bond-title">{{text.name}}</p>
                                 <p class="bond-number">{{text.lastPrice}}</p>
-                                <div class="bond-rose">
+                                <div :class="[text.upDropSpeed<0?'':'red','bond-rose']">
                                     <span>{{text.upDropPrice}}</span>
-                                    <span>{{text.upDropSpeed}}</span>
+                                    <span>{{(text.upDropSpeed*100).toFixed(2)}}%</span>
                                 </div>
                             </div>
                         </div>
@@ -136,6 +136,7 @@
             </div>
         <BuyMask @close="close"  :show="show" :dataList="dataList" :listTitle="listTitle" :amountValues="amountValues" :upLimitPrice="upLimitPrice" :name="name" :instrumentId="instrumentId"></BuyMask>
         </div>
+
         <footer-nav></footer-nav>
     </div>
 </template>
@@ -242,6 +243,17 @@ export default {
       });
   },
   methods: {
+    focus(event){
+      if(event.target.value==''){
+        this.seo_stock(event)
+        
+      }
+    },
+    blur(){
+      this.serchList = [];
+      this.seo_stock_open = false;
+      this.keyword = ''
+    },
     addIcon() {
       this.$axios
         .post(
@@ -268,6 +280,12 @@ export default {
       this.amountValues = [];
     },
     pointBuy(code) {
+      if(!this.$time.outtime('09:30',new Date().getHours()+':'+new Date().getMinutes())){
+        this.$alert('非交易时间段', '交易日式', {
+          confirmButtonText: '确定',
+        });
+        return 
+      }
       axios
         .get("/strategist/stock/market/" + code)
         .then(
@@ -347,8 +365,11 @@ export default {
           console.log(error);
         });
     },
-    seo_stock:_.debounce( function(){
-      var val = this.keyword;
+    seo_stock:_.debounce( function(event){
+      var val = event.target.value;
+      if(!val){
+        val = '0'
+      }
       var _this = this;
       var nowArr = [];
       if (val === "") {
@@ -356,12 +377,12 @@ export default {
         this.canSearch = false;
         return;
       }
-      this.canSearch = true;
       axios
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {
           if (response.data.code == 200) {
             var data = response.data.result;
+           this.canSearch = true;
             _this.serchList = data;
             _this.searchArr = data;
             _this.first = data.slice(0, 1);
@@ -713,6 +734,9 @@ export default {
 </script>
 
 <style scoped>
+.bond-rose.red>span{
+  color: #e26042;
+}
 .circur {
   display: inline-block;
   width: 16px;

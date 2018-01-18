@@ -33,7 +33,7 @@
                 navLists:[
                     {
                         "text":"持仓",
-                        "url":"/position/price"
+                        "url":"/position/price/holding"
                     },
                     {
                         "text":"自选股",

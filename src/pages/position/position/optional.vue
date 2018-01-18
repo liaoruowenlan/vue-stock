@@ -2,14 +2,14 @@
     <div class="optional-seo">
         <div>
             <div class="clearfix">
-              <input type="text" class="seo-text" v-model="code" @keyup="changeCode($event)" placeholder="输入股票名称/代码/简拼" />
+              <input type="text" class="seo-text" v-model="code" @blur="blur" @keyup="changeCode($event)" placeholder="输入股票名称/代码/简拼" />
               <!-- <input type="button" value="搜索" class="seo-btn"/> -->
             </div>
             <ul v-if="searchShow" >
               <li  class="clearfix" v-for="(item,index) in searchList" :key="index">
                 <span class="fl">{{item.name}} </span>   
-                <span class="fl"> {{item.code}}</span>   
-                <el-button type="danger" class="fr" size="mini" style="marginTop:1px;" @click="add(item.code)">加入自选</el-button>
+                <span class="fl"> {{item.code}}</span>     
+                <el-button type="danger" class="fr" size="mini" style="marginTop:1px;" :disabled="item.disabled" @click="add(item.code)">加入自选</el-button>
               </li>
               
             </ul>
@@ -71,10 +71,12 @@
             v-if="dataList.length>0"
             @current-change="currentPage">
         </el-pagination>
+        <BuyMask @close="close"  :show="show" :dataList="buyList" :listTitle="listTitle" :amountValues="amountValues" :upLimitPrice="upLimitPrice" :name="name" :instrumentId="instrumentId"></BuyMask>
     </div>
 </template>
 
 <script>
+import BuyMask from "../../../components/buy";
 export default {
   name: "optional",
   data() {
@@ -88,13 +90,27 @@ export default {
       searchList: [],
       canSearch:false,
       searchShow:false,
-      exmSearch:[]
+      exmSearch:[],
+      show:false,
+      buyList:[],
+      listTitle:[],
+      amountValues:[],
+      upLimitPrice:'',
+      name:"",
+      instrumentId:''
     };
+  },
+  components: {
+    BuyMask
   },
   mounted() {
     this.getList();
   },
   methods: {
+    blur(){
+      this.searchShow= false;
+      this.searchList= []
+    },
     changeCode(event) {
       var val = this.code;
       var _this = this;
@@ -110,10 +126,19 @@ export default {
         .then(response => {
           if (response.data.code == 200) {
             var data = response.data.result.splice(0,4);
+            for(let i=0;i<this.dataList.length;i++){
+              for(let j=0;j<data.length;j++){
+                if(data[j].name == this.dataList[i].name || data[j].code == this.dataList[i].code){
+                  data[j].disabled = true;
+                  break
+                }
+              }
+            }
             _this.searchList = data;
             this.exmSearch.push(data)
             _this.first = data.slice(0, 1);
             this.searchShow = true
+            
           }
         })
         .catch(function(error) {
@@ -171,7 +196,57 @@ export default {
         });
     },
     point(code) {
-      this.$router.push({ name: "Quotation", query: { code: code.code } });
+      if(!this.$time.outtime('09:30','11:30',new Date().getHours()+':'+new Date().getMinutes())){
+        this.$alert('非交易时间段', '交易日式', {
+          confirmButtonText: '确定',
+        });
+        return 
+      }
+      var _this = this
+      this.$axios
+        .get("/strategist/stock/market/" + code.code)
+        .then(
+          function(response) {
+            var data = response.data.result;
+            _this.upLimitPrice = data.upLimitPrice;
+            _this.name = data.name;
+            _this.instrumentId = data.instrumentId;
+            _this.buy();
+          }
+        )
+        .catch(function(error) {
+          console.log(error);
+        });
+      // this.$router.push({ name: "Quotation", query: { code: code.code } });
+    },
+    close() {
+      this.show = false;
+      this.listTitle = [];
+      this.upLimitPrice = "";
+      // this.name=''
+      // this.instrumentId=''
+      this.amountValues = [];
+    },
+    buy() {
+      var _this = this;
+      var listTitle = this.listTitle;
+      var amountValues = this.amountValues;
+      this.$axios
+        .get("/strategist/strategytype/lists")
+        .then(response => {
+          this.show = true;
+          if (response.data.code == 200) {
+            var data = response.data.result;
+            _this.buyList = data;
+            for (let i = 0; i < data.length; i++) {
+              listTitle.push(data[i].name);
+              amountValues.push(data[i].amountValues);
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     getList() {
       this.loading = true;

@@ -13,15 +13,15 @@
             return{
                 cards:[
                     {
-                        "href":"http://www.baidu.com",
+                        "href":"javascript:;",
                         "img": require("../assets/img/banner01.png")
                     },
                     {
-                        "href":"http://www.baidu.com",
+                        "href":"javascript:;",
                         "img": require("../assets/img/banner02.png")
                     },
                     {
-                        "href":"http://www.baidu.com",
+                        "href":"javascript:;",
                         "img": require("../assets/img/banner03.png")
                     }
                 ]
