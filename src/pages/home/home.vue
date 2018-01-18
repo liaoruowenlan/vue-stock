@@ -157,7 +157,9 @@
             }
         },
         mounted () {
-            this.getpw()
+            if(sessionStorage.getItem("token")){
+                this.getpw()
+            }
         }
     }
 </script>
