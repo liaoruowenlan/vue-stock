@@ -22,12 +22,12 @@
                     </div>
                     <input id="user-login" :class="btnUp?'addColor':''" type="button" value="登陆" class="login-btn" @click="login"/>
                     <div class="login-operation">
-                        <a href="#/reset">
+                        &nbsp;<router-link to="/reset">
                             忘记密码
-                        </a>
-                        <a href="#/register">
+                        </router-link>
+                        <router-link to="/register">
                             注册账号
-                        </a>
+                        </router-link>
                     </div>
                     <input type="text" style="display:none;" />
                 </div>

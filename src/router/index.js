@@ -6,6 +6,7 @@ import { MessageBox } from 'element-ui';
 Vue.use(Router)
 
 const router = new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -56,22 +57,24 @@ const router = new Router({
                     component: resolve => require(['@/pages/position/position/price.vue'], resolve),
                     children:[
                         {
-                            path: '/',
-                            redirect: '/position/price/holding',
-                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve),
+                            path: '/position/price',
+                            redirect:'/position/price/holding',
+                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve)
                         },
                         {
                             path: '/position/price/holding',
-                            name:'holding',
                             component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve)
                         },
                         {
                             path: '/position/price/settlement',
-                            component: resolve => require(['@/pages/position/position/price/settlement.vue'], resolve) ,
+                            component: resolve => require(['@/pages/position/position/price/settlement.vue'], resolve)
                         }
                     ]
                 },
-                {path: '/position/optional', component:  resolve => require(['@/pages/position/position/optional.vue'], resolve) }
+                {
+                    path: '/position/optional',
+                    component:  resolve => require(['@/pages/position/position/optional.vue'], resolve)
+                }
             ]
         },
         {

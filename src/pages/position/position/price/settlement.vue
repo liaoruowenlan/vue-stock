@@ -27,7 +27,7 @@ export default {
     };
   },
   components: {
-    List  
+    List
   },
   mounted () {
     this.getList()  
