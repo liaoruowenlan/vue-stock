@@ -119,9 +119,9 @@
                     this.AuCode.AuCodeMeg = "*检查验证码长度";
                     return false;
                 }
-                if(!(/^[0-9A-Za-z]{6,10}$/.test(this.password.userPwd))){
+                if(!(/^[a-zA-Z][a-zA-Z0-9]{6,12}$/.test(this.password.userPwd))){
                     this.password.Pwdreg = true;
-                    this.password.phoneMsg = "*注册密码必须为6-12位数字或字母";
+                    this.password.phoneMsg = "*注册密码必须为字母开头6-12位数字";
                     return;
                 }
                 var _this = this;

@@ -53,7 +53,7 @@ export default {
         userWithd(){
             if(this.payPass.length<6) return ;
             this.$axios.post('/strategist/publisher/initPaymentPassword',qs.stringify({paymentPassword:this.payPass})).then((response)=>{
-                 this.$alert('这是一段内容', '标题名称', {
+                 this.$alert('设置成功', '密码设置', {
                     confirmButtonText: '确定',
                     callback: action => {
                         this.$emit('close')

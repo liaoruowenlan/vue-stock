@@ -26,11 +26,11 @@
                     </div>
                     <div class="stock-seo-div">
                         <div class="seo-text">
-                            <input type="text" maxlength="6" placeholder="输入股票名称／代码／简拼" class="seo-val" @focus="focus($event)" @blur="blur" @keyup="seo_stock($event)" v-model="keyword"/>
+                            <input type="text" maxlength="6" placeholder="输入股票名称／代码／简拼" class="seo-val" @focus="focus($event)" @keyup="seo_stock($event)" v-model="keyword"/>
                             <input type="button" value="搜索" :class="canSearch?'canSearch seo-btn':'seo-btn'"  @click="search(first,$event)"/>
                             <div class="seo-list" v-show= "seo_stock_open">
                                 <ul>
-                                    <li v-for="(item,index) in serchList" :key="index" @click="search(item.code,$event)">
+                                    <li v-for="(item,index) in serchList" :key="index" @click.stop="search(item.code,$event)">
                                         <span>{{item.name}}</span>
                                         <span>{{item.code}}</span>
                                     </li>
@@ -337,9 +337,8 @@ export default {
         });
     },
     search(code, event) {
-      if (this.keyword === "") {
-        return;
-      }
+      // 
+      console.log(code)
       if (event.target.className === "canSearch seo-btn") {
         if (this.first.length > 0) {
           code = this.first[0].code;
@@ -833,6 +832,7 @@ a {
 .seo-list li {
   line-height: 32px;
   padding: 0 8px;
+  cursor: pointer;
 }
 .seo-list li:hover {
   background: #ddd;
