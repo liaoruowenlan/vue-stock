@@ -26,7 +26,7 @@
                     </div>
                     <div class="stock-seo-div">
                         <div class="seo-text">
-                            <input type="text" maxlength="6" placeholder="输入股票名称／代码／简拼" class="seo-val" @focus="focus($event)" @keyup="seo_stock($event)" v-model="keyword"/>
+                            <input type="text" maxlength="6" placeholder="输入股票名称／代码" class="seo-val" @focus="focus($event)" @keyup="seo_stock($event)" v-model="keyword"/>
                             <input type="button" value="搜索" :class="canSearch?'canSearch seo-btn':'seo-btn'"  @click="search(first,$event)"/>
                             <div class="seo-list" v-show= "seo_stock_open">
                                 <ul>
