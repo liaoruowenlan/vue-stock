@@ -55,7 +55,7 @@
         color: #818081;
         font-size: 16px;
     }
-    .router-link-exact-active{
+    .router-link-active{
         display: block;
         width: 101px;
         margin: 0 auto;

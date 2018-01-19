@@ -66,8 +66,8 @@ const router = new Router({
                             component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve)
                         },
                         {
+                            path: '/position/price/settlement',
                             component: resolve => require(['@/pages/position/position/price/settlement.vue'], resolve) ,
-                            path: '/position/price/settlement'
                         }
                     ]
                 },
