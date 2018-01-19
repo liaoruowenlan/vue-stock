@@ -9,7 +9,7 @@
               @close = "clear"
               center>
           <div>
-              <input type="password"  class="payPasw" maxlength="6" @keyup="showTime" ref="PwdInput"  v-model="payPass"/>
+              <input type="password"  class="payPasw" maxlength="6" @keyup="showTime($event)" ref="PwdInput"  v-model="payPass"/>
           </div>
           <span slot="footer" class="dialog-footer">
             <div @click="userWithd" class="paypassword" ref="btn">
@@ -21,7 +21,7 @@
       <div class="main">
           <span class="close" @click="close"> X </span>
           <h2>{{name}} {{instrumentId}}</h2>
-          <ul class="firstUl" v-for="(item,index) in dataList" :key="index" v-show="index==bigI">
+          <ul class="firstUl" v-for="(item,index) in dataList" :key="index" v-if="index==bigI">
               <li class="topone clearfix">
                   <span class="label fl">点买类型</span>
                   <ul class="toptwo fr clearfix" ref="toptwo">
@@ -31,7 +31,7 @@
               <li class="topone clearfix" >
                   <span class="label fl">申请金额</span>
                   <ul class="toptwo fr clearfix">
-                      <li :class="index2==i?'active fl':'fl'" v-for="(el,i) in item.amountValues" :key="i"  @click="click1(el,i)">{{((el.value)/10000).toFixed(1)}}万</li>
+                      <li :class="index2==i?'active fl':'fl'" v-for="(el,i) in item.amountValues" :key="i"  @click="click1(el,i)">{{((el.value)/10000).toFixed(2)}}万</li>
                   </ul>
               </li>
               <li class="topone clearfix" >
@@ -63,6 +63,7 @@
               <li class="topone clearfix" >
                   <span class="label fl">递 延 费</span>
                   <div>{{item.deferred*(marketValue)/10000}}/天</div>
+                  <input type="hidden" v-model="item.deferred"/>
               </li>
           </ul>
           <ul class="secondUl">
@@ -120,6 +121,7 @@ export default {
       this.serviceFee =
         this.dataList.length > 0 ? this.dataList[0].serviceFeePerWan : "";
       this.id = this.dataList.length > 0 ? this.dataList[0].id : "";
+      this.deferredFee = this.dataList.length > 0 ? this.dataList[0].deferred : "";
     }
   },
   data() {
@@ -139,16 +141,20 @@ export default {
       profitPoint: "",
       serviceFee: "",
       dialogVisible: true,
-      canBuy:true
+      canBuy:true,
+      deferredFee:0
     };
   },
   methods: {
     clear(){
       this.payPass = ''
     },
-    showTime() {
+    showTime(event) {
       this.payPass = this.payPass.replace(/[^\d]/g,'');
       if (this.payPass.length > 5) {
+        if(event.keyCode == 13){
+          this.userWithd()
+        }
         this.$refs.btn.style.backgroundColor="#ee8354"        
       }else{
         this.$refs.btn.style.backgroundColor="#f9d9cb" 
@@ -172,7 +178,8 @@ export default {
         applyAmount: this.marketValue, //申请金额
         strategyTypeId: this.id, //类型id
         deferred: this.checked, //选择框
-        paymentPassword:this.payPass//支付密码
+        paymentPassword:this.payPass,//支付密码
+        deferredFee:this.checked?this.deferredFee*this.marketValue/10000:0
       };
       axios.post('/strategist/buyRecord/buy',qs.stringify(requestObj), {
         headers:{
@@ -189,16 +196,25 @@ export default {
             this.$confirm('已开启自动支付，在到期日期之后的交易日下午14:40自动扣除递延费18元/天,不出现止盈、止损、延期费扣除失败的情况下可以继续持有策略之下个交易日！', '购买成功', {
             confirmButtonText: '我知道了',
             cancelButtonText: '不在提示'}).catch(()=>{
+              this.$router.push('/position/price/holding')
               localStorage.setItem('askAgain',1)
             })
         }else if(response.data.code==200 && !localStorage.getItem('askAgain')){
             this.$alert('点买成功', '购买提示', ) 
+              this.$router.push('/position/price/holding')
+            
         }else if(response.data.code==6008){          
           this.$alert(response.data.message, '点买通知', {
           confirmButtonText: '去设置支付密码',
           callback: action => {
            this.$router.push('/myaccount/setup')
           }})
+        }else if(response.data.code==6001){
+          this.$confirm('余额不足，是否前往充值？', '购买提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'}).then(()=>{
+              this.$router.push('/myaccount/capital')
+            })        
         }else{
           this.$alert(response.data.message, '购买提示', )          
         }

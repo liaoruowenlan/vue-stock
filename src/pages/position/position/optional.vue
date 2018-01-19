@@ -58,7 +58,7 @@
             align="center">
             <template slot-scope="scope">
                 <el-button type="text" size="medium" class="res" @click="getList()">刷 新</el-button>
-                <el-button type="text" size="medium" class="pointBuy" @click="point(scope.row)">点 买</el-button>
+                <el-button type="text" size="medium" class="pointBuy" @click="point(scope.row,$event)">点 买</el-button>
                 <el-button type="text" size="medium" class="remove" @click="remove(scope.row)">移 除</el-button>
             </template>
             </el-table-column>
@@ -195,7 +195,9 @@ export default {
           });
         });
     },
-    point(code) {
+    point(code,event) {
+            event.stopPropagation()
+
       if(!this.$time.outtime('09:30','11:30',new Date().getHours()+':'+new Date().getMinutes())){
         this.$alert('非交易时间段', '交易日式', {
           confirmButtonText: '确定',

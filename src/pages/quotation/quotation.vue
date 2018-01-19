@@ -20,7 +20,7 @@
                         <span class="refresh" @click="openFullScreen" v-loading.fullscreen.lock="fullscreenLoading">
                             刷新
                         </span>
-                        <span class="buy-btn" @click="pointBuy(pcode)">
+                        <span class="buy-btn" @click="pointBuy(pcode,$event)">
                             点买
                         </span>
                     </div>
@@ -117,7 +117,7 @@
                         <div class="stock-right-div2">
                             <p>热门股票</p>
                             <ul class="data-stock">
-                                <li v-for="(item,index) in hot" :key="index" @click="pointBuy(item.code)">
+                                <li v-for="(item,index) in hot" :key="index" @click.prevent="pop(item.code)">
                                     <div class="stock-title">
                                         <span>{{item.name}}</span>
                                         <span>{{item.code}}</span>
@@ -126,7 +126,7 @@
                                         <span>{{item.lastPrice}}</span>
                                     </div>
                                     <div>
-                                        <span>点买</span>
+                                        <span @click.prevent="pointBuy(item.code,$event)">点买</span>
                                     </div>
                                 </li>
                             </ul>
@@ -243,6 +243,21 @@ export default {
       });
   },
   methods: {
+    pop(code){
+      // this.$router.push({path:'/quotation',query:{code:code}})
+      // this.$router.go(0)
+      if(this.open){
+        this.resubscribe(code);
+
+      }
+      this.shares(code);
+      this.retriveMarket(code)
+      window.scrollTo(0,0)
+      this.$message({
+          message: '切换成功',
+          type: 'warning'
+        });
+    },
     focus(event){
       if(event.target.value==''){
         this.seo_stock(event)
@@ -275,11 +290,10 @@ export default {
       this.dataList = [];
       this.listTitle = [];
       this.upLimitPrice = "";
-      // this.name=''
-      // this.instrumentId=''
       this.amountValues = [];
     },
-    pointBuy(code) {
+    pointBuy(code,event) {
+      event.stopPropagation()
       if(!this.$time.outtime('09:30',new Date().getHours()+':'+new Date().getMinutes())){
         this.$alert('非交易时间段', '交易日式', {
           confirmButtonText: '确定',
@@ -700,7 +714,10 @@ export default {
     },
     resubscribe(code){
       var _this = this;
-      this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
+      if(this.stompSubscribe){
+        this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
+
+      }
       this.stockTimeLineWs = "/user/"+code+"/stockTimeLine";
       this.stompSubscribe = this.stompClient.subscribe(this.stockTimeLineWs, function(data) {
         _this.rawData = JSON.parse(data.body)

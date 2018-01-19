@@ -22,7 +22,7 @@
                     <span class="r">{{item.numberOfStrand}}</span>&nbsp;&nbsp;
                     <span class="space"></span>
                     <span class="l">点买本金</span>&nbsp;&nbsp;
-                    <span class="r">{{(item.reserveFund/10000).toFixed(1)}}万元</span>&nbsp;&nbsp;
+                    <span class="r">{{(item.applyAmount/10000).toFixed(2)}}万元</span>&nbsp;&nbsp;
                 </p>   
                 <p class="bottom">
                     <span class="l">当前价</span>&nbsp;&nbsp;
