@@ -16,7 +16,7 @@
                         <div v-if="phone.PhoneReg">{{phone.PhoneMsg}}</div>
                     </div>
                     <div class="passworld">
-                        <p>登陆密码</p>
+                        <p>登录密码</p>
                         <input type="password" v-model="Pwd.UserPwd" @keyup="change($event)" autocomplete="off"/>
                         <div v-if="Pwd.PwdReg">{{Pwd.PwdMsg}}</div>
                     </div>
@@ -53,7 +53,7 @@
             return {
                 phone:{
                   UserPhone:"",
-                  PhoneMsg:"*请检查您登陆号码",
+                  PhoneMsg:"*请检查您登录号码",
                   PhoneReg:""
                 },
                 Pwd:{

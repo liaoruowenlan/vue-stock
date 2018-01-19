@@ -102,3 +102,9 @@ input:-webkit-autofill {
 	z-index: 8999 !important;
 	
   }
+  .green{
+	  color:#46c032;
+  }
+  .red{
+	  color:#e26042;
+  }

@@ -23,7 +23,7 @@
 						<div v-if="AuCode.AuCodeReg">{{AuCode.AuCodeMeg}}</div>
 					</div>
 					<div class="passworld">
-						<p>登陆密码</p>
+						<p>登录密码</p>
 						<input type="password" v-model="password.userPwd" ref="passwordInput" maxlength="12" @keyup="UserPass" />
 						<img v-if="imgSrc" src="../../assets/img/dl-yincang@2x.png"  @click="changePasswordType()"/>
 						<img v-else-if="!imgSrc" src="../../assets/img/show@2x.png"  @click="changePasswordType()"/>
