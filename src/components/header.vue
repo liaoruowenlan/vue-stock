@@ -18,8 +18,9 @@
                     <router-link to="/login">登录</router-link>
                 </li>
             </ul>
-            <div v-if="loginOpen">
-                欢迎回来，<router-link to="/myaccount">{{phone}}</router-link>
+            <div v-if="loginOpen" class="loginitem">
+                欢迎回来，<a href="javascript:;">{{phone}}</a>
+                <div class="signout" @click="signout">退出登录</div>
             </div>
             <div>
                     <img src="../assets/img/help.png" class="help-img" />
@@ -66,6 +67,17 @@ export default {
     //
   },
   methods: {
+    signout(){
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('phone')
+      this.$alert('退出成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.loginOpen = false
+            this.$router.push('/home')      
+          }
+        });
+    },
     refreshUserInfo: function() {
       var phone = sessionStorage.getItem("phone");
       if (phone) {
@@ -78,14 +90,53 @@ export default {
 </script>
 
 <style scoped>
+.loginitem {
+  position: relative;
+}
+.loginitem:hover a {
+  color: #ff7e45;
+}
+.loginitem:hover .signout {
+  display: block;
+}
+.signout {
+  position: absolute;
+  z-index: 99;
+  color: #687284;
+  right: -10px;
+  top: 58px;
+  display: none;
+  height: 40px;
+  width: 100px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.signout:after {
+  display: block;
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  background: #fff;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  position: absolute; /*绝对定位1*/
+  top: -5px;
+  left: 46px;
+}
 .nav {
   width: 1024px;
   margin: 0 auto;
   height: 80px;
   background: #fff;
 }
-.help{
-  font-size:14px;
+.help {
+  font-size: 14px;
 }
 .logo {
   float: left;
@@ -152,7 +203,7 @@ export default {
   float: left;
 }
 .nav-login > ul > li a:hover {
-  color: blue;
+  color: #ff7e45;
 }
 .nav-login > div a {
   color: #687284;

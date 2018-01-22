@@ -1,7 +1,7 @@
 <template>
     <el-carousel trigger="click" :interval="3000" arrow="always" height="480px">
         <el-carousel-item v-for="item in cards" :key="item.cardTypeName">
-            <a :href="item.href"><img :src="item.img" /></a>
+            <router-link :to="item.href"><img :src="item.img" /></router-link>
         </el-carousel-item>
     </el-carousel>
 </template>
@@ -13,15 +13,15 @@
             return{
                 cards:[
                     {
-                        "href":"javascript:;",
+                        "href":"",
                         "img": require("../assets/img/banner01.png")
                     },
                     {
-                        "href":"javascript:;",
+                        "href":"/quotation",
                         "img": require("../assets/img/banner02.png")
                     },
                     {
-                        "href":"javascript:;",
+                        "href":"",
                         "img": require("../assets/img/banner03.png")
                     }
                 ]

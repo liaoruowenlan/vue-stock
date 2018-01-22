@@ -99,7 +99,7 @@
                         <div class="stock-right-div1">
                             <p>实时交易动态</p>
                             <ul class="data-stock">
-                                <li v-for="(item,index) in transaction" :key="index">
+                                <li v-for="(item,index) in transaction" :key="index" @click="pop(item.stockCode)">
                                     <div class="stock-title">
                                         <span>{{item.phone}}</span>
                                         <span>{{item.tradeTime}}{{item.tradeType}}</span>
@@ -337,7 +337,6 @@ export default {
         });
     },
     search(code, event) {
-      // 
       console.log(code)
       if (event.target.className === "canSearch seo-btn") {
         if (this.first.length > 0) {
@@ -364,6 +363,8 @@ export default {
     },
     shares(code) {
       var _this = this;
+      this.$router.push({path:'/quotation',query:{code:code}})
+      
       axios
         .get("/strategist/stock/timeLine/" + code)
         .then(
@@ -908,6 +909,7 @@ a {
 }
 .data-stock {
   background: #f7f7f7;
+  cursor: pointer;
 }
 .stock-right-div1 .data-stock li > div,
 .stock-right-div2 .data-stock div {
@@ -984,7 +986,7 @@ a {
   color: #ff583d;
   padding-top: 18px;
   font-family: fantasy;
-  letter-spacing: 10px;
+  letter-spacing: 2px;
 }
 .stock-rose {
   font-size: 14px;

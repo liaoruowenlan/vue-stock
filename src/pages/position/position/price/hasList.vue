@@ -91,7 +91,7 @@
                     </p>
                     <p>
                         <span class="l">解 &nbsp;冻</span>
-                        <span class="r-color">{{item.publisherProfitOrLoss>0?item.reserveFund:item.reserveFund-item.publisherProfitOrLoss}}</span>
+                        <span class="r-color">{{item.publisherProfitOrLoss>0?item.reserveFund:item.reserveFund+item.publisherProfitOrLoss}}</span>
                     </p>
                 </div>                     
             </div>
@@ -135,9 +135,6 @@ export default {
       } else {
         this.$refs.rowwer.className = "el-icon-arrow-down";
       }
-      //   this.$refs.bottom.setAttribute('className','bottom')
-
-      console.log(this.$refs.bottom);
       if (this.showNum != index) {
         this.showNum = index;
       } else {
