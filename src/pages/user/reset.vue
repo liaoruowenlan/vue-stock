@@ -19,7 +19,7 @@
                         <input type="text" v-model="AuCode.userAcd" maxlength="4"  />
                         <span v-show="show" :class="this.AuCode.AuCodeUp?'addColor':''" @click="getAuCode()">获取验证码</span>
                         <span class="addColor" v-show="!show">{{count}}s</span>
-                        <div v-if="AuCode.AuCodeReg">{{AuCode.AuCodeMeg}}</div>
+                        <div v-if="AuCode.AuCodeReg" class="regw">{{AuCode.AuCodeMeg}}</div>
                     </div>
                     <div class="passworld">
                         <p>登陆密码</p>
@@ -99,9 +99,9 @@
                         _this.AuCode.AuCodeReg=true;
                         return false;
                     }else if(res.data.code==200){
-                        sessionStorage.setItem("token",res.data.result.token);
-                        sessionStorage.setItem("phone", _this.phone.userPhone);
-                        sessionStorage.setItem('id',res.data.result.id);
+                        localStorage.setItem("token",res.data.result.token);
+                        localStorage.setItem("phone", _this.phone.userPhone);
+                        localStorage.setItem('id',res.data.result.id);
                          _this.$router.push({ path: 'home' });
                     }
                 })
@@ -169,6 +169,13 @@
 </script>
 
 <style scoped>
+.regw {
+        position: absolute;
+        bottom: -16px;
+        color: #e26042;
+        font-size: 12px;
+        left: 105px;
+    }
     .noreset{
         margin-top: 20% !important;
     }

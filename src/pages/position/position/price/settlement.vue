@@ -40,7 +40,7 @@ export default {
     getList(){
         this.$axios.get('/strategist/buyRecord/pagesUnwind?page='+this.page+'&size='+this.size,{
             headers:{
-                Authorization: sessionStorage.getItem("token")
+                Authorization: localStorage.getItem("token")
             }
         }).then((res)=>{
             if(res.data.code == 200){

@@ -116,7 +116,7 @@ const router = new Router({
     ]
 })
 router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
-    const Token = sessionStorage.getItem("token");
+    const Token = localStorage.getItem("token");
     // console.log(to)
     if(  to.name == 'Quotation' || to.name == 'holding'|| to.name == 'capital'|| to.name == 'holding' ){
         if(!Token){

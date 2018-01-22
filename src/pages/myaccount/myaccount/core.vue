@@ -183,7 +183,7 @@ export default {
   created() {
     this.getList();
     var _this = this;
-    var token = sessionStorage.getItem("token");
+    var token = localStorage.getItem("token");
     axios
       .get("/strategist/capitalAccount/", {
         headers: {
@@ -219,7 +219,7 @@ export default {
             }),
           {
             headers: {
-              Authorization: sessionStorage.getItem("token")
+              Authorization: localStorage.getItem("token")
             }
           }
         )
@@ -228,7 +228,7 @@ export default {
             var data = res.data.result,
               list = data.content,
               arr = [],
-              phone = sessionStorage.getItem("phone");
+              phone = localStorage.getItem("phone");
             for (let i = 0; i < list.length; i++) {
               var obj = {};
               if (list[i].type == "Recharge") {

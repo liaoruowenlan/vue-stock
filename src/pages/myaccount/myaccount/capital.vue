@@ -56,7 +56,7 @@
             var _this = this;
             axios.get('/strategist/capitalAccount/', {
                 headers: {
-                    'Authorization': sessionStorage.getItem("token")
+                    'Authorization': localStorage.getItem("token")
                 }
             })
             .then(function(res){
@@ -68,7 +68,7 @@
             });
             axios.get('/strategist/bindCard/myBankCardList', {
                 headers: {
-                    'Authorization': sessionStorage.getItem("token")
+                    'Authorization': localStorage.getItem("token")
                 }
             })
                 .then(function(res){

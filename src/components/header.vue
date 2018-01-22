@@ -59,7 +59,7 @@ export default {
   },
   mounted: function() {
     this.refreshUserInfo();
-    // var token = sessionStorage.getItem("token");
+    // var token = localStorage.getItem("token");
     // if(!token){
     //     this.$router.push({ path: 'myaccount' });
     // }
@@ -68,10 +68,10 @@ export default {
   },
   methods: {
     signout(){
-      sessionStorage.removeItem('token')
-      sessionStorage.removeItem('phone')
+      localStorage.clear()
       this.$alert('退出成功', '提示', {
           confirmButtonText: '确定',
+          showClose:false,
           callback: action => {
             this.loginOpen = false
             this.$router.push('/home')      
@@ -79,7 +79,7 @@ export default {
         });
     },
     refreshUserInfo: function() {
-      var phone = sessionStorage.getItem("phone");
+      var phone = localStorage.getItem("phone");
       if (phone) {
         this.loginOpen = true;
         this.phone = phone.substring(0, 3) + "****" + phone.substring(7);

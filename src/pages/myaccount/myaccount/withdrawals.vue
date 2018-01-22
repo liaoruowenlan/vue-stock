@@ -155,7 +155,7 @@
              BBlank:'',
              userMoney:'',
              centerDialogVisible: false,
-             token:sessionStorage.getItem('token'),
+             token:localStorage.getItem('token'),
              moneyOne:'',
              addBlank:{
                  BlankOpen:true,

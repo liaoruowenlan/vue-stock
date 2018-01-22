@@ -2,11 +2,11 @@
     <div class="optional-seo">
         <div>
             <div class="clearfix">
-              <input type="text" class="seo-text" v-model="code" @blur="blur" @keyup="changeCode($event)" placeholder="输入股票名称/代码/简拼" />
+              <input type="text" class="seo-text" v-model="code"   @keyup="changeCode($event)" placeholder="输入股票名称/代码/简拼" />
               <!-- <input type="button" value="搜索" class="seo-btn"/> -->
             </div>
             <ul v-if="searchShow" >
-              <li  class="clearfix" v-for="(item,index) in searchList" :key="index">
+              <li  class="clearfix searchList" v-for="(item,index) in searchList" :key="index">
                 <span class="fl">{{item.name}} </span>   
                 <span class="fl"> {{item.code}}</span>     
                 <el-button type="danger" class="fr" size="mini" style="marginTop:1px;" :disabled="item.disabled" @click="add(item.code)">加入自选</el-button>
@@ -86,31 +86,50 @@ export default {
       total: 0,
       size: 8,
       page: 0,
-      code:'',
+      code: "",
       searchList: [],
-      canSearch:false,
-      searchShow:false,
-      exmSearch:[],
-      show:false,
-      buyList:[],
-      listTitle:[],
-      amountValues:[],
-      upLimitPrice:'',
-      name:"",
-      instrumentId:''
+      canSearch: false,
+      searchShow: false,
+      exmSearch: [],
+      show: false,
+      buyList: [],
+      listTitle: [],
+      amountValues: [],
+      upLimitPrice: "",
+      name: "",
+      instrumentId: ""
     };
   },
   components: {
     BuyMask
   },
+  // destroyed(){
+  //   window.removeEventListener('mousedown',function(){})
+  // },
   mounted() {
     this.getList();
+    // var _this = this;
+    // window.addEventListener("mousedown", function(event) {
+    //   console.log(event);
+    //   if (
+    //     event.target.className ==
+    //     "el-button fr el-button--danger el-button--mini" ||event.target.tagName == "INPUT"
+    //   ) {
+    //     return;
+    //   }
+    //   _this.searchShow = false;
+    //   _this.searchList = [];
+    // });
   },
   methods: {
-    blur(){
-      this.searchShow= false;
-      this.searchList= []
-    },
+    // blur(event){
+    //   console.log(event)
+    //   if(event.target.className=="el-button fr el-button--danger el-button--mini"){
+    //     return
+    //   }
+    //   this.searchShow= false;
+    //   this.searchList= []
+    // },
     changeCode(event) {
       var val = this.code;
       var _this = this;
@@ -125,20 +144,23 @@ export default {
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {
           if (response.data.code == 200) {
-            var data = response.data.result.splice(0,4);
-            for(let i=0;i<this.dataList.length;i++){
-              for(let j=0;j<data.length;j++){
-                if(data[j].name == this.dataList[i].name || data[j].code == this.dataList[i].code){
+            console.log(this.dataList);
+            var data = response.data.result.splice(0, 4);
+            for (let i = 0; i < this.dataList.length; i++) {
+              for (let j = 0; j < data.length; j++) {
+                if (
+                  data[j].name == this.dataList[i].name ||
+                  data[j].code == this.dataList[i].code
+                ) {
                   data[j].disabled = true;
-                  break
+                  break;
                 }
               }
             }
             _this.searchList = data;
-            this.exmSearch.push(data)
-            _this.first = data.slice(0, 1);
-            this.searchShow = true
-            
+            console.log(data);
+            this.exmSearch.push(data);
+            this.searchShow = true;
           }
         })
         .catch(function(error) {
@@ -150,8 +172,8 @@ export default {
       this.getList();
     },
     remove(code) {
-      var _this = this
-      _this.code = ''
+      var _this = this;
+      _this.code = "";
       this.$confirm(
         '确定移除"' + code.name + '" （' + code.code + "） 这只股票吗？",
         "提示",
@@ -166,7 +188,7 @@ export default {
             .post(
               "/strategist/favoriteStock/removeFavoriteStock?stockCodes=" +
                 code.code
-           )
+            )
             .then(res => {
               if (res.data.code == 200) {
                 this.$message({
@@ -174,12 +196,12 @@ export default {
                   message: "删除成功!"
                 });
               }
-              
+
               // this.$router.go(0);
-              for(let i = 0;i<this.dataList.length;i++){
-                if(this.dataList[i].code==code.code){
-                  this.dataList.splice(i,1)
-                  break
+              for (let i = 0; i < this.dataList.length; i++) {
+                if (this.dataList[i].code == code.code) {
+                  this.dataList.splice(i, 1);
+                  break;
                 }
               }
               // this.
@@ -195,27 +217,30 @@ export default {
           });
         });
     },
-    point(code,event) {
-            event.stopPropagation()
+    point(code, event) {
+      event.stopPropagation();
 
-      if(!this.$time.outtime('09:30','11:30',new Date().getHours()+':'+new Date().getMinutes())){
-        this.$alert('非交易时间段', '交易日式', {
-          confirmButtonText: '确定',
+      if (
+        !this.$time.outtime(
+          "09:30",
+          new Date().getHours() + ":" + new Date().getMinutes()
+        )
+      ) {
+        this.$alert("非交易时间段", "交易日式", {
+          confirmButtonText: "确定"
         });
-        return 
+        return;
       }
-      var _this = this
+      var _this = this;
       this.$axios
         .get("/strategist/stock/market/" + code.code)
-        .then(
-          function(response) {
-            var data = response.data.result;
-            _this.upLimitPrice = data.upLimitPrice;
-            _this.name = data.name;
-            _this.instrumentId = data.instrumentId;
-            _this.buy();
-          }
-        )
+        .then(function(response) {
+          var data = response.data.result;
+          _this.upLimitPrice = data.upLimitPrice;
+          _this.name = data.name;
+          _this.instrumentId = data.instrumentId;
+          _this.buy();
+        })
         .catch(function(error) {
           console.log(error);
         });
@@ -260,7 +285,7 @@ export default {
             this.size,
           {
             headers: {
-              Authorization: sessionStorage.getItem("token")
+              Authorization: localStorage.getItem("token")
             }
           }
         )
@@ -275,28 +300,28 @@ export default {
           }, 300);
         });
     },
-    add(code){
-        this.searchShow = false;    
-        this.code =''  
+    add(code, event) {
+      this.searchShow = false;
+      this.code = "";
       this.$axios
-        .post(
-          "/strategist/favoriteStock/addFavoriteStock?stockCode=" + code
-        )
+        .post("/strategist/favoriteStock/addFavoriteStock?stockCode=" + code)
         .then(res => {
           if (res.data.code == 200) {
             this.$message({
               showClose: true,
               message: "加入成功",
-              type: "success"
+              type: "success",
+              duration: 3000
             });
           }
-          this.getList()
-        }).catch((res)=>{
+          this.getList();
+        })
+        .catch(res => {
           this.$message({
-              showClose: true,
-              message: "已收藏该股票",
-              type: "warning"
-            });
+            showClose: true,
+            message: "已收藏该股票",
+            type: "warning"
+          });
         });
     }
   }
@@ -304,7 +329,7 @@ export default {
 </script>
 
 <style scoped>
-.user_div-table{
+.user_div-table {
   min-height: 540px;
 }
 .codeName {
@@ -348,7 +373,7 @@ export default {
   border: 1px solid #ddd;
   border-top: none;
   box-sizing: border-box;
-  width: 100%;
+  width: 812px;
 }
 .optional-seo ul li {
   padding: 2px 0;

@@ -1,5 +1,5 @@
 <template>
-  <div class="mask" v-show="show">
+  <div id="mask" v-show="show">
       <el-dialog
               title="请输入支付密码"
               :visible.sync="centerDialogVisible"
@@ -183,7 +183,7 @@ export default {
       };
       axios.post('/strategist/buyRecord/buy',qs.stringify(requestObj), {
         headers:{
-          'Authorization':sessionStorage.getItem('token')
+          'Authorization':localStorage.getItem('token')
         }
       }).then((response)=>{
         _this.canBuy = true
@@ -191,11 +191,16 @@ export default {
         this.payPass='';
         this.$refs.btn.style.backgroundColor="#f9d9cb";   
         if(response.data.code==200&&localStorage.getItem('askAgain')){
-          this.$alert('点买成功', '购买提示', ) 
+          this.$confirm('点买成功', '购买提示', {
+            confirmButtonText: '我知道了',}).then(()=>{
+              this.$router.push('/position/price/holding')
+            })
         }else if(response.data.code==200 && !localStorage.getItem('askAgain')&&this.checked){
             this.$confirm('已开启自动支付，在到期日期之后的交易日下午14:40自动扣除递延费'+this.deferredFee +'元/天,不出现止盈、止损、延期费扣除失败的情况下可以继续持有策略之下个交易日！', '购买成功', {
             confirmButtonText: '我知道了',
-            cancelButtonText: '不在提示'}).catch(()=>{
+            cancelButtonText: '不在提示'}).then(()=>{
+              this.$router.push('/position/price/holding')
+            }).catch(()=>{
               this.$router.push('/position/price/holding')
               localStorage.setItem('askAgain',1)
             })
@@ -289,7 +294,7 @@ export default {
   top: 10px;
   cursor: pointer;
 }
-.mask {
+#mask {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -299,7 +304,7 @@ export default {
   left: 0;
   z-index: 899;
 }
-.mask .main {
+#mask .main {
   width: 800px;
   min-height: 710px;
   position: absolute;
@@ -311,7 +316,7 @@ export default {
   padding: 30px 140px;
   box-sizing: border-box;
 }
-.mask .main h2 {
+#mask .main h2 {
   line-height: 50px;
   font-family: MicrosoftYaHei;
   font-size: 22px;

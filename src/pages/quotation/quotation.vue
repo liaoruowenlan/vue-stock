@@ -26,7 +26,7 @@
                     </div>
                     <div class="stock-seo-div">
                         <div class="seo-text">
-                            <input type="text" maxlength="6" placeholder="输入股票名称／代码" class="seo-val" @focus="focus($event)" @keyup="seo_stock($event)" v-model="keyword"/>
+                            <input type="text" maxlength="6" placeholder="输入股票名称／代码" class="seo-val" @blur="blur" @focus="focus($event)" @keyup="seo_stock($event)" v-model="keyword"/>
                             <input type="button" value="搜索" :class="canSearch?'canSearch seo-btn':'seo-btn'"  @click="search(first,$event)"/>
                             <div class="seo-list" v-show= "seo_stock_open">
                                 <ul>
@@ -63,34 +63,34 @@
                         <div class="buysell">
                             <ul class="clearfix">
                               <li class="fl">
-                                <span>买</span> <span class="circur">1</span> <span>{{market.askPrice}}</span> <span class="shares">{{market.askVolume}}</span>
+                                <span>买</span> <span class="circur">1</span> <span>{{market.askPrice}}</span> <span class="shares">{{(market.askVolume/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">1</span> <span>{{market.bidPrice}}</span> <span class="shares">{{market.bidVolume}}</span>
+                                <span>卖</span> <span class="circur">1</span> <span>{{market.bidPrice}}</span> <span class="shares">{{(market.bidVolume/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>买</span> <span class="circur">2</span> <span>{{market.askPrice2}}</span> <span class="shares">{{market.askVolume2}}</span>
+                                <span>买</span> <span class="circur">2</span> <span>{{market.askPrice2}}</span> <span class="shares">{{(market.askVolume2/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">2</span> <span>{{market.bidPrice2}}</span> <span class="shares">{{market.bidVolume2}}</span>
+                                <span>卖</span> <span class="circur">2</span> <span>{{market.bidPrice2}}</span> <span class="shares">{{(market.bidVolume2/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>买</span> <span class="circur">3</span> <span>{{market.askPrice3}}</span> <span class="shares">{{market.askVolume3}}</span>
+                                <span>买</span> <span class="circur">3</span> <span>{{market.askPrice3}}</span> <span class="shares">{{(market.askVolume3/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">3</span> <span>{{market.bidPrice3}}</span> <span class="shares">{{market.bidVolume3}}</span>
+                                <span>卖</span> <span class="circur">3</span> <span>{{market.bidPrice3}}</span> <span class="shares">{{(market.bidVolume3/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>买</span> <span class="circur">4</span> <span>{{market.askPrice4}}</span> <span class="shares">{{market.askVolume4}}</span>
+                                <span>买</span> <span class="circur">4</span> <span>{{market.askPrice4}}</span> <span class="shares">{{(market.askVolume4/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">4</span> <span>{{market.bidPrice4}}</span> <span class="shares">{{market.bidVolume4}}</span>
+                                <span>卖</span> <span class="circur">4</span> <span>{{market.bidPrice4}}</span> <span class="shares">{{(market.bidVolume4/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>买</span> <span class="circur">5</span> <span>{{market.askPrice5}}</span> <span class="shares">{{market.askVolume5}}</span>
+                                <span>买</span> <span class="circur">5</span> <span>{{market.askPrice5}}</span> <span class="shares">{{(market.askVolume5/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">5</span> <span>{{market.bidPrice5}}</span> <span class="shares">{{market.bidVolume5}}</span>
+                                <span>卖</span> <span class="circur">5</span> <span>{{market.bidPrice5}}</span> <span class="shares">{{(market.bidVolume5/100).toFixed(2)}}</span>
                               </li>
                             </ul>
                         </div>
@@ -265,9 +265,10 @@ export default {
       }
     },
     blur(){
-      this.serchList = [];
-      this.seo_stock_open = false;
-      this.keyword = ''
+      if(this.keyword==''){
+        this.serchList = [];
+        this.seo_stock_open = false;
+      }
     },
     addIcon() {
       this.$axios
@@ -337,7 +338,6 @@ export default {
         });
     },
     search(code, event) {
-      console.log(code)
       if (event.target.className === "canSearch seo-btn") {
         if (this.first.length > 0) {
           code = this.first[0].code;
@@ -380,7 +380,23 @@ export default {
         });
     },
     seo_stock:_.debounce( function(event){
+      console.log(event)
       var val = event.target.value;
+      if(event.keyCode == 13 && val == ''){
+        return
+      }else if(event.keyCode == 13 && val != ''){
+        console.log(this.first)
+        if (this.first.length > 0) {
+          val = this.first[0].code;
+        } else {
+          this.$alert("请输入正确的股票代码", "提示", {
+            confirmButtonText: "确定"
+          });
+        }
+        this.shares(val);
+        this.retriveMarket(val);
+        return
+      }
       if(!val){
         val = '0'
       }
@@ -391,6 +407,16 @@ export default {
         this.canSearch = false;
         return;
       }
+      // if(event.keyCode == 13&&val!=''){
+      //   axios
+      //   if(this.open){
+      //     this.resubscribe(val);
+
+      //   }
+      //   this.shares(val+'');
+      //   this.retriveMarket(val+'');
+      //   return
+      // }
       axios
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {

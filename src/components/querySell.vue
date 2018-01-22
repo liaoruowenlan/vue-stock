@@ -49,12 +49,7 @@ export default {
     sellOut(){
       this.$axios.post('/strategist/buyRecord/sellapply/'+this.maskInfo.id).then((res)=>{
         this.$emit("close");
-        this.$alert(res.data.message, '提示',{
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$router.go(-1)
-          }
-        } ) 
+        this.$alert(res.data.message, '提示', ) 
       }).catch((res)=>{
         this.$emit("close");        
       })

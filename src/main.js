@@ -9,9 +9,8 @@ import './assets/css/index.css'
 import axios from 'axios';
 import time from './assets/js/timeout'
 Vue.prototype.$time = time
-// Vue.config.$time = time
 Vue.use(ElementUI)
-axios.defaults.headers['Authorization']=sessionStorage.getItem('token')||' '
+axios.defaults.headers['Authorization']=localStorage.getItem('token')||' '
 axios.defaults.headers.post['Content-Type']='application/x-www-form-urlencoded;charset=UTF-8';
 // Vue.config.$axios = axios
 Vue.prototype.$axios=axios;
@@ -26,7 +25,7 @@ new Vue({
   components: { App }
 });
 // axios.interceptors.request.use(function (config) {    // 这里的config包含每次请求的内容
-//     var token = sessionStorage.getItem("token");
+//     var token = local.get("token");
 //     alert(token);
 //     if (token) {
 //         config.headers.Authorization = token;

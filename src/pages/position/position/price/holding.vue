@@ -40,7 +40,8 @@
                     {{item.state=="POSTED"||item.state=="BUYLOCK"?'买入中':item.state=="HOLDPOSITION"?'持仓中':item.state=="SELLAPPLY"?"卖出申请":'卖出锁定'}}
                 </el-tag>
                 <el-button type="warning"
-                :disabled="item.state=='HOLDPOSITION'&&item.createTime.split(' ')[0]!=new Date().toLocaleDateString().replace(/\//g,'-')?false:true"
+                :disabled="item.state=='HOLDPOSITION'&&item.createTime.split(' ')[0]!=new Date().toLocaleDateString().replace(/\//g,'-')&&$time.outtime('09:30',new Date().getHours() + ':' + new Date().getMinutes()
+        )?false:true"
                   @click="sellOut(item)">卖 出</el-button>
             </div>   
         </div>
@@ -90,7 +91,6 @@ export default {
         this.show = true
         this.maskInfo = item
         this.createTime = Math.floor((Date.parse(new Date())-Date.parse(item.createTime.split(' ')[0]))/(1000*60*60*24))
-
     },
     getList() {
       this.$axios
@@ -101,7 +101,7 @@ export default {
             this.size,
           {
             headers: {
-              Authorization: sessionStorage.getItem("token")
+              Authorization: localStorage.getItem("token")
             }
           }
         )

@@ -117,7 +117,7 @@
                 if(this.AuCode.userAcd.length!=4){
                     this.AuCode.AuCodeReg = true;
                     this.AuCode.AuCodeMeg = "*检查验证码长度";
-                    return false;
+                    return false; 
                 }
                 if(!(/^[a-zA-Z][a-zA-Z0-9]{6,12}$/.test(this.password.userPwd))){
                     this.password.Pwdreg = true;
@@ -136,9 +136,9 @@
                             _this.AuCode.AuCodeMeg = res.data.message;
                             return false;
 						}else if(res.data.code==200){
-                            sessionStorage.setItem("token",res.data.result.token);
-                            sessionStorage.setItem("phone", _this.phone.userPhone);
-                            sessionStorage.setItem("id",res.data.result.id);
+                            localStorage.setItem("token",res.data.result.token);
+                            localStorage.setItem("phone", _this.phone.userPhone);
+                            localStorage.setItem("id",res.data.result.id);
                             _this.$router.push({ path: 'home' });
                         }else if(res.data.code==2001){
 

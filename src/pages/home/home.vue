@@ -140,7 +140,7 @@
                 var _this = this
                 this.$axios.get('/strategist/publisher/getSettingRemind',{
                     headers: {
-                        'Authorization': sessionStorage.getItem("token") || ' '
+                        'Authorization': localStorage.getItem("token") || ' '
                     }
                 }).then((response)=>{
                     var data = response.data
@@ -157,7 +157,8 @@
             }
         },
         mounted () {
-            if(sessionStorage.getItem("token")){
+            console.log(localStorage.getItem("token"))
+            if(localStorage.getItem("token")){
                 this.getpw()
             }
         }

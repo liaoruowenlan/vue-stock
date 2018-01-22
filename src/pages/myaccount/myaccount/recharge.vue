@@ -6,7 +6,7 @@
                 <ul>
                     <li>
                         <img src="../../../assets/img/myblank.png"/>
-                        <router-link to="/myaccount/core">提现记录</router-link>
+                        <router-link to="/myaccount/core">充值记录</router-link>
                     </li>
                 </ul>
             </div>
@@ -26,10 +26,6 @@
                                 <img :src="blank.iconLink"/>
                                 {{blank.bankName}}
                             </li>
-                            <!--<li class="actives">-->
-                            <!--<img src="../../../assets/img/hang.png" />-->
-                            <!--建设银行-->
-                            <!--</li>-->
                         </ul>
                     </el-form-item>
                 </el-form>
@@ -69,13 +65,13 @@
             return {
                 centerDialogVisible: false,
                 btnUp: "",
-                token: sessionStorage.getItem('token'),
-                phone: sessionStorage.getItem('phone'),
+                token: localStorage.getItem('token'),
+                phone: localStorage.getItem('phone'),
                 activeIdx: 0,
                 bindCardId: '',
                 banCode: 'null',
                 diaOpen:false,
-                publisherId: sessionStorage.getItem('id'),
+                publisherId: localStorage.getItem('id'),
                 ruleForm: {
                     name: '',
                     resource: '',

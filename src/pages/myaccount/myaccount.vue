@@ -62,8 +62,8 @@
             FooterNav
         },
         mounted(){
-             this.phone = sessionStorage.getItem("phone");
-            // var token = sessionStorage.getItem("token");
+             this.phone = localStorage.getItem("phone");
+            // var token = localStorage.getItem("token");
             // if(!token){
             //     alert(1);
             // }
