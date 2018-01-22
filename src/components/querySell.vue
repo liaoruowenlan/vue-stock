@@ -39,20 +39,28 @@ export default {
       type: Boolean
     },
     createTime: {
-      type: [String,Number]
+      type: [String, Number]
     }
   },
   methods: {
-    close(){
+    close() {
       this.$emit("close");
     },
-    sellOut(){
-      this.$axios.post('/strategist/buyRecord/sellapply/'+this.maskInfo.id).then((res)=>{
-        this.$emit("close");
-        this.$alert(res.data.message, '提示', ) 
-      }).catch((res)=>{
-        this.$emit("close");        
-      })
+    sellOut() {
+      this.$axios
+        .post("/strategist/buyRecord/sellapply/" + this.maskInfo.id)
+        .then(res => {
+          this.$alert(res.data.message, "提示", {
+            confirmButtonText: "确定",
+            callback: action => {
+              this.$emit("close");
+              this.$router.go(0);
+            }
+          });
+        })
+        .catch(res => {
+          this.$emit("close");
+        });
     }
   }
 };

@@ -10,7 +10,7 @@
                             <span class="number">{{market.instrumentId}}</span>
                             <i class="el-icon-circle-plus addIcon" v-show="canAdd" @click="addIcon"></i>
                         </div>
-                        <div class="stock-number">{{market.lastPrice}}</div>
+                        <div class="stock-number">{{(market.lastPrice).toFixed(2)}}</div>
                         <div class="stock-rose">
                             <span>{{market.upDropPrice}}</span>
                             <span>{{market.upDropSpeed}}</span>
@@ -260,12 +260,12 @@ export default {
     },
     focus(event){
       if(event.target.value==''){
-        this.seo_stock(event)
-        
+        this.seo_stock(event) 
       }
     },
     blur(){
       if(this.keyword==''){
+        this.keyword==' '
         this.serchList = [];
         this.seo_stock_open = false;
       }
@@ -385,7 +385,6 @@ export default {
       if(event.keyCode == 13 && val == ''){
         return
       }else if(event.keyCode == 13 && val != ''){
-        console.log(this.first)
         if (this.first.length > 0) {
           val = this.first[0].code;
         } else {
@@ -393,8 +392,15 @@ export default {
             confirmButtonText: "确定"
           });
         }
+        this.keyword=''
+        this.serchList = []
         this.shares(val);
         this.retriveMarket(val);
+        this.$message({
+          message: '切换成功',
+          type: 'warning',
+          duration:1500,
+        });
         return
       }
       if(!val){

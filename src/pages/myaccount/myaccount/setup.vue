@@ -235,8 +235,8 @@ export default {
           })
         )
         .then(function(res) {
-          console.log(res.data);
-          const TIME_COUNT = 60;
+          if(res.data.code == 200){
+         const TIME_COUNT = 60;
           if (!_this.timer) {
             _this.count = TIME_COUNT;
             _this.show = false;
@@ -250,6 +250,12 @@ export default {
               }
             }, 2000);
           }
+          }else{
+              this.$alert(res.data.message, '提示', {
+                  confirmButtonText: '确定',
+                });
+          }
+
         })
         .catch(function(err) {
           console.log(err);
