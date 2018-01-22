@@ -277,6 +277,7 @@ export default {
     },
     getList() {
       this.loading = true;
+      if(!localStorage.getItem('token')) return;
       this.$axios
         .get(
           "/strategist/favoriteStock/favoriteStockPage?page=" +
@@ -303,6 +304,7 @@ export default {
     add(code, event) {
       this.searchShow = false;
       this.code = "";
+      if(!localStorage.getItem('token')) return;
       this.$axios
         .post("/strategist/favoriteStock/addFavoriteStock?stockCode=" + code)
         .then(res => {

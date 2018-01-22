@@ -117,8 +117,8 @@ const router = new Router({
 })
 router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
     const Token = localStorage.getItem("token");
-    // console.log(to)
-    if(  to.name == 'Quotation' || to.name == 'holding'|| to.name == 'capital'|| to.name == 'holding' ){
+    console.log(to)
+    if(  to.name == 'Quotation' || to.name == 'holding'|| to.name == 'capital'|| to.name == 'holding'||/^\/myaccount(?:\/(?=$))?$/i.test(to.path)  ){
         if(!Token){
             MessageBox.alert('您还没有登录，请先登录','提示',{confirmButtonText: '确定',})
             next('/login')

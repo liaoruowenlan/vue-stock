@@ -17,7 +17,7 @@
                     </div>
                     <div class="passworld">
                         <p>登录密码</p>
-                        <input type="password" v-model="Pwd.UserPwd" @keyup="change($event)" autocomplete="off"/>
+                        <input  type="password" v-model="Pwd.UserPwd" @keyup="change($event)" autocomplete="off"/>
                         <div v-if="Pwd.PwdReg">{{Pwd.PwdMsg}}</div>
                     </div>
                     <input id="user-login" :class="btnUp?'addColor':''" type="button" value="登陆" class="login-btn" @click="login"/>
@@ -29,7 +29,7 @@
                             注册账号
                         </router-link>
                     </div>
-                    <input type="text" style="display:none;" />
+                    <input type="text" style="display:none;"/>
                 </div>
             </div>
         </section>

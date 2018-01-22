@@ -19,7 +19,7 @@
                         <input v-model="oldpassworld.newloginpass" type="password" placeholder="  请输入新密码"/>
                     </div>
                     <p v-show="newPay.btn" class="regw">*请检查原密码</p>
-                    <p v-show="newPay.PassReg" class="regw">*注册密码必须为字母开头6-12位数字</p>                    
+                    <p v-show="newPay.PassReg" class="regw">*注册密码必须为字母数字组合6-12位</p>                    
                 </div>
                 <section>
                     <div @click="setPass">确定</div>
@@ -137,7 +137,7 @@ export default {
     setPass() {
       this.newPay.PassReg = false;
       this.newPay.btn = false;
-      if (!/^[a-zA-Z][a-zA-Z0-9]{6,12}$/.test(this.oldpassworld.newloginpass)) {
+      if (!(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/.test(this.oldpassworld.newloginpass))) {
         this.newPay.PassReg = true;
         return;
       }

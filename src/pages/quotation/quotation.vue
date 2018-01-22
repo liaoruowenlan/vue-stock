@@ -10,7 +10,7 @@
                             <span class="number">{{market.instrumentId}}</span>
                             <i class="el-icon-circle-plus addIcon" v-show="canAdd" @click="addIcon"></i>
                         </div>
-                        <div class="stock-number">{{(market.lastPrice).toFixed(2)}}</div>
+                        <div class="stock-number">{{market.lastPrice?(market.lastPrice).toFixed(2):market.lastPrice}}</div>
                         <div class="stock-rose">
                             <span>{{market.upDropPrice}}</span>
                             <span>{{market.upDropSpeed}}</span>
@@ -63,41 +63,41 @@
                         <div class="buysell">
                             <ul class="clearfix">
                               <li class="fl">
-                                <span>买</span> <span class="circur">1</span> <span>{{market.askPrice}}</span> <span class="shares">{{(market.askVolume/100).toFixed(2)}}</span>
+                                <span>买</span> <span class="circur">1</span> <span>{{market.bidPrice}}</span> <span class="shares">{{(market.bidVolume/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">1</span> <span>{{market.bidPrice}}</span> <span class="shares">{{(market.bidVolume/100).toFixed(2)}}</span>
+                                <span>卖</span> <span class="circur">1</span> <span>{{market.askPrice}}</span> <span class="shares">{{(market.askVolume/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>买</span> <span class="circur">2</span> <span>{{market.askPrice2}}</span> <span class="shares">{{(market.askVolume2/100).toFixed(2)}}</span>
+                                <span>买</span> <span class="circur">2</span> <span>{{market.bidPrice2}}</span> <span class="shares">{{(market.bidVolume2/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">2</span> <span>{{market.bidPrice2}}</span> <span class="shares">{{(market.bidVolume2/100).toFixed(2)}}</span>
+                                <span>卖</span> <span class="circur">2</span> <span>{{market.askPrice2}}</span> <span class="shares">{{(market.askVolume2/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>买</span> <span class="circur">3</span> <span>{{market.askPrice3}}</span> <span class="shares">{{(market.askVolume3/100).toFixed(2)}}</span>
+                                <span>买</span> <span class="circur">3</span> <span>{{market.bidPrice3}}</span> <span class="shares">{{(market.bidVolume3/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">3</span> <span>{{market.bidPrice3}}</span> <span class="shares">{{(market.bidVolume3/100).toFixed(2)}}</span>
+                                <span>卖</span> <span class="circur">3</span> <span>{{market.askPrice3}}</span> <span class="shares">{{(market.askVolume3/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>买</span> <span class="circur">4</span> <span>{{market.askPrice4}}</span> <span class="shares">{{(market.askVolume4/100).toFixed(2)}}</span>
+                                <span>买</span> <span class="circur">4</span> <span>{{market.bidPrice4}}</span> <span class="shares">{{(market.bidVolume4/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">4</span> <span>{{market.bidPrice4}}</span> <span class="shares">{{(market.bidVolume4/100).toFixed(2)}}</span>
+                                <span>卖</span> <span class="circur">4</span> <span>{{market.askPrice4}}</span> <span class="shares">{{(market.askVolume4/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>买</span> <span class="circur">5</span> <span>{{market.askPrice5}}</span> <span class="shares">{{(market.askVolume5/100).toFixed(2)}}</span>
+                                <span>买</span> <span class="circur">5</span> <span>{{market.bidPrice5}}</span> <span class="shares">{{(market.bidVolume5/100).toFixed(2)}}</span>
                               </li>
                               <li class="fl">
-                                <span>卖</span> <span class="circur">5</span> <span>{{market.bidPrice5}}</span> <span class="shares">{{(market.bidVolume5/100).toFixed(2)}}</span>
+                                <span>卖</span> <span class="circur">5</span> <span>{{market.askPrice5}}</span> <span class="shares">{{(market.askVolume5/100).toFixed(2)}}</span>
                               </li>
                             </ul>
                         </div>
                     </div>
                     <div class="stock-right">
-                        <div class="stock-right-div1">
-                            <p>实时交易动态</p>
+                        <div class="stock-right-div1" v-show="transaction>0">
+                            <p >实时交易动态</p>
                             <ul class="data-stock">
                                 <li v-for="(item,index) in transaction" :key="index" @click="pop(item.stockCode)">
                                     <div class="stock-title">
@@ -255,7 +255,8 @@ export default {
       window.scrollTo(0,0)
       this.$message({
           message: '切换成功',
-          type: 'warning'
+          type: 'warning',
+          duration:1000
         });
     },
     focus(event){
@@ -876,8 +877,8 @@ a {
 .stock-left {
   float: left;
 }
-.stock-right-div2 {
-  margin-top: 10px;
+.stock-right-div1 {
+  margin-bottom: 10px;
 }
 .stock-right-div2 ul li > div:last-child span {
   display: block;

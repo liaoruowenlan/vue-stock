@@ -67,16 +67,18 @@ export default {
     //
   },
   methods: {
-    signout(){
-      localStorage.clear()
-      this.$alert('退出成功', '提示', {
-          confirmButtonText: '确定',
-          showClose:false,
-          callback: action => {
-            this.loginOpen = false
-            this.$router.push('/home')      
-          }
-        });
+    signout() {
+      this.$confirm("是否退出", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          localStorage.clear();
+          this.loginOpen = false;
+          this.$router.push("/home");
+        })
+        .catch(() => {});
     },
     refreshUserInfo: function() {
       var phone = localStorage.getItem("phone");
