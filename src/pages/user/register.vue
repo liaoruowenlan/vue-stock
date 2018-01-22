@@ -24,7 +24,7 @@
 					</div>
 					<div class="passworld">
 						<p>登录密码</p>
-						<input type="password" v-model="password.userPwd" ref="passwordInput" maxlength="12" @keyup="UserPass" />
+						<input type="password" v-model="password.userPwd" ref="passwordInput" maxlength="12" />
 						<img v-if="imgSrc" src="../../assets/img/dl-yincang@2x.png"  @click="changePasswordType()"/>
 						<img v-else-if="!imgSrc" src="../../assets/img/show@2x.png"  @click="changePasswordType()"/>
 						<div v-if="password.Pwdreg">{{password.phoneMsg}}</div>
@@ -92,13 +92,6 @@
             FooterNav
         },
         methods:{
-            UserPass(){
-                // if(this.password.userPwd.length==12){
-                 //    this.password.Pwdreg = true;
-                 //    this.password.phoneMsg = "密码长度不能大于12位" ;
-				// }
-                // this.password.userPwd = this.password.userPwd.replace(/[]/g,'');
-            },
             changePasswordType() {
                 var origin = this.$refs.passwordInput.type;
                 this.$refs.passwordInput.type = origin == "password" ? "text" : "password";
@@ -119,9 +112,9 @@
                     this.AuCode.AuCodeMeg = "*检查验证码长度";
                     return false; 
                 }
-                if(!(/^[a-zA-Z][a-zA-Z0-9]{6,12}$/.test(this.password.userPwd))){
+                if(!(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/.test(this.password.userPwd))){
                     this.password.Pwdreg = true;
-                    this.password.phoneMsg = "*注册密码必须为字母开头6-12位数字";
+                    this.password.phoneMsg = "*注册密码必须为字母数字组合6-12位";
                     return;
                 }
                 var _this = this;
