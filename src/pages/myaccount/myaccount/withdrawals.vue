@@ -319,11 +319,11 @@
                     this.userMoneyText = '*请先绑定银行卡！';
                     return false;
                 }
-                // if(this.moneyOne < 500){
-                //     this.userMoneyReg = true;
-                //     this.userMoneyText = '*提现金额需大于或等于500';
-                //     return false;
-                // }
+                   if(this.moneyOne < 500){
+                       this.userMoneyReg = true;
+                       this.userMoneyText = '*提现金额需大于或等于500';
+                       return false;
+                   }
                 if(this.moneyOne>this.userMoney){ //。
                     this.userMoneyReg=true;
                     this.userMoneyText = '*提现金额不得大于用户余额';
