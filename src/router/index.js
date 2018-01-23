@@ -62,12 +62,12 @@ const router = new Router({
             component: resolve => require(['@/pages/newsbanner/newsbanner.vue'], resolve),
             meta: { login: true }
         },
-        // {
-        //     path: '/app',
-        //     name: 'app',
-        //     component: resolve => require(['@/pages/appsec/app.vue'], resolve),
-        //     meta: { login: true }
-        // },
+        {
+            path: '/app',
+            name: 'app',
+            component: resolve => require(['@/pages/dowapp/dowapp.vue'], resolve),
+            meta: { login: true }
+        },
         {
             path: '/help',
             name: 'Help',
