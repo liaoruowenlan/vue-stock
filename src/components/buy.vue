@@ -25,7 +25,7 @@
               <li class="topone clearfix">
                   <span class="label fl">点买类型</span>
                   <ul class="toptwo fr clearfix" ref="toptwo">
-                      <li :class="index1==i?'active fl':'fl'"  v-for="(o,i) in listTitle" :key="i" @click="click(i)">{{o}}</li>
+                      <li :class="index1==i?'active fl':'fl'"  v-for="(o,i) in listTitle" :key="i" @click="click(i,o)">{{o.name}}</li>
                   </ul>
               </li>
               <li class="topone clearfix" >
@@ -121,7 +121,8 @@ export default {
       this.serviceFee =
         this.dataList.length > 0 ? this.dataList[0].serviceFeePerWan : "";
       this.id = this.dataList.length > 0 ? this.dataList[0].id : "";
-      this.deferredFee = this.dataList.length > 0 ? this.dataList[0].deferred : "";
+      this.deferredFee =
+        this.dataList.length > 0 ? this.dataList[0].deferred : "";
     }
   },
   data() {
@@ -141,30 +142,30 @@ export default {
       profitPoint: "",
       serviceFee: "",
       dialogVisible: true,
-      canBuy:true,
-      deferredFee:0
+      canBuy: true,
+      deferredFee: 0
     };
   },
   methods: {
-    clear(){
-      this.payPass = ''
+    clear() {
+      this.payPass = "";
     },
     showTime(event) {
-      this.payPass = this.payPass.replace(/[^\d]/g,'');
+      this.payPass = this.payPass.replace(/[^\d]/g, "");
       if (this.payPass.length > 5) {
-        if(event.keyCode == 13){
-          this.userWithd()
+        if (event.keyCode == 13) {
+          this.userWithd();
         }
-        this.$refs.btn.style.backgroundColor="#ee8354"        
-      }else{
-        this.$refs.btn.style.backgroundColor="#f9d9cb" 
+        this.$refs.btn.style.backgroundColor = "#ee8354";
+      } else {
+        this.$refs.btn.style.backgroundColor = "#f9d9cb";
       }
     },
     userWithd() {
-      if(this.payPass.length<5) return;
-      if(!this.canBuy) return;
-      this.canBuy =false;
-      var _this = this
+      if (this.payPass.length < 5) return;
+      if (!this.canBuy) return;
+      this.canBuy = false;
+      var _this = this;
       var requestObj = {
         stockCode: this.instrumentId, //股票代码
         lossPoint: this.losses, //止损点
@@ -178,72 +179,93 @@ export default {
         applyAmount: this.marketValue, //申请金额
         strategyTypeId: this.id, //类型id
         deferred: this.checked, //选择框
-        paymentPassword:this.payPass,//支付密码
-        deferredFee:this.checked?this.deferredFee*this.marketValue/10000:0
+        paymentPassword: this.payPass, //支付密码
+        deferredFee: this.checked
+          ? this.deferredFee * this.marketValue / 10000
+          : 0
       };
-      axios.post('/strategist/buyRecord/buy',qs.stringify(requestObj), {
-        headers:{
-          'Authorization':localStorage.getItem('token')
-        }
-      }).then((response)=>{
-        _this.canBuy = true
-        this.centerDialogVisible=false;
-        this.payPass='';
-        this.$refs.btn.style.backgroundColor="#f9d9cb";   
-        if(response.data.code==200&&localStorage.getItem('askAgain')){
-          this.$confirm('点买成功', '购买提示', {
-            confirmButtonText: '我知道了',}).then(()=>{
-              this.$router.push('/position/price/holding')
-            })
-        }else if(response.data.code==200 && !localStorage.getItem('askAgain')&&this.checked){
-            this.$confirm('已开启自动支付，在到期日期之后的交易日下午14:40自动扣除递延费'+this.deferredFee +'元/天,不出现止盈、止损、延期费扣除失败的情况下可以继续持有策略之下个交易日！', '购买成功', {
-            confirmButtonText: '我知道了',
-            cancelButtonText: '不在提示'}).then(()=>{
-              this.$router.push('/position/price/holding')
-            }).catch(()=>{
-              this.$router.push('/position/price/holding')
-              localStorage.setItem('askAgain',1)
-            })
-        }else if(response.data.code==200 && !localStorage.getItem('askAgain')){
-            this.$alert('点买成功', '购买提示', ) 
-              this.$router.push('/position/price/holding')
-            
-        }else if(response.data.code==6008){          
-          this.$alert(response.data.message, '点买通知', {
-          confirmButtonText: '去设置支付密码',
-          callback: action => {
-           this.$router.push('/myaccount/setup')
-          }})
-        }else if(response.data.code==6001){
-          this.$confirm('余额不足，是否前往充值？', '购买提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消'}).then(()=>{
-              this.$router.push('/myaccount/capital')
-            })        
-        }else{
-          this.$alert(response.data.message, '购买提示', )          
-        }
-      })
-
+      axios
+        .post("/strategist/buyRecord/buy", qs.stringify(requestObj), {
+          headers: {
+            Authorization: localStorage.getItem("token")
+          }
+        })
+        .then(response => {
+          _this.canBuy = true;
+          this.centerDialogVisible = false;
+          this.payPass = "";
+          this.$refs.btn.style.backgroundColor = "#f9d9cb";
+          if (response.data.code == 200 && localStorage.getItem("askAgain")) {
+            this.$alert("点买成功", "购买提示", {
+              confirmButtonText: "我知道了",
+              showClose:false,
+              callback: action => {
+                this.$router.push("/position/price/holding");
+              }
+            });
+          } else if (
+            response.data.code == 200 &&
+            !localStorage.getItem("askAgain") &&
+            this.checked
+          ) {
+            this.$confirm(
+              "勾选递延费后,需要扣除当天的递延费（只递延一天），在不出现止盈，止损的情况下可以持该方案一天到下一个交易日，如当天到达止盈、止损线，递延费将退回您的账户",
+              "购买成功",
+              {
+                confirmButtonText: "我知道了",
+                cancelButtonText: "不在提示"
+              }
+            )
+              .then(() => {
+                this.$router.push("/position/price/holding");
+              })
+              .catch(() => {
+                this.$router.push("/position/price/holding");
+                localStorage.setItem("askAgain", 1);
+              });
+          } else if (
+            response.data.code == 200 &&
+            !localStorage.getItem("askAgain")
+          ) {
+            this.$alert("点买成功", "购买提示");
+            this.$router.push("/position/price/holding");
+          } else if (response.data.code == 6008) {
+            this.$alert(response.data.message, "点买通知", {
+              confirmButtonText: "去设置支付密码",
+              callback: action => {
+                this.$router.push("/myaccount/setup");
+              }
+            });
+          } else if (response.data.code == 6001) {
+            this.$confirm("余额不足，是否前往充值？", "购买提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消"
+            }).then(() => {
+              this.$router.push("/myaccount/capital");
+            });
+          } else {
+            this.$alert(response.data.message, "购买提示");
+          }
+        });
     },
     submit() {
-      this.centerDialogVisible=true
+      this.centerDialogVisible = true;
     },
     close() {
       this.$emit("close");
     },
-    click(index) {
+    click(index, item) {
       this.losses = this.dataList[index].losses[0].point;
       this.marketValue = this.dataList[index].amountValues[0].value;
       this.index1 = index;
       this.index2 = 0;
       this.index3 = 0;
       this.bigI = index;
-      this.id = index + 1;
+      this.id = item.id;
       this.reserveFund = this.dataList[index].wearingPoint;
       this.serviceFee = this.dataList[index].serviceFeePerWan;
       this.profitPoint = this.dataList[index].profit;
-      console.log(this.reserveFund);
+      console.log(this.id);
     },
     click1(value, index) {
       this.index2 = index;
@@ -326,7 +348,7 @@ export default {
   border-bottom: 1px solid #ece7e7;
   margin-bottom: 20px;
 }
-.firstUl{
+.firstUl {
   min-height: 468px;
 }
 .firstUl > li:nth-of-type(2n) {

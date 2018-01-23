@@ -331,10 +331,11 @@ export default {
             var data = response.data.result;
             _this.dataList = data;
             for (let i = 0; i < data.length; i++) {
-              listTitle.push(data[i].name);
+              listTitle.push({name:data[i].name,id:data[i].id});
               amountValues.push(data[i].amountValues);
             }
           }
+          console.log(listTitle)
         })
         .catch(error => {
           console.log(error);
@@ -402,7 +403,7 @@ export default {
         this.$message({
           message: '切换成功',
           type: 'warning',
-          duration:1500,
+          duration:500,
         });
         return
       }
@@ -416,16 +417,7 @@ export default {
         this.canSearch = false;
         return;
       }
-      // if(event.keyCode == 13&&val!=''){
-      //   axios
-      //   if(this.open){
-      //     this.resubscribe(val);
 
-      //   }
-      //   this.shares(val+'');
-      //   this.retriveMarket(val+'');
-      //   return
-      // }
       axios
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {
