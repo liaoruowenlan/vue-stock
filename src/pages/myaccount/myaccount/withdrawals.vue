@@ -181,7 +181,7 @@
                  ],
                  BlankCard: [
                      { required: true, message: '请输入银行卡', trigger: 'blur' },
-                     { pattern: /^([1-9]{1})(\d{14}|\d{18})$/, message: '请检查银行卡号', trigger: 'blur' }
+                     { pattern:  /^(\d{16}|\d{19})$/, message: '请检查银行卡号', trigger: 'blur' }
                  ],
                  Phone: [
                      { required: true, message: '请输入手机号码', trigger: 'blur' },

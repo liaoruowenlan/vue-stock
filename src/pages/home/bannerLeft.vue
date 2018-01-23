@@ -1,13 +1,6 @@
 <template>
   <div class="bannerLeft">
-      <ul class="tittle flex">
-          <li v-for="(item,index) in tittle" :key="index" :class="active==index?'active':''" @click='activeClick(index)'>{{item.name}}</li>
-      </ul>
-      <div class="contain">
-          <p class="big">1234.322</p>
-          <p class="updown"><span>+4.123</span> <span>+4.12%</span></p>
-          <p><button>大盘详情</button></p>
-      </div>
+      <market-item></market-item>
       <ul class="tittle tittle1 flex">
           <li v-for="(item,index) in ranking" :key="index" :class="rank==index?'active':''" @click='rankClick(index)'>{{item.name}} <span class="time">({{item.info}})</span></li>
       </ul>
@@ -24,14 +17,21 @@
   </div>
 </template>
 <script>
+import MarketItem from '../../components/martket'
 export default {
+    components: {
+        MarketItem
+    },
   data() {
     return {
-      tittle: [{ name: "上证" }, { name: "深证" }, { name: "创业板" }],
       active: 0,
       ranking: [{ name: "股神排行榜", info: "月榜" }],
-      rank: 0
+      rank: 0,
+      market: []
     };
+  },
+  mounted () {
+      this.getMarket()
   },
   methods: {
     activeClick(index) {
@@ -39,16 +39,29 @@ export default {
     },
     rankClick(index) {
       this.rank = index;
+    },
+    getMarket() {
+      var _this = this;
+      this.$axios
+        .get("/strategist/system/stockMarketExponent")
+        .then(function(response) {
+          if (response.data.code == 200) {
+            _this.market = response.data.result;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   }
 };
 </script>
 <style scoped>
-.people .red{
-    color: #ea523b;
+.people .red {
+  color: #ea523b;
 }
-.profit{
-    color: #687284;
+.profit {
+  color: #687284;
 }
 .time {
   font-size: 12px;
@@ -56,19 +69,31 @@ export default {
 .bannerLeft {
   width: 266px;
 }
-.bannerLeft .tittle {
-  justify-content: flex-start;
-  background: #fff;
+ .tittle li {
+  line-height: 40px;
+  padding: 0 20px;
+  color: #adb3c1;
+  cursor: pointer;
+  font-size: 14px;
+}
+ .tittle1 li {
+  padding: 0 10px;
+}
+ .tittle li.active {
+  color: #3e59a7;
+  border-top: 1px solid #3e59a7;
+  line-height: 38px;
 }
 .contain {
-  padding: 35px 20px 40px 20px;
-  background: url('../../assets/img/pankou-bg.png') no-repeat center bottom /100%,#fff;
+  padding: 20px;
+  background: url("../../assets/img/pankou-bg.png") no-repeat center bottom /100%,
+    #fff;
   margin-bottom: 10px;
 }
-.huang{
-    position: absolute;
-    left: 2px;
-    top: -9px;
+.huang {
+  position: absolute;
+  left: 2px;
+  top: -9px;
 }
 .time {
   font-size: 12px;
@@ -77,7 +102,6 @@ export default {
 .contain p {
   text-align: center;
   line-height: 28px;
-  color: #ea523b;
 }
 .contain .big {
   font-size: 22px;
@@ -92,33 +116,18 @@ export default {
   color: #3e59a7;
   background: transparent;
 }
-.bannerLeft .tittle li {
-  line-height: 40px;
-  padding: 0 20px;
-  color: #adb3c1;
-  cursor: pointer;
-  font-size: 14px;
-}
-.bannerLeft .tittle1 li {
-  padding: 0 10px;
-}
-.bannerLeft .tittle li.active {
-  color: #3e59a7;
-  border-top: 1px solid #3e59a7;
-  line-height: 38px;
-}
 .people {
   background: #fff;
 }
 .people .peopleItem {
-  padding: 14px 10px;
+  padding: 12px 10px;
   justify-content: flex-start;
   align-items: center;
   font-size: 12px;
 }
-.ip{
-    color: #687284;
-    margin: 0 36px 0 12px;
+.ip {
+  color: #687284;
+  margin: 0 36px 0 12px;
 }
 .people .face {
   position: relative;

@@ -4,7 +4,7 @@
         <swiper></swiper>
         <Pay :centerDialogVisible="centerDialogVisible" @close="close"></Pay>
         <div class="width100">
-            <div class="news">
+            <!-- <div class="news">
                 <img src="../../assets/img/sy-gonggao copy@2x.png" />
                 <p>
                     <a href="#">
@@ -103,11 +103,12 @@
                     </p>
                 </div>
 
-            </div> 
+            </div>  -->
             <div class="payHot flex">
                 <Hot></Hot>
                 <BannerLeft></BannerLeft>
             </div>
+                <news></news>
         </div>
         <div class="width100-bg">
             <footer-nav></footer-nav>
@@ -122,6 +123,7 @@
     import Pay from '../../components/paypassword.vue'
     import Hot from './hot.vue'
     import BannerLeft from './bannerLeft.vue'
+    import News from './news.vue'
     
     export default {
         name: "home",
@@ -131,7 +133,8 @@
             Swiper,
             Pay,
             Hot,
-            BannerLeft
+            BannerLeft,
+            News
         },
         data(){
             return {

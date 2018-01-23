@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import { MessageBox } from 'element-ui';
+import { clearInterval } from 'timers';
 
 Vue.use(Router)
 
@@ -37,6 +38,18 @@ const router = new Router({
             component: resolve => require(['@/pages/user/register.vue'], resolve),
             meta: { login: false }
         },
+        {
+            path: '/news',
+            name: 'news',
+            component: resolve => require(['@/pages/newsbanner/newsbanner.vue'], resolve),
+            meta: { login: true }
+        },
+        // {
+        //     path: '/app',
+        //     name: 'app',
+        //     component: resolve => require(['@/pages/appsec/app.vue'], resolve),
+        //     meta: { login: true }
+        // },
         {
             path: '/help',
             name: 'Help',
@@ -171,20 +184,27 @@ router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他�
     }
 })
 // router.afterEach((to, from) => {
-//     const Token = localStorage.getItem("token");    
-//     var logoutLimit = 1000 ; // 5
-//     var logoutTimer = setTimeout(logout, logoutLimit);
-//     if(!to.meta.login && !Token) return
-//     function move() {
-//         clearTimeout(logoutTimer);
-//         logoutTimer = setTimeout(logout, logoutLimit);
-//     }
-
-//     function logout() {
-//         //一般是ajax到后台清除session；
-//         MessageBox.alert('由于长时间未操作，您已退出登录！', '提示', { confirmButtonText: '确定', }).then(() => {
-//             router.push('/login')
-//         })
-//     }
+//     const Token = localStorage.getItem("token");
+//     if (!Token) return;
+//     console.log(!to.meta.login,!Token)
+//     if(!to.meta.login && !Token) return;
+//     // 移动了就更新最近一次移动的时间。
+//     document.onmousemove = function () {
+//         window.lastMove = new Date().getTime();
+//     };
+//     window.lastMove = new Date().getTime();//最近一次移动时间
+//     window.time1 = window.setInterval(function () {//每1秒钟检查一次。
+//         var now = new Date().getTime();
+//         // 如果超时了
+//         // console.log(now - lastMove)
+//         if (now - lastMove > 1000*60*.25) {
+//             // 自己写了撒。
+//             MessageBox.alert('由于长时间未操作，您已退出登录！', '提示', { confirmButtonText: '确定', }).then(() => {
+//                 localStorage.clear()
+//                 router.push('/login')
+//                 return
+//             })
+//         }
+//     }, 1000);
 // })
 export default router;
