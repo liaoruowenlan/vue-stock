@@ -10,41 +10,49 @@ const router = new Router({
     routes: [
         {
             path: '/',
-            redirect: '/home'
+            redirect: '/home',
+            meta:{login:false}
         },
         {
             path: '/home',
             name: 'Home',
-            component: resolve => require(['@/pages/home/home.vue'], resolve)
+            component: resolve => require(['@/pages/home/home.vue'], resolve),
+            meta:{login:false}
         },
         {
             path: '/login',
             name: 'Login',
-            component:  resolve => require([ '@/pages/user/login.vue'], resolve)
+            component: resolve => require(['@/pages/user/login.vue'], resolve),
+            meta:{login:false}
         },
         {
             path: '/reset',
             name: 'Reset',
-            component:  resolve => require([ '@/pages/user/reset.vue'], resolve)
+            component: resolve => require(['@/pages/user/reset.vue'], resolve),
+            meta:{login:false}
         },
         {
             path: '/register',
             name: 'Register',
-            component:  resolve => require(['@/pages/user/register.vue'], resolve)
+            component: resolve => require(['@/pages/user/register.vue'], resolve),
+            meta:{login:false}
         },
         {
             path: '/help',
             name: 'Help',
-            component: resolve => require(['@/pages/help/help.vue'], resolve)
+            component: resolve => require(['@/pages/help/help.vue'], resolve),
+            meta:{login:false}
         },
         {
             path: '/quotation',
             name: 'Quotation',
-            component:  resolve => require(['@/pages/quotation/quotation.vue'], resolve)
+            component: resolve => require(['@/pages/quotation/quotation.vue'], resolve),
+            meta:{login:true}
         },
         {
             path: '/position',
             component: resolve => require(['@/pages/position/position.vue'], resolve),
+            meta:{login:true},
             children: [
                 // {
                 //     path: '/',
@@ -53,27 +61,32 @@ const router = new Router({
                 // },
                 {
                     path: '/',
-                    redirect:'/position/price',
+                    redirect: '/position/price',
+                    meta:{login:true},
                     component: resolve => require(['@/pages/position/position/price.vue'], resolve),
-                    children:[
+                    children: [
                         {
                             path: '/position/price',
-                            redirect:'/position/price/holding',
-                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve)
+                            redirect: '/position/price/holding',
+                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve),
+                            meta:{login:true}
                         },
                         {
                             path: '/position/price/holding',
-                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve)
+                            component: resolve => require(['@/pages/position/position/price/holding.vue'], resolve),
+                            meta:{login:true}
                         },
                         {
                             path: '/position/price/settlement',
-                            component: resolve => require(['@/pages/position/position/price/settlement.vue'], resolve)
+                            component: resolve => require(['@/pages/position/position/price/settlement.vue'], resolve),
+                            meta:{login:true}
                         }
                     ]
                 },
                 {
                     path: '/position/optional',
-                    component:  resolve => require(['@/pages/position/position/optional.vue'], resolve)
+                    component: resolve => require(['@/pages/position/position/optional.vue'], resolve),
+                    meta:{login:true}
                 }
             ]
         },
@@ -81,51 +94,80 @@ const router = new Router({
 
             path: '/myaccount',
             // name:'Myaccount',
-            component:resolve => require(['@/pages/myaccount/myaccount.vue'], resolve),
+            component: resolve => require(['@/pages/myaccount/myaccount.vue'], resolve),
+            meta:{login:true},
             children: [
-                {path: '/', component:resolve => require(['@/pages/myaccount/myaccount/capital.vue'], resolve) , redirect: '/myaccount/capital'},
-                {path: '/myaccount/capital', component: resolve => require(['@/pages/myaccount/myaccount/capital.vue'], resolve) ,name:'capital'},
-                {path: '/myaccount/core', component: resolve => require(['@/pages/myaccount/myaccount/core.vue'], resolve) },
-                {path: '/myaccount/recharge', component: resolve => require(['@/pages/myaccount/myaccount/recharge.vue'], resolve) },
-                {path: '/myaccount/setup', component: resolve => require(['@/pages/myaccount/myaccount/setup.vue'], resolve) },
-                {path: '/myaccount/withdrawals', component: resolve => require(['@/pages/myaccount/myaccount/withdrawals.vue'], resolve) }]
+                {
+                    path: '/',
+                    component: resolve => require(['@/pages/myaccount/myaccount/capital.vue'], resolve),
+                    redirect: '/myaccount/capital',
+                    meta:{login:true}
+                },
+                {
+                    path: '/myaccount/capital',
+                    component: resolve => require(['@/pages/myaccount/myaccount/capital.vue'], resolve),
+                    name: 'capital',
+                    meta:{login:true}
+                },
+                {
+                    path: '/myaccount/core',
+                    component: resolve => require(['@/pages/myaccount/myaccount/core.vue'], resolve),
+                    meta:{login:true}
+                },
+                {
+                    path: '/myaccount/recharge',
+                    component: resolve => require(['@/pages/myaccount/myaccount/recharge.vue'], resolve),
+                    meta:{login:true}
+                },
+                {
+                    path: '/myaccount/setup',
+                    component: resolve => require(['@/pages/myaccount/myaccount/setup.vue'], resolve),
+                    meta:{login:true}
+                },
+                {
+                    path: '/myaccount/withdrawals',
+                    component: resolve => require(['@/pages/myaccount/myaccount/withdrawals.vue'], resolve),
+                    meta:{login:true}
+                }]
         },
         {
-            path:'/FooterIndex',
-            component:resolve => require(['@/pages/footer/footerIndex'], resolve),
-            name:'FooterIndex',
-            children:[
+            path: '/FooterIndex',
+            component: resolve => require(['@/pages/footer/footerIndex'], resolve),
+            name: 'FooterIndex',
+            meta:{login:true},
+            children: [
                 {
-                    path:'/FooterIndex/footerL',
-                    name:'footerL',
-                    component: resolve => require(['@/pages/footer/footerL'], resolve)
+                    path: '/FooterIndex/footerL',
+                    name: 'footerL',
+                    component: resolve => require(['@/pages/footer/footerL'], resolve),
+                    meta:{login:true}
                 },
                 {
-                    path:'/FooterIndex/footerM',
-                    name:'footerM',
-                    component:resolve => require(['@/pages/footer/footerM'], resolve)
+                    path: '/FooterIndex/footerM',
+                    name: 'footerM',
+                    component: resolve => require(['@/pages/footer/footerM'], resolve),
+                    meta:{login:true}
                 },
                 {
-                    path:'/FooterIndex/footerR',
-                    name:'footerR',
-                    component:resolve => require(['@/pages/footer/footerR'], resolve)
+                    path: '/FooterIndex/footerR',
+                    name: 'footerR',
+                    component: resolve => require(['@/pages/footer/footerR'], resolve),
+                    meta:{login:true}
                 }
             ]
         },
-        
+
     ]
 })
 router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
     const Token = localStorage.getItem("token");
-    console.log(to)
-    if(  to.name == 'Quotation' || to.name == 'holding'|| to.name == 'capital'|| to.name == 'holding'||/^\/myaccount(?:\/(?=$))?$/i.test(to.path)  ){
-        if(!Token){
-            MessageBox.alert('您还没有登录，请先登录','提示',{confirmButtonText: '确定',})
+    // console.log(to)
+    // console.log(to.meta.login)
+    if (to.meta.login&&!Token) {
+        MessageBox.alert('您还没有登录，请先登录', '提示', { confirmButtonText: '确定', }).then(() => {
             next('/login')
-        }else{
-            next()
-        }
-    }else{
+        })
+    } else {
         next()
     }
 })

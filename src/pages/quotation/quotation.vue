@@ -246,6 +246,8 @@ export default {
     pop(code){
       // this.$router.push({path:'/quotation',query:{code:code}})
       // this.$router.go(0)
+      this.pcode = code;
+      this.code = code;
       if(this.open){
         this.resubscribe(code);
 
