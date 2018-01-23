@@ -4,7 +4,6 @@
         <swiper></swiper>
         <Pay :centerDialogVisible="centerDialogVisible" @close="close"></Pay>
         <div class="width100">
-<<<<<<< HEAD
         	<div class="aBuy-demo">
         		<p>点买流程</p>
         		<div class="aBuy-demo-ul">
@@ -40,61 +39,7 @@
         			</div>
         		</div>
         	</div>
-=======
-            <!-- <div class="news">
-                <img src="../../assets/img/sy-gonggao copy@2x.png" />
-                <p>
-                    <a href="#">
-                        银行为广大中小微企业提供的线上流动资金贷款服务，该产品为结合大数据...
-                    </a>
-                </p>
-                <div>
-                    <p>累计匹配策略人数<span>{{money1}}</span>人</p>
-                    <p>累计实现交易金额<span>{{money2}}</span>万</p>
-                </div>
-            </div>
-            <div class="buy">
-                <div class="buy-img">
-                    <img src="../../assets/img/headerworld.png" />
-                </div>
-                <div>
-                    <p class="buy-header">什么是点买A股?</p>
-                    <p class="bug-title">点买人提供交易策略，投资人提供资金，优股网平台撮合双方完成交易。风险共担，收益共享 &nbsp;<router-link to="">查看详情></router-link></p>
-                    <ul>
-                        <li>
-                            <img src="../../assets/img/dian.png" />
-                            寻找股神合作：入市资金低，收益高，投资1250元即可点买；
-                        </li>
-                        <li>
-                            <img src="../../assets/img/dian.png" />
-                            快速短频交易：A股市场，合作选股，T+1、T+5交易，快速盈利；
-                        </li>
-                        <li>
-                            <img src="../../assets/img/dian.png" />
-                            低门槛高收益：股票获利9成归您，投资人助您成股神；
-                        </li>
-                    </ul>
-                    <img class="user-buyH" @click="go" src="../../assets/img/user-buy.png" />
-                </div>
-            </div>
-            <div class="qCcode">
-                <div class="qCcode-left">
-                    <img src="../../assets/img/phone-ti.png" />
-                </div>
-                <div class="qCcode-right">
-                    <img class="YG-logo" src="../../assets/img/YGlogo.png" />
-                    <p class="qCcode-text">
-                        实时行情数据，随时看行情，随手发布策略，投资机会不容错过！
-                    </p>
-                    <p class="qsCode-title">
-                        扫一扫，就能下载优股网APP！
-                    </p>
-                    <div class="qCode-bg">
 
-                    </div>
-                </div>
-            </div>
->>>>>>> ad40c0ab5ed2cb7a62858c9893d8e6db8c88bc45
             <div class="introduce">
                 <div>
                     <div>
@@ -141,7 +86,7 @@
                     </p>
                 </div>
 
-            </div>  -->
+            </div>  
             <div class="payHot flex">
                 <Hot></Hot>
                 <BannerLeft></BannerLeft>

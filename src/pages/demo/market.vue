@@ -53,7 +53,9 @@
 						
 					</div>
 					<div class="market-body-right">
-						
+						<div class="market-body-right-title">
+							<p :class="[active == index?'activeOne':'']" v-for="(item,index) in marKetList" :key="index" @click="marKetListClick(index)">{{item.name}}</p>						
+						</div>
 					</div>
 				</div>
 			</div>
@@ -71,18 +73,48 @@
 	export default {
 		data() {
 			return {
-
+				active:0,
+				marKetList:[
+					{
+						name:'涨幅板'
+					},
+					{
+						name:'跌幅板'
+					}
+				]
 			}
 		},
 		components: {
 			TopHeader,
 			FooterNav
+		},
+		methods:{
+			marKetListClick(index){
+				this.active = index;
+			}
 		}
 	}
 </script>
 
 <style scoped>
-	
+	.market-body-right-title{
+		height: 33px;
+		border-bottom:1px solid #DEDEE3;
+	}
+	.market-body-right-title>p{
+		float: left;
+		width:50px;
+		text-align: center;
+		font-size: 14px;
+		line-height: 33px;
+		color: #687284;
+		margin-left: 10px;
+		cursor: pointer;
+	}
+	.market-body-right-title>p.activeOne{
+		color: #3E59A7;
+		border-bottom: 1px solid #3E59A7;
+	}
 	.market-header-number-right ul{
 		width: 520px;
 		overflow: hidden;
