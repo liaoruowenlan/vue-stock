@@ -23,7 +23,7 @@
                 </div>
                 <section>
                     <div @click="setPass">确定</div>
-                    <div class="bgcolor" @click="hide">取消</div>
+                    <!-- <div class="bgcolor" @click="hide">取消</div> -->
                 </section>
             </div>
         </div>
@@ -32,9 +32,9 @@
             <p>
                 <img src="../../../assets/img/psw.png"/>
                 <span>支付密码</span>
-                <a @click="login">修改></a>
+                <a @click="login1">修改></a>
             </p>
-            <div class="pass" v-if="!newPay.payOen">
+            <div class="pass" v-if="newPay.payOen1">
                 <div class="pass1">
                     <div>手机号码</div>
                     <div>
@@ -64,7 +64,7 @@
                 </div>
                 <section>
                     <div @click="payWold">确定</div>
-                    <div class="bgcolor" @click="hide">取消</div>
+                    <!-- <div class="bgcolor" @click="hide">取消</div> -->
                 </section>
             </div>
         </div>
@@ -88,7 +88,8 @@ export default {
         Phone: localStorage.getItem("phone"),
         Aucode: "",
         AuCodeAdd: "",
-        payOen: 2,
+        payOen: false,
+        payOen1: false,
         PassWorld: "",
         PhoneReg: "",
         btn: false,
@@ -117,23 +118,32 @@ export default {
     },
     login() {
       this.newPay.payOen = !this.newPay.payOen;
+      this.newPay.payOen1 = false;
       this.newPay.PassWorld = ''
       this.oldpassworld.loginpass = ''
       this.oldpassworld.newloginpass = ''
       this.newPay.Aucode = ''
     },
-    hide() {
-      this.oldpassworld.loginpass = null;
-      this.oldpassworld.newloginpass = null;
-      this.oldpassworld.passOpen = false;
-      this.newPay.Phone = null;
-      this.newPay.Aucode = null;
+    login1() {
+      this.newPay.payOen1 = !this.newPay.payOen1;
       this.newPay.payOen = false;
-      this.newPay.PassWorld = null;
-      this.newPay.PhoneReg = false;
-      this.newPay.btn = false;
-      this.newPay.PassReg = false;
+      this.newPay.PassWorld = ''
+      this.oldpassworld.loginpass = ''
+      this.oldpassworld.newloginpass = ''
+      this.newPay.Aucode = ''
     },
+    // hide() {
+    //   this.oldpassworld.loginpass = null;
+    //   this.oldpassworld.newloginpass = null;
+    //   this.oldpassworld.passOpen = false;
+    //   this.newPay.Phone = null;
+    //   this.newPay.Aucode = null;
+    //   this.newPay.payOen = false;
+    //   this.newPay.PassWorld = null;
+    //   this.newPay.PhoneReg = false;
+    //   this.newPay.btn = false;
+    //   this.newPay.PassReg = false;
+    // },
     setPass() {
       this.newPay.PassReg = false;
       this.newPay.btn = false;
@@ -364,7 +374,7 @@ export default {
 }
 
 .pass section > div {
-  width: 134px;
+  width: 258px;
   height: 32px;
   text-align: center;
   line-height: 32px;
@@ -381,7 +391,7 @@ export default {
 }
 
 .pass section > div:last-child {
-  margin-left: 20px;
+  margin-left: 102px;
 }
 
 .user_div {
@@ -421,7 +431,7 @@ i {
 }
 
 .login1passWorld section > div {
-  width: 134px;
+  width: 258px;
   height: 32px;
   text-align: center;
   line-height: 32px;
@@ -438,7 +448,7 @@ i {
 }
 
 .login1passWorld section > div:last-child {
-  margin-left: 20px;
+  margin-left: 108px;
 }
 
 .bgcolor {

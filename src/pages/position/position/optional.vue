@@ -2,7 +2,7 @@
     <div class="optional-seo">
         <div>
             <div class="clearfix">
-              <input type="text" class="seo-text" v-model="code"   @keyup="changeCode($event)" placeholder="输入股票名称/代码/简拼" />
+              <input type="text" class="seo-text" v-model="code"   @keyup="changeCode($event)" placeholder="输入股票名称/代码" />
               <!-- <input type="button" value="搜索" class="seo-btn"/> -->
             </div>
             <ul v-if="searchShow" >
@@ -193,18 +193,11 @@ export default {
               if (res.data.code == 200) {
                 this.$message({
                   type: "success",
-                  message: "删除成功!"
+                  message: "删除成功!",
+                  duration:500,
                 });
               }
-
-              // this.$router.go(0);
-              for (let i = 0; i < this.dataList.length; i++) {
-                if (this.dataList[i].code == code.code) {
-                  this.dataList.splice(i, 1);
-                  break;
-                }
-              }
-              // this.
+              this.getList()
             })
             .catch(res => {
               console.log(res.data);

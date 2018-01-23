@@ -26,7 +26,7 @@
                     </div>
                     <div class="stock-seo-div">
                         <div class="seo-text">
-                            <input type="text" maxlength="6" placeholder="输入股票名称／代码" class="seo-val" @blur="blur" @focus="focus($event)" @keyup="seo_stock($event)" v-model="keyword"/>
+                            <input type="text" maxlength="6" placeholder="输入股票名称／代码" class="seo-val" @blur="blur"  @focus="focus($event)" @keyup="seo_stock($event)" v-model="keyword"/>
                             <input type="button" value="搜索" :class="canSearch?'canSearch seo-btn':'seo-btn'"  @click="search(first,$event)"/>
                             <div class="seo-list" v-show= "seo_stock_open">
                                 <ul>
@@ -158,8 +158,8 @@ export default {
       transaction: null,
       hot: null,
       market: {},
-      code: this.$route.query.code || "000001",
-      pcode: this.$route.query.code || "000001",
+      code:"000001",
+      pcode:"000001",
       seo_stock_open: false,
       rawData: [],
       serchList: [],
@@ -246,8 +246,8 @@ export default {
     pop(code){
       // this.$router.push({path:'/quotation',query:{code:code}})
       // this.$router.go(0)
-      this.pcode = code;
-      this.code = code;
+      this.pcode = code || '000001';
+      this.code = code|| '000001';
       if(this.open){
         this.resubscribe(code);
 
@@ -355,8 +355,8 @@ export default {
       this.canSearch = false; //控制搜索按钮
       this.seo_stock_open = false; //显示模糊搜索列表
       this.keyword = ""; //清空搜索关键字
-      this.pcode = code;
-      this.code = code;
+      this.pcode = code|| '000001';
+      this.code = code|| '000001';
       // this.stompSubscribe = null
       if(this.open){
         this.resubscribe(code);
@@ -364,6 +364,11 @@ export default {
       }
       this.shares(code);
       this.retriveMarket(code);
+      this.$message({
+          message: '切换成功',
+          type: 'warning',
+          duration:500,
+        });
     },
     shares(code) {
       var _this = this;
@@ -384,7 +389,6 @@ export default {
         });
     },
     seo_stock:_.debounce( function(event){
-      console.log(event)
       var val = event.target.value;
       if(event.keyCode == 13 && val == ''){
         return

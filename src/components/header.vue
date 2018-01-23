@@ -54,7 +54,7 @@ export default {
         },
         {
           text: "APP",
-          url: "/news"
+          url: "/app"
         },
         {
           text: "我的",
