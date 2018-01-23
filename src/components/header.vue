@@ -49,7 +49,15 @@ export default {
           url: "/position"
         },
         {
-          text: "我的账户",
+          text: "咨询",
+          url: "/news"
+        },
+        {
+          text: "APP",
+          url: "/news"
+        },
+        {
+          text: "我的",
           url: "/myaccount"
         }
       ],
@@ -154,7 +162,6 @@ export default {
 
 .Tlogo-nav {
   float: left;
-  margin-left: 68px;
 }
 
 .Tlogo-nav ul {
@@ -164,11 +171,11 @@ export default {
 
 .Tlogo-nav ul li {
   float: left;
-  width: 72px;
+  width: 68px;
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   color: #687284;
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 .Tlogo-nav ul li a {
   color: #687284;
@@ -213,12 +220,12 @@ export default {
 .nav-login > div:last-child {
   float: right;
   height: 80px;
-  line-height: 75px;
+  line-height: 72px;
   margin-left: 20px;
 }
 .nav-login > div:first-child {
   float: left;
-  line-height: 80px;
+  line-height: 73px;
   font-size: 14px;
   color: #687284;
 }

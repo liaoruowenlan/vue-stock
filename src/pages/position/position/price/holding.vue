@@ -40,8 +40,7 @@
                     {{item.state=="POSTED"||item.state=="BUYLOCK"?'买入中':item.state=="HOLDPOSITION"?'持仓中':item.state=="SELLAPPLY"?"卖出申请":'卖出锁定'}}
                 </el-tag>
                 <el-button type="warning"
-                :disabled="item.state=='HOLDPOSITION'&&item.createTime.split(' ')[0]!=new Date().toLocaleDateString().replace(/\//g,'-')&&$time.outtime('09:30',new Date().getHours() + ':' + new Date().getMinutes()
-        )?false:true"
+:disabled="item.state=='HOLDPOSITION'&&item.createTime.split(' ')[0]==new Date().toLocaleDateString().replace(/\//g,'-')&&$time.outtime('09:30',new Date().getHours() + ':' + new Date().getMinutes())?false:true"
                   @click="sellOut(item)">卖 出</el-button>
             </div>   
         </div>

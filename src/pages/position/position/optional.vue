@@ -266,7 +266,7 @@ export default {
             var data = response.data.result;
             _this.buyList = data;
             for (let i = 0; i < data.length; i++) {
-              listTitle.push(data[i].name);
+              listTitle.push({name:data[i].name,id:data[i].id});
               amountValues.push(data[i].amountValues);
             }
           }

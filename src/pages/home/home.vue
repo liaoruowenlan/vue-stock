@@ -103,6 +103,10 @@
                     </p>
                 </div>
 
+            </div> 
+            <div class="payHot flex">
+                <Hot></Hot>
+                <BannerLeft></BannerLeft>
             </div>
         </div>
         <div class="width100-bg">
@@ -116,6 +120,8 @@
     import FooterNav from '../../components/footer.vue'
     import Swiper from '../../components/swiper.vue'
     import Pay from '../../components/paypassword.vue'
+    import Hot from './hot.vue'
+    import BannerLeft from './bannerLeft.vue'
     
     export default {
         name: "home",
@@ -123,7 +129,9 @@
             TopHeader,
             FooterNav,
             Swiper,
-            Pay
+            Pay,
+            Hot,
+            BannerLeft
         },
         data(){
             return {
@@ -157,7 +165,6 @@
             }
         },
         mounted () {
-            console.log(localStorage.getItem("token"))
             if(localStorage.getItem("token")){
                 this.getpw()
             }
@@ -166,6 +173,11 @@
 </script>
 
 <style scoped>
+.payHot{
+    justify-content: space-between;
+        margin: 20px auto;
+        width: 1024px;
+}
     .introduce>div>div{
         height: 143px;
         position: relative;
