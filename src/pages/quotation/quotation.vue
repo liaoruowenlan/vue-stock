@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="stock-right">
-                        <div class="stock-right-div1" v-show="transaction>0">
+                        <div class="stock-right-div1">
                             <p >实时交易动态</p>
                             <ul class="data-stock">
                                 <li v-for="(item,index) in transaction" :key="index" @click="pop(item.stockCode)">
