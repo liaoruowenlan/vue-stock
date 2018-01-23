@@ -26,7 +26,7 @@
                             忘记密码
                         </router-link>
                         <router-link to="/register">
-                            注册账号
+                            	注册账号
                         </router-link>
                     </div>
                     <input type="text" style="display:none;"/>
