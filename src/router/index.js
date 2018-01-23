@@ -17,31 +17,31 @@ const router = new Router({
             path: '/home',
             name: 'Home',
             component: resolve => require(['@/pages/home/home.vue'], resolve),
-            meta:{login:true}
+            meta:{login:false}
         },
         {
             path: '/login',
             name: 'Login',
             component: resolve => require(['@/pages/user/login.vue'], resolve),
-            meta:{login:true}
+            meta:{login:false}
         },
         {
             path: '/reset',
             name: 'Reset',
             component: resolve => require(['@/pages/user/reset.vue'], resolve),
-            meta:{login:true}
+            meta:{login:false}
         },
         {
             path: '/register',
             name: 'Register',
             component: resolve => require(['@/pages/user/register.vue'], resolve),
-            meta:{login:true}
+            meta:{login:false}
         },
         {
             path: '/help',
             name: 'Help',
             component: resolve => require(['@/pages/help/help.vue'], resolve),
-            meta:{login:true}
+            meta:{login:false}
         },
         {
             path: '/quotation',
@@ -163,13 +163,10 @@ router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他�
     const Token = localStorage.getItem("token");
     // console.log(to)
     // console.log(to.meta.login)
-    if (to.meta.login) {
-        if (!Token) {
-            MessageBox.alert('您还没有登录，请先登录', '提示', { confirmButtonText: '确定', })
+    if (to.meta.login&&!Token) {
+        MessageBox.alert('您还没有登录，请先登录', '提示', { confirmButtonText: '确定', }).then(() => {
             next('/login')
-        } else {
-            next()
-        }
+        })
     } else {
         next()
     }
