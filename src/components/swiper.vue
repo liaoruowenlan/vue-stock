@@ -17,7 +17,7 @@
                         "img": require("../assets/img/banner01.png")
                     },
                     {
-                        "href":"/quotation",
+                        "href":"/quotation?code=000001",
                         "img": require("../assets/img/banner02.png")
                     },
                     {

@@ -32,9 +32,9 @@
             <p>
                 <img src="../../../assets/img/psw.png"/>
                 <span>支付密码</span>
-                <a @click="login">修改></a>
+                <a @click="login1">修改></a>
             </p>
-            <div class="pass" v-if="!newPay.payOen">
+            <div class="pass" v-if="newPay.payOen1">
                 <div class="pass1">
                     <div>手机号码</div>
                     <div>
@@ -88,7 +88,8 @@ export default {
         Phone: localStorage.getItem("phone"),
         Aucode: "",
         AuCodeAdd: "",
-        payOen: 2,
+        payOen: false,
+        payOen1: false,
         PassWorld: "",
         PhoneReg: "",
         btn: false,
@@ -117,6 +118,15 @@ export default {
     },
     login() {
       this.newPay.payOen = !this.newPay.payOen;
+      this.newPay.payOen1 = false;
+      this.newPay.PassWorld = ''
+      this.oldpassworld.loginpass = ''
+      this.oldpassworld.newloginpass = ''
+      this.newPay.Aucode = ''
+    },
+    login1() {
+      this.newPay.payOen1 = !this.newPay.payOen1;
+      this.newPay.payOen = false;
       this.newPay.PassWorld = ''
       this.oldpassworld.loginpass = ''
       this.oldpassworld.newloginpass = ''
