@@ -13,7 +13,7 @@
             return{
                 cards:[
                     {
-                        "href":"",
+                        "href":"/case",
                         "img": require("../assets/img/banner01.png")
                     },
                     {

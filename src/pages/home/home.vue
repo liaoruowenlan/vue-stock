@@ -198,6 +198,7 @@
         margin-top: 31px;
         width: 192px;
         height: 36px;
+        cursor: pointer;
     }
     .buy ul{
         margin-top: 24px;

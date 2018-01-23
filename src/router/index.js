@@ -20,6 +20,12 @@ const router = new Router({
             meta:{login:false}
         },
         {
+            path: '/case',
+            name: 'Case',
+            component: resolve => require(['@/pages/home/case.vue'], resolve),
+            meta:{login:false}
+        },
+        {
             path: '/login',
             name: 'Login',
             component: resolve => require(['@/pages/user/login.vue'], resolve),
