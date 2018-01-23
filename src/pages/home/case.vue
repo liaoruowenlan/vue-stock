@@ -3,7 +3,7 @@
 		<top-header></top-header>
 		<div class="width100 case">
 			<div class="case-title">
-				 <router-link to="/register">首页</router-link>
+				 <router-link to="/home">首页</router-link>
 				<span>&gt;</span> 
 				<span>点买模式案列</span>
 			</div>

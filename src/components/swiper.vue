@@ -34,6 +34,7 @@
 <style scoped>
     .el-carousel__container{
         height: 480px;
+   			
     }
     .el-carousel__item img{
         width: 100%;

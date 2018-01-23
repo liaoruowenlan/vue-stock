@@ -62,7 +62,7 @@
 				if(!Number.isInteger(value)) {
 					callback(new Error('充值金额需为数字并且是整数'));
 				} else {
-					if(/^[0-9]$/.test(value)) {
+					if(!/^[0-9]$/.test(value)) {
 						callback(new Error('充值金额不能有小数点'));
 					}
 					if(value < 100) {
