@@ -142,7 +142,7 @@ export default {
 .nav {
   width: 1024px;
   margin: 0 auto;
-  height: 80px;
+  height: 60px;
   background: #fff;
 }
 .help {
@@ -152,12 +152,12 @@ export default {
   float: left;
   width: 338px;
   height: 52px;
-  margin: 14px 0;
 }
 
 .logo > img {
   width: 320px;
-  height: 44px;
+  height: 48px;
+  padding: 6px 0;
 }
 
 .Tlogo-nav {
@@ -165,15 +165,16 @@ export default {
 }
 
 .Tlogo-nav ul {
-  margin: 25px 0;
+  margin: 15px 0;
   height: 30px;
+   line-height: 30px;
 }
 
 .Tlogo-nav ul li {
   float: left;
   width: 68px;
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
   color: #687284;
   /* margin-left: 10px; */
 }
@@ -182,25 +183,20 @@ export default {
 }
 .bote {
   color: #3e59a7;
-  border-bottom: 4px solid #3e59a7;
-}
-.logo-nav ul li:hover {
-  color: #3e59a7 !important;
-  border-bottom: 4px solid #3e59a7;
+  border-bottom: 2px solid #3e59a7;
 }
 .logo-nav ul li a:hover {
   color: #3e59a7 !important;
-  border-bottom: 4px solid #3e59a7;
+  border-bottom: 2px solid #3e59a7;
 }
-
 .nav-login {
   float: right;
-  height: 80px;
+  height: 60px;
 }
 
 .nav-login > ul > li {
   float: left;
-  font-size: 14px;
+  font-size: 12px;
   margin: 30px 0;
   color: #687284;
 }
@@ -219,14 +215,14 @@ export default {
 }
 .nav-login > div:last-child {
   float: right;
-  height: 80px;
-  line-height: 72px;
+  height: 60px;
+  line-height: 60px;
   margin-left: 20px;
 }
 .nav-login > div:first-child {
   float: left;
-  line-height: 73px;
-  font-size: 14px;
+  line-height: 60px;
+  font-size: 12px;
   color: #687284;
 }
 .border {
