@@ -213,6 +213,7 @@ export default {
         .then(function(res) {
           console.log(res.data);
           if (res.data.code != 200) {
+            clearInterval(_this.timer)
             _this.$alert(res.data.message, "提示", {
               confirmButtonText: "确定",
             });
