@@ -1,7 +1,7 @@
 <template>
     <div class="hot">
         <ul class="tittle clearfix">
-            <li :class="[active==index?'active':'','']" v-for="(item,index) in tittle" :key="index" @click="tittleClick(index)">{{item.name}}</li>
+            <li :class="[active==index?'active':'','fl']" v-for="(item,index) in tittle" :key="index" @click="tittleClick(index)">{{item.name}}</li>
         </ul>
         <ul class="section" v-loading="loading" v-if="active==0">
             <li class="item flex"  v-for="(item,index) in transaction" :key="index">

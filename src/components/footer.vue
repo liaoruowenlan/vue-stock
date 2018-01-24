@@ -63,13 +63,13 @@
                 <div class="continuity-right">
                     <p class="continuity-onep">
                         <img class="footer-phone" src="../assets/img/phone.png"/>
-                        客户热线
+                       	 联系我们
                     </p>
                     <p class="continuity-twop">
-                        0755-23065340
+                        0755-23065340&nbsp;&nbsp;<span style="color:#687284">服务时间 8:00-21:00</span>
                     </p>
                     <p class="continuity-threep">
-                        服务时间 8:00-21:00
+                       QQ:19002456    Email:serve@youguwang.com.cn
                     </p>
                 </div>
             </div>
@@ -95,15 +95,14 @@
         color: #687284;
     }
     .YG-Show{
-        font-size: 14px;
+        font-size: 12px;
         color: #687284;
         margin-bottom: 6px;
     }
     .continuity-twop{
         color: #3e59a7;
-        font-size: 16px;
-        line-height: 28px;
-        font-weight: 700;
+        font-size: 14px;
+        line-height: 30px;
     }
     .continuity-onep{
         color: #1c242f;
@@ -141,13 +140,13 @@
     footer>div.footer-nav {
         width: 88px;
         height: 128px;
-        margin-right: 119px;
+        margin-right: 92px;
         float: left;
         margin-top: 28px;
     }
 
     footer>.footer-nav p {
-        font-size: 16px;
+        font-size: 14px;
         color: #1e242e;
         text-align: center;
     }
@@ -159,7 +158,7 @@
 
     footer>div ul li {
         color: #687284;
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .tel {

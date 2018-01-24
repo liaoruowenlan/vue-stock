@@ -18,10 +18,10 @@
                     </div>
                     <div class="buy">
                         <span class="refresh" @click="openFullScreen" v-loading.fullscreen.lock="fullscreenLoading">
-                            刷新
+                           		 刷新
                         </span>
                         <span class="buy-btn" @click="pointBuy(pcode,$event)">
-                            点买
+                          		  点买
                         </span>
                     </div>
                     <div class="stock-seo-div">
@@ -38,13 +38,15 @@
                             </div>
                         </div>
                         <div class="stock_export">
+                        	
                             <div v-for="(text,index) in message" :key="index">
-                                <p class="bond-title">{{text.name}}</p>
-                                <p :class="[text.upDropSpeed<0?'green':'red','bond-number']">{{text.lastPrice}}</p>
-                                <div :class="[text.upDropSpeed<0?'':'red','bond-rose']">
-                                    <span>{{text.upDropPrice}}</span>
-                                    <span>{{(text.upDropSpeed*100).toFixed(2)}}%</span>
-                                </div>
+                            	
+		                                <p class="bond-title">{{text.name}}</p>
+		                                <p :class="[text.upDropSpeed<0?'green':'red','bond-number']">{{text.lastPrice}}</p>
+		                                <div :class="[text.upDropSpeed<0?'':'red','bond-rose']">
+		                                    <span>{{text.upDropPrice}}</span>
+		                                    <span>{{(text.upDropSpeed*100).toFixed(2)}}%</span>
+		                                </div>              		
                             </div>
                         </div>
                     </div>
