@@ -55,6 +55,7 @@ export default {
             this.$axios.post('/strategist/publisher/initPaymentPassword',qs.stringify({paymentPassword:this.payPass})).then((response)=>{
                  this.$alert('设置成功', '密码设置', {
                     confirmButtonText: '确定',
+                    showClose:true,
                     callback: action => {
                         this.$emit('close')
                     }
