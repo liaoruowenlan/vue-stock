@@ -12,6 +12,5 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-.babelrc
 .editorconfig
 .project

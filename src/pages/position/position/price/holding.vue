@@ -1,67 +1,68 @@
 <template>
     <div class="holding">
         <div v-if="dataList.length<1" style="textAlign:center">暂无数据</div>
-      
         <div class="holding-list" v-for="(item,index) in dataList" :key="index">
           <div class="top flex">
             <div class="top-left">
               <div class="top-left-top">
                 <span class="name">
-                  平安银行
+                  {{item.stockName}}
                 </span>
                 <span class="code">
-                  000001
+                  {{item.stockCode}}
                 </span>
                 <img src="" alt="">
               </div>
               <div class="top-left-bottom">
                 <span class="dingdan">订单号</span>
-                <span class="dingdanhao">201801111701515864096 </span>
+                <span class="dingdanhao">{{item.tradeNo}} </span>
               </div>
             </div>
             <div class="top-middle">
               <div class="top-middle-top">
-                  <span>当前盈亏</span>
-                  <span class="money">+22.88元</span>
+                  <span class="ornow">当前盈亏</span>
+                  <span :class="[item.profitOrLoss>0?'red':'green','money']">{{item.profitOrLoss}}</span>
               </div>
               <div class="top-middle-bottom">
                   <img class="clock" src="../../../../assets/img/time@2x.png" alt="">
-                  <span>2017-10-11 10:00  </span>
+                  <span>{{item.updateTime}} </span>
               </div>
             </div>
             <div class="top-right">
-              <el-button type="warning">卖 出</el-button>
+              <el-button type="warning"
+              :disabled="item.state=='HOLDPOSITION'&&item.createTime.split(' ')[0]!=new Date().toLocaleDateString().replace(/\//g,'-')&&$time.outtime('09:30',new Date().getHours() + ':' + new Date().getMinutes())?false:true"
+              @click="sellOut(item)">卖 出</el-button>
             </div>
           </div>
           <div class="bottom flex">
               <div class="bottom-left">
                 <p>
-                  <span>买入价</span>
-                  <span>16.45</span>
+                  <span>买入价 </span>
+                  <span> {{item.buyingPrice||"--"}}</span>
                 </p>
                 <p>
-                  <span>当前价</span>
-                  <span>16.45</span>
+                  <span>当前价 </span>
+                  <span> {{item.lastPrice}}</span>
                 </p>
               </div>
               <div class="bottom-middle">
                 <p>
-                  <span>可用股数</span>
-                  <span>16.45</span>
+                  <span>可用股数 </span>
+                  <span> {{item.numberOfStrand}}</span>
                 </p>
                 <p>
-                  <span>止损金额</span>
-                  <span>16.45</span>
+                  <span>止损金额 </span>
+                  <span>{{parseInt(item.applyAmount*item.lossPoint).toFixed(2)}}</span>
                 </p>
               </div>
               <div class="bottom-right">
                 <p>
-                  <span>点买本金</span>
-                  <span>0.2万元</span>
+                  <span>点买本金 </span>
+                  <span> {{(item.applyAmount/10000).toFixed(2)}}万元</span>
                 </p>
                 <p>
-                  <span>点买类型</span>
-                  <span>即时买入</span>
+                  <span>点买类型 </span>
+                  <span> 即时买入</span>
                 </p>
               </div>
           </div>
@@ -184,43 +185,69 @@ export default {
 </script>
 
 <style scoped>
-div{
+.el-button--warning {
+  width: 140px;
+  height: 30px;
+}
+.ornow {
   color: #687284;
+  font-size: 14px;
 }
-.top{
-  border-bottom: 1px dashed #ddd;
+.top-left-top,
+.top-middle-top,
+.bottom-left p:first-child,
+.bottom-middle p:first-child,
+.bottom-right p:first-child {
+  margin-bottom: 6px;
 }
-.bottom{
+.bottom-left p span:last-child,
+.bottom-middle p span:last-child,
+.bottom-right p span:last-child {
+  color: #1e242e;
+}
+div {
+  color: #687284;
   font-size: 12px;
 }
-.name{
+.top {
+  border-bottom: 1px dashed #ddd;
+}
+.bottom {
+  font-size: 12px;
+}
+.name {
   color: #1e242e;
   font-size: 16px;
 }
-.code{
+.code {
   font-size: 12px;
-  color:#adb3c1; 
+  color: #adb3c1;
 }
-.holding-list{
+.holding-list {
   padding: 10px 0;
-  background: #F7F7F7;
+  background: #f7f7f7;
 }
-.top,.bottom{
+.top,
+.bottom {
   background: #fff;
   padding: 15px 20px;
   padding-right: 141px;
 }
-.top-left,.bottom-left{
+.bottom {
+  padding-right: 181px;
+}
+.top-left,
+.bottom-left {
   width: 260px;
 }
-.holding-list img{
+.holding-list img {
   display: inline-block;
 }
-.clock{
+.clock {
   width: 11px;
   height: 11px;
 }
-.holding-list>div{
+.holding-list > div {
   justify-content: space-between;
   align-items: center;
   background: #fff;
