@@ -60,20 +60,18 @@
 					return callback(new Error('充值金额不能为空'));
 				}
 				if(!Number.isInteger(value)) {
-					callback(new Error('充值金额需为数字并且是整数'));
+					callback(new Error('充值金额须为整数且大于100'));
 				} else {
-					if(!/^[0-9]$/.test(value)) {
-						callback(new Error('充值金额不能有小数点'));
-					}
-					if(value < 100) {
+					if(value <= 99) {
 						callback(new Error('充值金额必须大于100'));
 					}
-					if(value > 50000) {
+					if(value >= 50001) {
 						callback(new Error('充值金额不能大于50000'));
 					} else {
 						callback();
 					}
 				}
+
 
 			};
 			return {
@@ -92,10 +90,9 @@
 				},
 				rules: {
 					name: [{
-							validator: RegText,
-							trigger: "blur"
-					}
-					]
+						validator: RegText,
+						trigger: "blur"
+					}]
 				},
 				blanks: [
 
@@ -122,7 +119,7 @@
 		},
 		computed: {
 			spanValue: function() {
-				this.btnUp = !/^[0-9]$/.test(this.ruleForm.name)&&this.ruleForm.name > 100 && this.ruleForm.name < 50000 && this.ruleForm.name != "" && Number.isInteger(this.ruleForm.name)
+				this.btnUp = this.ruleForm.name > 99 && this.ruleForm.name < 50001 && this.ruleForm.name != "" && Number.isInteger(this.ruleForm.name)
 			}
 		},
 		methods: {
@@ -142,6 +139,7 @@
 				if(!this.btnUp) {
 					return false;
 				}
+				console.log(1);
 				//充值金额不能为空、充值金额不能有小数点、充值金额不能大于50000、充值金额不能小于100
 				var jump = '/strategist/payment/recharge?' + qs.stringify({
 					publisherId: this.publisherId,
