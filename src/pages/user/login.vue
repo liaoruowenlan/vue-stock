@@ -122,7 +122,7 @@
     section {
         background: url("../../assets/img/bg.png") no-repeat;
         background-size: 100% 100%;
-        height: 480px;
+        height: 492px;
     }
 
     section > div {
@@ -139,7 +139,7 @@
         height: 346px;
         background: #fff;
         float: right;
-        margin-top: 42px;
+        margin-top: 53px;
         position: relative;
     }
 
@@ -170,11 +170,11 @@
     }
 
     .phone input, .passworld input {
-        width: 212px;
-        height: 28px;
-        line-height:28px;
+            width: 214px;
+		    height: 30px;
+		    line-height: 30px;
+		    border: solid 1px #dcdee3;
     }
-
     .login-title {
         text-align: center;
         font-size: 18px;

@@ -50,12 +50,40 @@
 			<div class="market-body">
 				<div class="market-body-div">
 					<div class="market-body-left">
-						
+
 					</div>
 					<div class="market-body-right">
 						<div class="market-body-right-title">
-							<p :class="[active == index?'activeOne':'']" v-for="(item,index) in marKetList" :key="index" @click="marKetListClick(index)">{{item.name}}</p>						
+							<p :class="[active == index?'activeOne':'']" v-for="(item,index) in marKetList" :key="index" @click="marKetListClick(index)">{{item.name}}</p>
 						</div>
+						<ul class="rank-list" v-if="active==0">
+							<li v-for="(item,index) in RankList" :key="index">
+								<div class="rank-list-text1">
+									<p>{{item.Aname}}</p>
+									<span>{{item.Anumber}}</span>
+								</div>
+								<div class="rank-list-text2">
+									{{item.Amoney}}
+								</div>
+								<div class="rank-list-text3">
+									{{item.Aplus}}&nbsp;&nbsp;{{item.Areduce}}
+								</div>
+							</li>
+						</ul>
+						<ul class="rank-list" v-if="active==1">
+							<li v-for="(item,index) in RankList1" :key="index">
+								<div class="rank-list-text1">
+									<p>{{item.Aname}}</p>
+									<span>{{item.Anumber}}</span>
+								</div>
+								<div class="rank-list-text2">
+									{{item.Amoney}}
+								</div>
+								<div class="rank-list-text3">
+									{{item.Aplus}}&nbsp;&nbsp;{{item.Areduce}}
+								</div>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -68,19 +96,160 @@
 	import TopHeader from '../../components/header.vue'
 	import FooterNav from '../../components/footer.vue'
 	import axios from "axios"
-    import qs from 'qs'
-	
+	import qs from 'qs'
+
 	export default {
 		data() {
 			return {
-				active:0,
-				marKetList:[
-					{
-						name:'涨幅板'
+				active: 0,
+				marKetList: [{
+						name: '涨幅板'
 					},
 					{
-						name:'跌幅板'
+						name: '跌幅板'
 					}
+				],
+				RankList: [{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+					{
+						Aname: '贵州茅台',
+						Anumber: '600519',
+						Amoney: '773.640',
+						Aplus: '+12.25',
+						Areduce: '+10.00%'
+					},
+				],
+				RankList1: [{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				},
+				{
+					Aname: '中国牛逼股票',
+					Anumber: '600519',
+					Amoney: '773.640',
+					Aplus: '-12.25',
+					Areduce: '-10.00%'
+				}
 				]
 			}
 		},
@@ -88,8 +257,8 @@
 			TopHeader,
 			FooterNav
 		},
-		methods:{
-			marKetListClick(index){
+		methods: {
+			marKetListClick(index) {
 				this.active = index;
 			}
 		}
@@ -97,13 +266,61 @@
 </script>
 
 <style scoped>
-	.market-body-right-title{
+	.market-body-right-title {
 		height: 33px;
-		border-bottom:1px solid #DEDEE3;
+		border-bottom: 1px solid #DEDEE3;
 	}
-	.market-body-right-title>p{
+	
+	.rank-list {
+		padding: 0 10px;
+	}
+	
+	.rank-list li {
+		height: 44px;
+		border-bottom: 1px solid #f7f7f7;
+	}
+	
+	.rank-list li:last-child {
+		border: 0;
+	}
+	
+	.rank-list li>div {
 		float: left;
-		width:50px;
+	}
+	
+	.rank-list-text1 {
+		width: 35%;
+		font-size: 12px;
+		color: #adb3c1;
+	}
+	
+	.rank-list-text1>p {
+		font-size: 14px;
+		margin-top: 7px;
+		color: #1E242E;
+		width: 70px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	
+	.rank-list-text2 {
+		width: 25%;
+		line-height: 45px;
+		color: #EA523B;
+		font-size: 12px;
+	}
+	
+	.rank-list-text3 {
+		font-size: 12px;
+		color: #EA523B;
+		width: 40%;
+		line-height: 45px;
+	}
+	
+	.market-body-right-title>p {
+		float: left;
+		width: 50px;
 		text-align: center;
 		font-size: 14px;
 		line-height: 33px;
@@ -111,64 +328,78 @@
 		margin-left: 10px;
 		cursor: pointer;
 	}
-	.market-body-right-title>p.activeOne{
+	
+	.market-body-right-title>p.activeOne {
 		color: #3E59A7;
 		border-bottom: 1px solid #3E59A7;
 	}
-	.market-header-number-right ul{
+	
+	.market-header-number-right ul {
 		width: 520px;
 		overflow: hidden;
 	}
-	.market-body{
+	
+	.market-body {
 		width: 100%;
 		padding-top: 11px;
 	}
-	.market-body-left{
-		width:748px ;
+	
+	.market-body-left {
+		width: 748px;
 		height: 100%;
 		background: #fff;
 	}
-	.market-body-right{
+	
+	.market-body-right {
 		margin-left: 10px;
-		width:266px ;
+		width: 266px;
 		height: 100%;
 		background: #fff;
 	}
-	.market-body-div{
-		height:506px;
+	
+	.market-body-div {
+		height: 506px;
 		width: 1024px;
 		margin: 0 auto;
 	}
-	.market-body-div>div{
+	
+	.market-body-div>div {
 		float: left;
 	}
-	.market-header-number-right ul li{
-		color:#fff;
+	
+	.market-header-number-right ul li {
+		color: #fff;
 		font-size: 16px;
 		margin-bottom: 18px;
 		float: left;
 		margin-right: 85px;
 	}
-	.market-header-number-right ul li:nth-child(3n){
+	
+	.market-header-number-right ul li:nth-child(3n) {
 		margin-right: 0;
 	}
-	.market-header-number-right ul li span{
+	
+	.market-header-number-right ul li span {
 		display: inline-block;
 		color: #ADB3C1;
 		margin-right: 15px;
 		font-size: 14px;
 	}
-	.market-header-number-left{
+	
+	.market-header-number-left {
 		color: #EE523b;
 		margin-right: 109px;
 	}
-	.market-header-number-left>div{
-		font-size:48px;
+	
+	.market-header-number-left>div {
+		font-size: 48px;
 	}
-	.market-header-number-left>p{
-		font-size:16px;
+	
+	.market-header-number-left>p {
+		font-size: 16px;
 		padding-top: 10px;
 	}
+	
 	.market {
 		height: 777px;
 		width: 100%;
@@ -179,25 +410,29 @@
 		background: url(../../assets/img/hangqiong-bg.png) no-repeat;
 		background-size: 100% 100%;
 	}
-	.market-header-text div{
+	
+	.market-header-text div {
 		color: #fff;
 		font-size: 20px;
 		float: left;
 	}
-		.market-header-text{
-			height: 26px;
-			padding-top: 44px;
-			padding-left: 25px;
-			
-		}
-		.market-header-number{
-			padding-left: 22px;
-			padding-top: 14px;
-			height: 156px;
-		}
-		.market-header-number>div{
-			float: left;
-		}
+	
+	.market-header-text {
+		height: 26px;
+		padding-top: 44px;
+		padding-left: 25px;
+	}
+	
+	.market-header-number {
+		padding-left: 22px;
+		padding-top: 14px;
+		height: 156px;
+	}
+	
+	.market-header-number>div {
+		float: left;
+	}
+	
 	.market-header-text p {
 		width: 36px;
 		height: 16px;
@@ -205,10 +440,11 @@
 		border: 1px solid #fff;
 		color: #fff;
 		float: left;
-		    margin-top: 6px;
-    margin-left: 10px;
+		margin-top: 6px;
+		margin-left: 10px;
 	}
-	.market-header-div{
+	
+	.market-header-div {
 		width: 1024px;
 		margin: 0 auto;
 	}
