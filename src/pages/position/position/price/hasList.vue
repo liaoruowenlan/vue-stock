@@ -21,11 +21,11 @@
                 <div class="flex bottom-item clearfix">
                     <p>
                         <span class="l">交易本金</span>
-                        <span class="r r-color">{{item.applyAmount}}</span>
+                        <span class="r r-color">{{item.applyAmount}}元</span>
                     </p>
                     <p>
                         <span class="l">买入价格</span>
-                        <span class="r r-color">{{item.buyingPrice}}</span>
+                        <span class="r r-color">{{item.buyingPrice}}元</span>
                     </p>
                     <p>
                         <span class="l">点买类型</span>
@@ -35,11 +35,11 @@
                 <div class="flex bottom-item">
                     <p>
                         <span class="l">交易数量</span>
-                        <span class="r r-color">{{item.numberOfStrand}}</span>
+                        <span class="r r-color">{{item.numberOfStrand}}股</span>
                     </p>
                     <p>
                         <span class="l">卖出价格</span>
-                        <span class="r r-color">{{item.sellingPrice}}</span>
+                        <span class="r r-color">{{item.sellingPrice}}元</span>
                     </p>
                     <p>
                         <span class="l">备 &nbsp;注</span>

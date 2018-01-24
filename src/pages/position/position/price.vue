@@ -1,9 +1,9 @@
 <template>
     <div>
         <ul class="topNav">
-            <li class="topNav-div" v-for="(value,index) in NavListOne" :key="index">
-                <router-link :to="value.url">{{value.text}}</router-link>
-            </li>
+            <router-link tag="li" :to="value.url" class="topNav-div" v-for="(value,index) in NavListOne" :key="index">
+                {{value.text}}
+            </router-link>
         </ul>
         <div class="price-list">
             <transition name="fade" mode="out-in">
@@ -38,7 +38,6 @@
 <style scoped>
     .price-list{
         background: #fff;
-        padding: 10px 0 ;
     }
     .topNav{
         width:884px;
@@ -46,24 +45,21 @@
         border-bottom: 1px solid #ddd;
         background: #fff;
     }
-    .topNav>li.topNav-div{
-        width: 50%;
+    .topNav-div.router-link-active{
+        display: block;
+        width: 120px;
+        /* margin: 0 auto; */
+        border-top: 2px solid #3e59a7;
+        line-height: 42px;
+        color: #3e59a7;
+    }
+    .topNav-div{
+        width: 120px;
         text-align: center;
         cursor: pointer;
         float: left;
-        line-height: 52px;
+        line-height: 46px;
         color: #818081;
         font-size: 16px;
-    }
-    .router-link-active{
-        display: block;
-        width: 101px;
-        margin: 0 auto;
-        border-bottom: 4px solid #3e59a7;
-        height: 50px;
-        color: #3e59a7;
-    }
-    a{
-        color:#818081;
     }
 </style>

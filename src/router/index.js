@@ -75,6 +75,12 @@ const router = new Router({
             meta: { login: false }
         },
         {
+            path: '/newDetail',
+            name: 'newDetail',
+            component: resolve => require(['@/pages/newDetail/newDetail.vue'], resolve),
+            meta: { login: true }
+        },
+        {
             path: '/quotation',
             name: 'Quotation',
             component: resolve => require(['@/pages/quotation/quotation.vue'], resolve),

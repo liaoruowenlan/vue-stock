@@ -2,8 +2,70 @@
     <div class="holding">
         <div v-if="dataList.length<1" style="textAlign:center">暂无数据</div>
       
-        <div class="holding-list flex" v-for="(item,index) in dataList" :key="index">
-            <div class="left ">
+        <div class="holding-list" v-for="(item,index) in dataList" :key="index">
+          <div class="top flex">
+            <div class="top-left">
+              <div class="top-left-top">
+                <span class="name">
+                  平安银行
+                </span>
+                <span class="code">
+                  000001
+                </span>
+                <img src="" alt="">
+              </div>
+              <div class="top-left-bottom">
+                <span class="dingdan">订单号</span>
+                <span class="dingdanhao">201801111701515864096 </span>
+              </div>
+            </div>
+            <div class="top-middle">
+              <div class="top-middle-top">
+                  <span>当前盈亏</span>
+                  <span class="money">+22.88元</span>
+              </div>
+              <div class="top-middle-bottom">
+                  <img class="clock" src="../../../../assets/img/time@2x.png" alt="">
+                  <span>2017-10-11 10:00  </span>
+              </div>
+            </div>
+            <div class="top-right">
+              <el-button type="warning">卖 出</el-button>
+            </div>
+          </div>
+          <div class="bottom flex">
+              <div class="bottom-left">
+                <p>
+                  <span>买入价</span>
+                  <span>16.45</span>
+                </p>
+                <p>
+                  <span>当前价</span>
+                  <span>16.45</span>
+                </p>
+              </div>
+              <div class="bottom-middle">
+                <p>
+                  <span>可用股数</span>
+                  <span>16.45</span>
+                </p>
+                <p>
+                  <span>止损金额</span>
+                  <span>16.45</span>
+                </p>
+              </div>
+              <div class="bottom-right">
+                <p>
+                  <span>点买本金</span>
+                  <span>0.2万元</span>
+                </p>
+                <p>
+                  <span>点买类型</span>
+                  <span>即时买入</span>
+                </p>
+              </div>
+          </div>
+            <!-- <div class="left ">
                 <p class="one">
                     <span :class="[item.profitOrLoss>0?'square orange':'square blue']"></span>
                     <span class="name">{{item.stockName}}  ( {{item.stockCode}} )</span>
@@ -34,15 +96,18 @@
                     <span class="l">点买类型</span>&nbsp;&nbsp;
                     <span class="r">即时买入</span>&nbsp;&nbsp;
                 </p>   
-            </div>
-            <div class="right flex">
+            </div> -->
+            <!-- <div class="right flex">
                 <el-tag  size="medium" type="info" disable-transitions>
                     {{item.state=="POSTED"||item.state=="BUYLOCK"?'买入中':item.state=="HOLDPOSITION"?'持仓中':item.state=="SELLAPPLY"?"卖出申请":'卖出锁定'}}
                 </el-tag>
                 <el-button type="warning"
-:disabled="item.state=='HOLDPOSITION'&&item.createTime.split(' ')[0]==new Date().toLocaleDateString().replace(/\//g,'-')&&$time.outtime('09:30',new Date().getHours() + ':' + new Date().getMinutes())?false:true"
-                  @click="sellOut(item)">卖 出</el-button>
-            </div>   
+:disabled="item.state=='HOLDPOSITION'&&item.createTime.split(' ')[0]!=new Date().toLocaleDateString().replace(/\//g,'-')&&$time.outtime('09:30',new Date().getHours() + ':' + new Date().getMinutes())?false:true"
+                  @click="sellOut(item)">卖 出</el-button> -->
+                  <!-- <span>{{item.state=='HOLDPOSITION'}}</span>
+                  <span>{{item.createTime.split(' ')[0]==new Date().toLocaleDateString().replace(/\//g,'-')}}</span>
+                  <span>{{$time.outtime('09:30',new Date().getHours() + ':' + new Date().getMinutes())}}</span>  -->
+            <!-- </div>   -->
         </div>
         <el-pagination
             layout="prev, pager, next"
@@ -56,7 +121,7 @@
 </template>
 
 <script>
-import Confirm from '../../../../components/querySell'
+import Confirm from "../../../../components/querySell";
 export default {
   name: "holding",
   data() {
@@ -64,32 +129,35 @@ export default {
       page: 0,
       size: 4,
       dataList: [],
-      maskInfo:{},
-      show:false,
-      createTime:'',
-      pageSizes:[4],
-      total:10,
+      maskInfo: {},
+      show: false,
+      createTime: "",
+      pageSizes: [4],
+      total: 10
     };
   },
   components: {
-      Confirm
+    Confirm
   },
   mounted() {
     this.getList();
   },
   methods: {
-    close(){
-      this.show=false
+    close() {
+      this.show = false;
     },
-    currentPage(val){
-      this.page =  val - 1
-      this.getList()
+    currentPage(val) {
+      this.page = val - 1;
+      this.getList();
     },
     sellOut(item) {
-        //:disabled="item.state!='HOLDPOSITION'"
-        this.show = true
-        this.maskInfo = item
-        this.createTime = Math.floor((Date.parse(new Date())-Date.parse(item.createTime.split(' ')[0]))/(1000*60*60*24))
+      //:disabled="item.state!='HOLDPOSITION'"
+      this.show = true;
+      this.maskInfo = item;
+      this.createTime = Math.floor(
+        (Date.parse(new Date()) - Date.parse(item.createTime.split(" ")[0])) /
+          (1000 * 60 * 60 * 24)
+      );
     },
     getList() {
       this.$axios
@@ -107,7 +175,7 @@ export default {
         .then(res => {
           if (res.data.code == 200) {
             this.dataList = res.data.result.content;
-            this.total = res.data.result.totalElements
+            this.total = res.data.result.totalElements;
           }
         });
     }
@@ -116,7 +184,47 @@ export default {
 </script>
 
 <style scoped>
-
+div{
+  color: #687284;
+}
+.top{
+  border-bottom: 1px dashed #ddd;
+}
+.bottom{
+  font-size: 12px;
+}
+.name{
+  color: #1e242e;
+  font-size: 16px;
+}
+.code{
+  font-size: 12px;
+  color:#adb3c1; 
+}
+.holding-list{
+  padding: 10px 0;
+  background: #F7F7F7;
+}
+.top,.bottom{
+  background: #fff;
+  padding: 15px 20px;
+  padding-right: 141px;
+}
+.top-left,.bottom-left{
+  width: 260px;
+}
+.holding-list img{
+  display: inline-block;
+}
+.clock{
+  width: 11px;
+  height: 11px;
+}
+.holding-list>div{
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+}
 .el-tag--medium {
   height: 30px;
   width: 100px;
@@ -132,68 +240,6 @@ export default {
   margin-left: 0 !important;
 }
 
-.holding-list {
-  display: flex;
-  justify-content: space-between;
-}
-.greenmoney {
-  color: #47c233;
-}
-.redmoney {
-  color: #e26042;
-}
-.space {
-  width: 40px;
-  display: inline-block;
-}
-.holding-list .right {
-  flex-direction: column;
-  padding: 32px 0;
-  justify-content: space-between;
-}
-.holding-list .middle {
-  padding-left: 27px;
-  font-size: 14px;
-  color: #687284;
-  line-height: 50px;
-}
-.holding-list .middle1,
-.holding-list .bottom {
-  padding-left: 27px;
-  line-height: 32px;
-  font-size: 14px;
-  color: #818081;
-}
-.holding-list .middle1 .r,
-.holding-list .bottom .r {
-  color: #1e242e;
-  display: inline-block;
-  width: 66px;
-}
-.holding > div.holding-list {
-  padding: 30px 0;
-  width: 683px;
-  margin: 0 auto;
-  border-bottom: 1px solid #dee0e4;
-}
-.holding::after {
-  content: ".";
-  clear: both;
-  display: block;
-  overflow: hidden;
-  font-size: 0;
-  height: 0;
-}
-.name {
-  color: #1e242e;
-  font-size: 16px;
-}
-.square {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin-right: 10px;
-}
 .blue {
   background: #3e59a7;
 }

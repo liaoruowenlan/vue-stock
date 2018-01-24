@@ -19,7 +19,7 @@
                     <span class="money">{{item.profit?(item.profit).toFixed(2)+'元':"----"}}</span>
                 </div>
                 <div class="five">
-                    <button>点买</button>
+                    <button @click="pointBuy(item.stockCode,$event)">点买</button>
                 </div>
             </li>
         </ul>
@@ -48,11 +48,17 @@
             @current-change="currentPage"
             :total="8">
         </el-pagination>
+        <BuyMask @close="close"  :show="show" :dataList="dataList" :listTitle="listTitle" :amountValues="amountValues" :upLimitPrice="upLimitPrice" :name="name" :instrumentId="instrumentId"></BuyMask>
     </div>
 </template>
 <script>
 import qs from "qs";
+import axios from "axios";
+import BuyMask from '../../components/buy'
 export default {
+  components: {
+    BuyMask,
+  },
   data() {
     return {
       tittle: [
@@ -70,12 +76,26 @@ export default {
       loading: false,
       isHot: false,
       hot: [],
+      show:false,
+      dataList:[],
+      listTitle:[],
+      amountValues:[],
+      upLimitPrice:'',
+      name:'',
+      instrumentId:''
     };
   },
   mounted() {
     this.getTransaction();
   },
   methods: {
+    close() {
+      this.show = false;
+      this.dataList = [];
+      this.listTitle = [];
+      this.upLimitPrice = "";
+      this.amountValues = [];
+    },
     tittleClick(index) {
       this.loading = true;
       if (index == 0) {
@@ -145,7 +165,52 @@ export default {
         .catch(function(err) {
           console.log(err);
         });
-    }
+    },
+    pointBuy(code,event) {
+      event.stopPropagation()
+      if(!this.$time.outtime('09:30',new Date().getHours()+':'+new Date().getMinutes())){
+        this.$alert('非交易时间段', '交易日式', {
+          confirmButtonText: '确定',
+        });
+        return 
+      }
+      axios
+        .get("/strategist/stock/market/" + code)
+        .then(
+          function(response) {
+            var data = response.data.result;
+            this.upLimitPrice = data.upLimitPrice;
+            this.name = data.name;
+            this.instrumentId = data.instrumentId;
+            this.buy();
+          }.bind(this)
+        )
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    buy() {
+      var _this = this;
+      var listTitle = this.listTitle;
+      var amountValues = this.amountValues;
+      axios
+        .get("/strategist/strategytype/lists")
+        .then(response => {
+          this.show = true;
+          if (response.data.code == 200) {
+            var data = response.data.result;
+            _this.dataList = data;
+            for (let i = 0; i < data.length; i++) {
+              listTitle.push({name:data[i].name,id:data[i].id});
+              amountValues.push(data[i].amountValues);
+            }
+          }
+          console.log(listTitle)
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
   }
 };
 </script>
@@ -167,6 +232,7 @@ export default {
   width: 120px;
   cursor: pointer;
   color: #687284;
+  float: left;
 }
 .hot .tittle .active {
   color: #3e59a7;

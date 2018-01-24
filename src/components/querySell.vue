@@ -30,6 +30,7 @@
   </div>
 </template>
 <script>
+import qs from 'qs'
 export default {
   props: {
     maskInfo: {
@@ -50,7 +51,11 @@ export default {
       this.$axios
         .post("/strategist/buyRecord/sellapply/" + this.maskInfo.id)
         .then(res => {
-          this.$alert(res.data.message, "提示", {
+          var message = '操作成功'
+          if(res.data.code!=200){
+            message = res.data.message
+          }
+          this.$alert(message, "提示", {
             confirmButtonText: "确定",
             callback: action => {
               this.$emit("close");
@@ -68,6 +73,7 @@ export default {
 <style scoped>
 .info {
   justify-content: center;
+  
   height: 32px;
   color: #e26042;
 }
@@ -92,7 +98,6 @@ export default {
   z-index: 99;
 }
 .mask .top {
-  /* justify-content: space-around; */
   padding-left: 70px;
   line-height: 50px;
 }

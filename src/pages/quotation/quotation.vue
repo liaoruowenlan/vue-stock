@@ -57,76 +57,45 @@
                             <a :class="dayormonth===0?'active':''" @click="changeMap(0)">时K</a> 
                             <a :class="dayormonth===1?'active':''" @click="kLine(code,2,1)">日K</a>
                         </div>
-                        <div id="main" style="width: 594px; height: 411px;">
+                        <div id="main" style="width: 748px; height: 411px;">
 
                         </div>
-                        <div class="buysell">
-                            <ul class="clearfix">
-                              <li class="fl">
-                                <span>买</span> <span class="circur">1</span> <span>{{market.bidPrice}}</span> <span class="shares">{{(market.bidVolume/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>卖</span> <span class="circur">1</span> <span>{{market.askPrice}}</span> <span class="shares">{{(market.askVolume/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>买</span> <span class="circur">2</span> <span>{{market.bidPrice2}}</span> <span class="shares">{{(market.bidVolume2/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>卖</span> <span class="circur">2</span> <span>{{market.askPrice2}}</span> <span class="shares">{{(market.askVolume2/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>买</span> <span class="circur">3</span> <span>{{market.bidPrice3}}</span> <span class="shares">{{(market.bidVolume3/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>卖</span> <span class="circur">3</span> <span>{{market.askPrice3}}</span> <span class="shares">{{(market.askVolume3/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>买</span> <span class="circur">4</span> <span>{{market.bidPrice4}}</span> <span class="shares">{{(market.bidVolume4/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>卖</span> <span class="circur">4</span> <span>{{market.askPrice4}}</span> <span class="shares">{{(market.askVolume4/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>买</span> <span class="circur">5</span> <span>{{market.bidPrice5}}</span> <span class="shares">{{(market.bidVolume5/100).toFixed(2)}}</span>
-                              </li>
-                              <li class="fl">
-                                <span>卖</span> <span class="circur">5</span> <span>{{market.askPrice5}}</span> <span class="shares">{{(market.askVolume5/100).toFixed(2)}}</span>
-                              </li>
-                            </ul>
-                        </div>
+                        <Three></Three>
                     </div>
                     <div class="stock-right">
                         <div class="stock-right-div1">
                             <p >实时交易动态</p>
-                            <ul class="data-stock">
-                                <li v-for="(item,index) in transaction" :key="index" @click="pop(item.stockCode)">
-                                    <div class="stock-title">
-                                        <span>{{item.phone}}</span>
-                                        <span>{{item.tradeTime}}{{item.tradeType}}</span>
+                            <ul >
+                                <li v-for="(item,index) in transaction" :key="index" @click="pop(item.stockCode)" class="real flex">
+                                    <div class="realItem flex">
+                                        <span class="name">{{item.stockName}}</span>
+                                        <span class="code">{{item.stockCode}}</span>
                                     </div>
-                                    <div class="stock-nuber">
-                                        <span>{{item.stockName}}</span>
-                                        <span>{{item.stockCode}}</span>
+                                    <div class="money" :class="[]">
+                                        <span>{{item.tradePrice}}</span>
                                     </div>
-                                    <div>
-                                        {{item.tradeType}}价格{{item.tradePrice || '暂无'}}
+                                    <div class="sell">
+                                        {{item.tradeType}}
+                                    </div>
+                                    <div class="ip">
+                                        {{item.phone}}
                                     </div>
                                 </li>
                             </ul>
                         </div>
                         <div class="stock-right-div2">
-                            <p>热门股票</p>
+                            <p>推荐股票</p>
                             <ul class="data-stock">
-                                <li v-for="(item,index) in hot" :key="index" @click.prevent="pop(item.code)">
+                                <li v-for="(item,index) in hot" :key="index" @click.prevent="pop(item.code)" class="Recommend flex">
                                     <div class="stock-title">
-                                        <span>{{item.name}}</span>
-                                        <span>{{item.code}}</span>
+                                        <span class="name">{{item.name}}</span>
+                                        <span class="code">{{item.code}}</span>
                                     </div>
                                     <div class="stock-nuber">
-                                        <span>{{item.lastPrice}}</span>
+                                        <span  :class="[item.upDropSpeed>0?'red':'green']" >{{(item.upDropSpeed*100).toFixed(2)}}%</span>
                                     </div>
-                                    <div>
-                                        <span @click.prevent="pointBuy(item.code,$event)">点买</span>
+                                    <div class="Rebuy">
+                                        <span  @click.prevent="pointBuy(item.code,$event)">点买</span>
                                     </div>
                                 </li>
                             </ul>
@@ -142,6 +111,7 @@
 </template>
 
 <script>
+import Three from '../../components/threeblock'
 import TopHeader from "../../components/header.vue";
 import FooterNav from "../../components/footer.vue";
 import BuyMask from "../../components/buy.vue";
@@ -158,8 +128,8 @@ export default {
       transaction: null,
       hot: null,
       market: {},
-      code:"000001",
-      pcode:"000001",
+      code: "000001",
+      pcode: "000001",
       seo_stock_open: false,
       rawData: [],
       serchList: [],
@@ -180,13 +150,14 @@ export default {
       stompClient: null,
       stompSubscribe: null,
       stockTimeLineWs: null,
-      open:true
+      open: true
     };
   },
   components: {
     TopHeader,
     FooterNav,
-    BuyMask
+    BuyMask,
+    Three
   },
   created() {
     this.retriveMarket(this.code);
@@ -243,32 +214,31 @@ export default {
       });
   },
   methods: {
-    pop(code){
+    pop(code) {
       // this.$router.push({path:'/quotation',query:{code:code}})
       // this.$router.go(0)
-      this.pcode = code || '000001';
-      this.code = code|| '000001';
-      if(this.open){
+      this.pcode = code || "000001";
+      this.code = code || "000001";
+      if (this.open) {
         this.resubscribe(code);
-
       }
       this.shares(code);
-      this.retriveMarket(code)
-      window.scrollTo(0,0)
+      this.retriveMarket(code);
+      window.scrollTo(0, 0);
       this.$message({
-          message: '切换成功',
-          type: 'warning',
-          duration:1000
-        });
+        message: "切换成功",
+        type: "warning",
+        duration: 1000
+      });
     },
-    focus(event){
-      if(event.target.value==''){
-        this.seo_stock(event) 
+    focus(event) {
+      if (event.target.value == "") {
+        this.seo_stock(event);
       }
     },
-    blur(){
-      if(this.keyword==''){
-        this.keyword==' '
+    blur() {
+      if (this.keyword == "") {
+        this.keyword == " ";
         this.serchList = [];
         this.seo_stock_open = false;
       }
@@ -296,13 +266,18 @@ export default {
       this.upLimitPrice = "";
       this.amountValues = [];
     },
-    pointBuy(code,event) {
-      event.stopPropagation()
-      if(!this.$time.outtime('09:30',new Date().getHours()+':'+new Date().getMinutes())){
-        this.$alert('非交易时间段', '交易日式', {
-          confirmButtonText: '确定',
+    pointBuy(code, event) {
+      event.stopPropagation();
+      if (
+        !this.$time.outtime(
+          "09:30",
+          new Date().getHours() + ":" + new Date().getMinutes()
+        )
+      ) {
+        this.$alert("非交易时间段", "交易日式", {
+          confirmButtonText: "确定"
         });
-        return 
+        return;
       }
       axios
         .get("/strategist/stock/market/" + code)
@@ -331,11 +306,11 @@ export default {
             var data = response.data.result;
             _this.dataList = data;
             for (let i = 0; i < data.length; i++) {
-              listTitle.push({name:data[i].name,id:data[i].id});
+              listTitle.push({ name: data[i].name, id: data[i].id });
               amountValues.push(data[i].amountValues);
             }
           }
-          console.log(listTitle)
+          console.log(listTitle);
         })
         .catch(error => {
           console.log(error);
@@ -355,25 +330,24 @@ export default {
       this.canSearch = false; //控制搜索按钮
       this.seo_stock_open = false; //显示模糊搜索列表
       this.keyword = ""; //清空搜索关键字
-      this.pcode = code|| '000001';
-      this.code = code|| '000001';
+      this.pcode = code || "000001";
+      this.code = code || "000001";
       // this.stompSubscribe = null
-      if(this.open){
+      if (this.open) {
         this.resubscribe(code);
-
       }
       this.shares(code);
       this.retriveMarket(code);
       this.$message({
-          message: '切换成功',
-          type: 'warning',
-          duration:500,
-        });
+        message: "切换成功",
+        type: "warning",
+        duration: 500
+      });
     },
     shares(code) {
       var _this = this;
-      this.$router.push({path:'/quotation',query:{code:code}})
-      
+      this.$router.push({ path: "/quotation", query: { code: code } });
+
       axios
         .get("/strategist/stock/timeLine/" + code)
         .then(
@@ -388,11 +362,11 @@ export default {
           console.log(error);
         });
     },
-    seo_stock:_.debounce( function(event){
+    seo_stock: _.debounce(function(event) {
       var val = event.target.value;
-      if(event.keyCode == 13 && val == ''){
-        return
-      }else if(event.keyCode == 13 && val != ''){
+      if (event.keyCode == 13 && val == "") {
+        return;
+      } else if (event.keyCode == 13 && val != "") {
         if (this.first.length > 0) {
           val = this.first[0].code;
         } else {
@@ -400,19 +374,19 @@ export default {
             confirmButtonText: "确定"
           });
         }
-        this.keyword=''
-        this.serchList = []
+        this.keyword = "";
+        this.serchList = [];
         this.shares(val);
         this.retriveMarket(val);
         this.$message({
-          message: '切换成功',
-          type: 'warning',
-          duration:500,
+          message: "切换成功",
+          type: "warning",
+          duration: 500
         });
-        return
+        return;
       }
-      if(!val){
-        val = '0'
+      if (!val) {
+        val = "0";
       }
       var _this = this;
       var nowArr = [];
@@ -427,7 +401,7 @@ export default {
         .then(response => {
           if (response.data.code == 200) {
             var data = response.data.result;
-           this.canSearch = true;
+            this.canSearch = true;
             _this.serchList = data;
             _this.searchArr = data;
             _this.first = data.slice(0, 1);
@@ -438,15 +412,15 @@ export default {
         });
 
       _this.seo_stock_open = true;
-    },300),
+    }, 300),
     openFullScreen() {
       this.fullscreenLoading = true;
       this.retriveMarket(this.code);
     },
     kLine(code, type, index) {
-      this.open = false
-      if(this.stompSubscribe){
-        this.stompSubscribe.unsubscribe(this.stockTimeLineWs);      
+      this.open = false;
+      if (this.stompSubscribe) {
+        this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
       }
       this.dayormonth = index;
       var _this = this;
@@ -488,15 +462,18 @@ export default {
         });
     },
     changeMap(value) {
-      this.open = true
-      var _this = this
+      this.open = true;
+      var _this = this;
       this.dayormonth = 0;
       this.shares(this.code);
-      this.stockTimeLineWs = "/user/"+this.code+"/stockTimeLine";
-      this.stompSubscribe = this.stompClient.subscribe(this.stockTimeLineWs, function(data) {
-        _this.rawData = JSON.parse(data.body)
-        _this.drawK();
-      });
+      this.stockTimeLineWs = "/user/" + this.code + "/stockTimeLine";
+      this.stompSubscribe = this.stompClient.subscribe(
+        this.stockTimeLineWs,
+        function(data) {
+          _this.rawData = JSON.parse(data.body);
+          _this.drawK();
+        }
+      );
     },
     drawK(value) {
       this.charts = echarts.init(document.getElementById("main"));
@@ -560,7 +537,8 @@ export default {
               left: "8%",
               right: "5%",
               padding: "8px",
-              height: "65%"
+              height: "65%",
+              width:'86%'
             },
             {
               left: "8%",
@@ -743,84 +721,81 @@ export default {
         volumes: volumes
       };
     },
-    resubscribe(code){
+    resubscribe(code) {
       var _this = this;
-      if(this.stompSubscribe){
+      if (this.stompSubscribe) {
         this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
-
       }
-      this.stockTimeLineWs = "/user/"+code+"/stockTimeLine";
-      this.stompSubscribe = this.stompClient.subscribe(this.stockTimeLineWs, function(data) {
-        _this.rawData = JSON.parse(data.body)
-        _this.drawK();
-      });
-    },
+      this.stockTimeLineWs = "/user/" + code + "/stockTimeLine";
+      this.stompSubscribe = this.stompClient.subscribe(
+        this.stockTimeLineWs,
+        function(data) {
+          _this.rawData = JSON.parse(data.body);
+          _this.drawK();
+        }
+      );
+    }
   },
   mounted() {
-      var _this = this;
-      var s = new SockJS("http://10.0.0.48:8084/socket");
-      this.stompClient = Stomp.over(s);
-      this.stompClient.connect({}, function() { 
-        _this.stockTimeLineWs = "/user/"+_this.code+"/stockTimeLine";
-        _this.stompSubscribe = _this.stompClient.subscribe(_this.stockTimeLineWs , function(data) {
-          _this.rawData = JSON.parse(data.body)
+    var _this = this;
+    var s = new SockJS("http://10.0.0.48:8084/socket");
+    this.stompClient = Stomp.over(s);
+    this.stompClient.connect({}, function() {
+      _this.stockTimeLineWs = "/user/" + _this.code + "/stockTimeLine";
+      _this.stompSubscribe = _this.stompClient.subscribe(
+        _this.stockTimeLineWs,
+        function(data) {
+          _this.rawData = JSON.parse(data.body);
           _this.drawK();
-        });
-        // 监听断开连接
-        s.onclose = function(event) {
-          console.log("a:" + event);
-        };
+        }
+      );
+      // 监听断开连接
+      s.onclose = function(event) {
+        console.log("a:" + event);
+      };
     });
   },
-  beforeRouteLeave(to,from,next){
-    if(this.stompSubscribe){
+  beforeRouteLeave(to, from, next) {
+    if (this.stompSubscribe) {
       this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
     }
-    next()
+    next();
   }
 };
 </script>
 
 <style scoped>
-.bond-rose.red>span{
-  color: #e26042;
+.Recommend  .stock-title{
+  width: 100px;
 }
-.circur {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  background: #e26042;
-  line-height: 16px;
+.Recommend .Rebuy{
+  color: #ff7e45;
+  border: 1px solid #ff7e45;
+  width: 60px;
+  height: 22px;
   text-align: center;
-  margin: 0 20px 0 10px;
-  color: #fff;
+  line-height: 22px;
+  cursor: pointer;
+}
+.Recommend >div{
+  text-align: center;
+}
+.Recommend  {
+  justify-content: space-between;
+  align-items: center;
   font-size: 12px;
-}
-.shares {
-  color: #687284;
-  font-size: 14px;
-  margin-left: 20px;
-}
-.buysell {
-  width: 594px;
-  padding: 20px;
-  box-sizing: border-box;
-  line-height: 48px;
+  padding: 10px 12px;
+  border-bottom: 1px dashed #ddd;
   background: #fff;
-  height: 321px;
-  padding-top: 40px;
 }
-.buysell li {
-  width: 50%;
-  color: #e26042;
-  /* text-align: center; */
-  padding-left: 20px;
-  box-sizing: border-box;
+.Recommend .name{
+  color: #1e242e;
 }
-.buysell li span:nth-child(3) {
-  display: inline-block;
-  width: 42px;
+.Recommend .code{
+  color: #acb3c2;
 }
+
+
 .number {
   display: inline-block;
   margin-right: 5px;
@@ -878,86 +853,32 @@ a {
 .stock-right-div1 {
   margin-bottom: 10px;
 }
-.stock-right-div2 ul li > div:last-child span {
-  display: block;
-  width: 78px;
-  height: 30px;
-  line-height: 32px;
-  border: 1px solid #ee8354;
-  text-align: center;
-  color: #ee8354;
-  margin: 0 auto;
-  margin-top: 18px;
-  cursor: pointer;
-}
-.stock-right-div2 .stock-nuber span {
-  text-align: center;
-  line-height: 68px;
-  color: #e26042;
-  font-size: 14px;
-  display: block;
-  text-align: center;
-}
-.stock-right-div2 .stock-title > span {
-  display: block;
-  font-size: 14px;
-  color: #adb3c1;
-  margin-left: 15px;
-}
-.stock-right-div2 .stock-title > span:first-child {
-  padding-top: 18px;
-  color: #1e242e;
-}
-.stock-right-div1 .stock-title > span:first-child {
-  color: #818081;
-  padding-top: 18px;
-}
-.stock-right-div1 .stock-title > span:last-child {
-  color: #adb3c1;
-  font-size: 12px;
-  padding-top: 2px;
-}
-.stock-right-div1 .stock-title > span {
-  display: block;
-  margin-left: 13px;
-}
-.stock-right-div1 .stock-title {
-  font-size: 14px;
-}
-.stock-right-div1 .stock-nuber {
-  text-align: center;
-  font-size: 14px;
-}
-.stock-right-div1 .stock-nuber > span:first-child {
-  color: #1e242e;
-  display: block;
-  padding-top: 18px;
-}
-.stock-right-div1 .stock-nuber > span:last-child {
-  color: #adb3c1;
-  display: block;
-  padding-top: 1px;
-}
-.data-stock {
-  background: #f7f7f7;
-  cursor: pointer;
-}
-.stock-right-div1 .data-stock li > div,
-.stock-right-div2 .data-stock div {
-  width: 33%;
-  float: left;
-}
-.stock-right-div1 .data-stock li,
-.stock-right-div2 .data-stock li {
-  height: 68px;
-  margin-bottom: 1px;
+
+.real {
+  padding: 10px 15px;
+  justify-content: space-between;
+  align-items: center;
   background: #fff;
+  border-bottom: 1px dashed #ddd;
+  font-size: 12px;
 }
-.stock-right-div1 .data-stock li > div:last-child {
-  line-height: 68px;
-  color: #e26042;
-  text-align: center;
+.real .ip {
+  color: #adb3c1;
 }
+.real .realItem {
+  flex-direction: column;
+  align-items: center;
+}
+.real .sell {
+  color: #7181c8;
+}
+.real .realItem .name {
+  color: #1e242e;
+}
+.real .realItem .code {
+  color: #acb3c2;
+}
+
 .stock-right > div > p {
   height: 40px;
   line-height: 40px;
@@ -968,7 +889,7 @@ a {
   background: #fff;
 }
 .stock-right {
-  width: 420px;
+  width: 266px;
   float: right;
 }
 .stock-data {
@@ -993,10 +914,6 @@ a {
 }
 .stock-seo > div {
   float: left;
-}
-#main {
-  width: 594px;
-  height: 482px;
 }
 .bg {
   background: url("../../assets/img/beijingtu02@2x.png") no-repeat;

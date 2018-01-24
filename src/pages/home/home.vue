@@ -91,7 +91,9 @@
                 <Hot></Hot>
                 <BannerLeft></BannerLeft>
             </div>
+            <div id="newsmust">
                 <news></news>
+            </div>
         </div>
         <div class="width100-bg">
             <footer-nav></footer-nav>
@@ -159,6 +161,10 @@
 </script>
 
 <style scoped>
+#newsmust{
+      margin: 20px auto;
+ width: 1024px;
+}
 	.aBuy-demo{
 		width: 1024px;
 		height: 168px;

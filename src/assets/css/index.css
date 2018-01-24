@@ -16,6 +16,10 @@ img {
 	width: 100%;
 	background: #f7f7f7;
 }
+.el-loading-mask{
+	background: #fff;
+	transition: none;
+}
 .user_div{
 	width: 725px;
 	margin-top: 32px;
@@ -107,4 +111,10 @@ input:-webkit-autofill {
   }
   .red{
 	  color:#e26042;
+  }
+  .inline-input .popper__arrow{
+	display: none;
+  }
+  .inline-input{
+	  width: 300px !important;
   }

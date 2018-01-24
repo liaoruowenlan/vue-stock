@@ -30,28 +30,12 @@ export default {
       market: []
     };
   },
-  mounted () {
-      this.getMarket()
-  },
   methods: {
     activeClick(index) {
       this.active = index;
     },
     rankClick(index) {
       this.rank = index;
-    },
-    getMarket() {
-      var _this = this;
-      this.$axios
-        .get("/strategist/system/stockMarketExponent")
-        .then(function(response) {
-          if (response.data.code == 200) {
-            _this.market = response.data.result;
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
     }
   }
 };
@@ -118,6 +102,7 @@ export default {
 }
 .people {
   background: #fff;
+  min-height: 270px;
 }
 .people .peopleItem {
   padding: 12px 10px;

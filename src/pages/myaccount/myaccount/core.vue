@@ -249,6 +249,8 @@ export default {
                 obj.name = "盈利";
               } else if (list[i].type == "Promotion") {
                 obj.name = "推广佣金";
+              }else {
+                obj.name = list[i].flowText;
               }
               obj.occurrenceTime = list[i].occurrenceTime;
               obj.amount = list[i].amount + " 元";
