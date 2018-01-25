@@ -3,7 +3,13 @@
         <top-header></top-header>
         <div class="width100">
             <div class="user-title">
-                <img src="../../assets/img/userdcim-.png" />
+            	<div style="padding-top: 20px;">
+            		
+            	</div>
+            	<div class="user-img">
+            	<img v-if="!User" src="../../assets/img/userdcim-.png" />
+                <img v-else v-bind:src="User" />
+            	</div>
                 <p>{{phone}}</p>
             </div>
             <div class="user-operation">
@@ -30,9 +36,11 @@
 
     export default {
         name: "myaccount",
+        
         data(){
             return{
                 phone:null,
+                User:localStorage.getItem("UserImg")||'',
                 userLists:[
                         {
                             "text":"个人中心",
@@ -52,6 +60,10 @@
                         },
                         {
                             "text":"设置",
+                            "url":"/myaccount/setup"
+                        },
+                        {
+                            "text":"成为经纪人",
                             "url":"/myaccount/setup"
                         }
                 ]
@@ -91,11 +103,17 @@
         background-size: 100% 100%;
         height: 240px;
     }
-    .user-title img{
+    .user-title .user-img{
         width: 84px;
         height: 84px;
         margin: 0 auto;
-        padding-top: 20px;
+    	background: #000;
+    border-radius: 100%;
+    }
+    .user-title .user-img img{
+    	width: 100%;
+    	height: 100%;
+    	border-radius: 50%;
     }
     .user-title>p{
         text-align: center;

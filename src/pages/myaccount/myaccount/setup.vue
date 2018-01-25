@@ -23,7 +23,6 @@
                 </div>
                 <section>
                     <div @click="setPass">确定</div>
-                    <!-- <div class="bgcolor" @click="hide">取消</div> -->
                 </section>
             </div>
         </div>
@@ -64,10 +63,47 @@
                 </div>
                 <section>
                     <div @click="payWold">确定</div>
-                    <!-- <div class="bgcolor" @click="hide">取消</div> -->
                 </section>
             </div>
         </div>
+		<i></i>
+    	<div>
+    		<p>
+                <img src="../../../assets/img/money.png"/>
+                <span>修改头像</span>
+                <a @click="login3">修改></a>
+            </p>
+            <div class="setup-logo" v-if="newPay.setup_logo">
+            	<!--<el-upload
+				  class="avatar-uploader"
+				  action="/strategist/publisher/headPortrait"
+				  :headers="headers" 
+				  name="file" 
+				  :show-file-list="false"
+				  :on-success="handleAvatarSuccess"
+				  :before-upload="beforeAvatarUpload">				  
+				  <img v-if="imageUrl" :src="imageUrl" class="avatar" >
+				  <img v-else src="../../../assets/img/userdcim-.png" class="avatar" >
+				  <i v-else class="el-icon-plus avatar-uploader-icon"></i>  :on-success="handlePreview"
+				</el-upload>-->
+				<el-upload
+				  class="upload-demo"
+				  ref="upload" 
+				  action="/strategist/publisher/headPortrait"
+				  :headers="headers" 
+				   :show-file-list="false" 				   
+				  :auto-upload="false" 
+				  name="file"
+				  :on-preview = "handlePreview"		
+				  :before-upload="beforeAvatarUpload"> 
+				  <el-button size="small" type="primary">点击上传</el-button>
+				</el-upload>
+				<img v-if="imageUrl" :src="imageUrl" class="avatar" >
+				<img v-else src="../../../assets/img/userdcim-.png" class="avatar" >
+				<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+
+            </div>
+    	</div>
     </div>
 </template>
 
@@ -77,12 +113,17 @@ import qs from "qs";
 
 export default {
   name: "setup",
-  data() {
+  data() {	
     return {
-      oldpassworld: {
+    	headers:{
+    		Authorization: localStorage.getItem("token")
+    	},
+    	imageUrl:localStorage.getItem("UserImg")||'',
+      	oldpassworld: {
         loginpass: "",
         newloginpass: "",
         passOpen: ""
+      
       },
       newPay: {
         Phone: localStorage.getItem("phone"),
@@ -90,6 +131,7 @@ export default {
         AuCodeAdd: "",
         payOen: false,
         payOen1: false,
+        setup_logo:true,
         PassWorld: "",
         PhoneReg: "",
         btn: false,
@@ -99,7 +141,8 @@ export default {
       },
       count: "",
       timer: null,
-      show: true
+      show: true,
+      
     };
   },
   computed: {
@@ -111,6 +154,27 @@ export default {
     }
   },
   methods: {
+  	submitUpload(){
+  		 this.$refs.upload.submit();//直接提交申请。
+  		 
+  	},
+  	 handlePreview(res, file) {
+  	 	console.log(1);
+	 	localStorage.setItem("UserImg", res.result);
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg'||'image/PNG';
+        const isLt2M = file.size / 1024  < 500;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式或 PNG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过500KB!');
+        }
+        return isJPG && isLt2M;
+      },
     blur() {
       this.newPay.PhoneReg =
         this.newPay.Phone.trim() != "" &&
@@ -119,18 +183,21 @@ export default {
     login() {
       this.newPay.payOen = !this.newPay.payOen;
       this.newPay.payOen1 = false;
-      this.newPay.PassWorld = ''
+      this.newPay.setup_logo = false;
       this.oldpassworld.loginpass = ''
       this.oldpassworld.newloginpass = ''
-      this.newPay.Aucode = ''
     },
     login1() {
       this.newPay.payOen1 = !this.newPay.payOen1;
       this.newPay.payOen = false;
+      this.newPay.setup_logo = false;
       this.newPay.PassWorld = ''
-      this.oldpassworld.loginpass = ''
-      this.oldpassworld.newloginpass = ''
       this.newPay.Aucode = ''
+    },
+    login3(){
+    	this.newPay.setup_logo = !this.newPay.setup_logo;
+    	 this.newPay.payOen1 = false;
+    	 this.newPay.payOen = false;
     },
     // hide() {
     //   this.oldpassworld.loginpass = null;
@@ -277,6 +344,7 @@ export default {
 </script>
 
 <style scoped>
+
 .regw {
   position: absolute;
   bottom: -30px;

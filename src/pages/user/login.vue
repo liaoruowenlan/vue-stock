@@ -114,6 +114,7 @@
                     localStorage.setItem("token",res.data.result.token);
                     localStorage.setItem("phone", _this.phone.UserPhone);
                     localStorage.setItem('id',res.data.result.id);
+                    localStorage.setItem('UserImg',res.data.result.headPortrait||'')
                     _this.$children[0].refreshUserInfo();
                     _this.$router.push({ path: 'home' });
                     // 修改header data
