@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 import { MessageBox } from 'element-ui';
 import { clearInterval } from 'timers';
-import quotation from '../pages/quotation/quotation.vue'
+import Quotation from '../pages/quotation/quotation.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -83,7 +83,7 @@ const router = new Router({
         {
             path: '/quotation',
             name: 'Quotation',
-            component: resolve => require(['@/pages/quotation/quotation.vue'], resolve),
+            component: Quotation,
             meta: { login: true }
         },
         {
