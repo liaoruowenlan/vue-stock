@@ -40,13 +40,14 @@
                         <div class="stock_export">
                         	
                             <div v-for="(text,index) in message" :key="index">
-                            	
+                            	<router-link to="/market">
 		                                <p class="bond-title">{{text.name}}</p>
 		                                <p :class="[text.upDropSpeed<0?'green':'red','bond-number']">{{text.lastPrice}}</p>
 		                                <div :class="[text.upDropSpeed<0?'':'red','bond-rose']">
 		                                    <span>{{text.upDropPrice}}</span>
 		                                    <span>{{(text.upDropSpeed*100).toFixed(2)}}%</span>
-		                                </div>              		
+		                                </div>
+		                        </router-link>        
                             </div>
                         </div>
                     </div>
@@ -1016,22 +1017,22 @@ a {
   float: left;
   text-align: center;
 }
-.stock_export > div > .bond-title {
+.stock_export > div a> .bond-title {
   margin-top: 36px;
   font-size: 14px;
   color: #fff;
 }
-.stock_export > div > .bond-number {
+.stock_export > div a> .bond-number {
   font-size: 22px;
   /* color: #e26042; */
   margin-top: 9px;
 }
-.stock_export > div > .bond-rose {
+.stock_export > div a> .bond-rose {
   font-size: 12px;
   color: #46c032;
   margin-top: 9px;
 }
-.stock_export > div > .bond-rose > span:first-child {
+.stock_export > div a> .bond-rose > span:first-child {
   margin-right: 10px;
 }
 </style>

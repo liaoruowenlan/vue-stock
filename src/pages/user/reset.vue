@@ -182,7 +182,7 @@
     section {
         background: url("../../assets/img/bg.png") no-repeat;
         background-size: 100% 100%;
-        height: 480px;
+        height: 492px;
     }
     .addColor{
         background:#ee8354 !important;
@@ -302,8 +302,10 @@
     }
 
     .phone input, .passworld input, .AuCode input {
-        width: 212px;
-        height: 28px
+       		width: 214px;
+		    height: 30px;
+		    line-height: 30px;
+		    border: solid 1px #dcdee3;
     }
 
     button {
