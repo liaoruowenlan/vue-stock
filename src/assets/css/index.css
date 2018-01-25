@@ -47,11 +47,11 @@ img {
 .popper__arrow{
 	display: none !important;
 }
-.el-input__inner{
+.stock-seo-div  .el-input__inner{
 	height: 32px;
 	width: 424px;
 }
-.el-input__icon{
+.stock-seo-div .el-input__icon{
 	line-height: 36px;
 }
 /* 搜索结束 */

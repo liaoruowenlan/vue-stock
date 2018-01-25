@@ -51,7 +51,7 @@
                         <div class="stock_export">
                         	
                             <div v-for="(text,index) in message" :key="index">
-                            	<router-link to="/market">
+                            	<router-link :to="{path:'/market',query:{code:text.code}}">
 		                                <p class="bond-title">{{text.name}}</p>
 		                                <p :class="[text.upDropSpeed<0?'green':'red','bond-number']">{{text.lastPrice}}</p>
 		                                <div :class="[text.upDropSpeed<0?'':'red','bond-rose']">
@@ -395,7 +395,7 @@ export default {
           console.log(error);
         });
     },
-    seo_stock: _.debounce(function(event) {
+    seo_stock(event) {
       var val = event.target.value;
       if (event.keyCode == 13 && val == "") {
         return;
@@ -428,7 +428,6 @@ export default {
         this.canSearch = false;
         return;
       }
-
       axios
         .get("/strategist/stock/selectStock?keyword=" + val)
         .then(response => {
@@ -445,7 +444,7 @@ export default {
         });
 
       _this.seo_stock_open = true;
-    }, 300),
+    },
     openFullScreen() {
       this.fullscreenLoading = true;
       this.retriveMarket(this.code);
@@ -1005,6 +1004,7 @@ a {
   width: 141px;
   float: left;
   text-align: center;
+  cursor: pointer;
 }
 .stock_export > div a > .bond-title {
   margin-top: 36px;

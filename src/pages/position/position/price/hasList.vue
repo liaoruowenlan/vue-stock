@@ -43,7 +43,7 @@
                     </p>
                     <p>
                         <span class="l">备 &nbsp;注</span>
-                        <span class="r-color">客户申请平仓</span>
+                        <span class="r-color">{{item.windControlType=="TRADINGEND"?'交易期满':item.windControlType=="REACHPROFITPOINT"?'达到止盈点':item.windControlType=="REACHLOSSPOINT"?'达到止损点':'客户申请平仓'}}</span>
                     </p>
                 </div>
                 <div class="flex specil bottom-item">

@@ -240,7 +240,7 @@
 		font-size: 14px;
 		line-height: 36px;
 		border-bottom: 1px solid #dcdee3;
-		color: #3658ad;
+		color: #687284;
 	}
 	
 	.title ul li {
