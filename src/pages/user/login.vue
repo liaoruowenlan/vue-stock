@@ -120,7 +120,7 @@
 </script>
 <style scoped>
     section {
-        background: url("../../assets/img/bg.png") no-repeat;
+        background: url("../../assets/img/bg.jpg") no-repeat;
         background-size: 100% 100%;
         height: 492px;
     }
