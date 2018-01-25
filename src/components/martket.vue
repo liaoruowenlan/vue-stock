@@ -47,6 +47,9 @@ export default {
 };
 </script>
 <style scoped>
+	ul.tittle{
+		background: #fff;
+	}
 .tittle li {
   line-height: 40px;
   flex-grow: 1;

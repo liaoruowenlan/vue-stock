@@ -30,6 +30,9 @@ export default {
 };
 </script>
 <style scoped>
+	.newsleft{
+		margin-left: 10px;
+	}
 .newsbanner .a{
     padding-bottom: 40px;
     background: url("../../assets/img/newsback.png") no-repeat 0 bottom /100%,
