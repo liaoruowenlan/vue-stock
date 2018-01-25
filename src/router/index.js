@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 import { MessageBox } from 'element-ui';
 import { clearInterval } from 'timers';
-
+import quotation from '../pages/quotation/quotation.vue'
 Vue.use(Router)
 
 const router = new Router({

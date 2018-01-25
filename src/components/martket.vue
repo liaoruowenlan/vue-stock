@@ -6,7 +6,7 @@
       <div :class="[item.upDropSpeed>0?'red':'green','contain']" v-for="(item,index) in market" :key="index" v-if="active==index">
           <p class="big">{{(item.lastPrice).toFixed(2)}}</p>
           <p class="updown"><span>{{item.upDropPrice>0?'+'+item.upDropPrice:item.upDropPrice}}</span> <span>{{item.upDropSpeed>0?'+'+((item.upDropSpeed)*100).toFixed(2):((item.upDropSpeed)*100).toFixed(2)}}%</span></p>
-          <p><button>大盘详情</button></p>
+          <p><button @click="checkDel(item.code)">大盘详情</button></p>
       </div>
   </div>
 </template>
@@ -23,8 +23,12 @@ export default {
     this.getMarket();
   },
   methods: {
+    
     activeClick(index) {
       this.active = index;
+    },
+    checkDel(code){
+      this.$router.push({path:'/market',query:{code:code}})
     },
     getMarket() {
       var _this = this;
