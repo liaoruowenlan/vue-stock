@@ -39,8 +39,10 @@
         			</div>
         		</div>
         	</div>
-
-            <div class="introduce">
+        	<div class="introduce addbgCodel">
+            		<p>
+            			我们的优势
+            		</p>
                 <div>
                     <div>
                         <img src="../../assets/img/icon01.png" />
@@ -87,6 +89,7 @@
                 </div>
 
             </div>  
+            
             <div class="payHot flex">
                 <Hot></Hot>
                 <BannerLeft></BannerLeft>
@@ -184,6 +187,7 @@
 		color: #3E59A7;
 		font-size: 16px;
 		line-height: 36px;
+		
 	}
 	.aBuy-demo-ul{
 		height: 132px;
@@ -213,13 +217,24 @@
         width: 1024px;
 }
     .introduce>div>div{
-        height: 143px;
-        position: relative;
+           height: 93px;
+    position: relative;
+    }
+    .introduce>p{
+    	line-height: 50px;
+    	text-align: center;
+    	font-size: 16px;
+    	color: #3E59A7;
     }
     .introduce>div>div>img{
-        position: absolute;
-        bottom: 20%;
-        left: 36%;
+            position: absolute;
+    bottom: 4%;
+    left: 36%;
+    }
+    .addbgCodel{
+    	background: url(../../assets/img/biaoti.png) no-repeat;
+    	background-color:#fff ;
+    	background-position: 50% 10%;
     }
     .width100-bg{
         width: 100%;
@@ -332,13 +347,6 @@
         text-align: center;
         margin-top:35px;
     }
-    .qCode-bg{
-        width: 142px;
-        height: 142px;
-        background: url("../../assets/img/qCode-bg.png") no-repeat;
-        background-size: 100%;
-        margin: 20px auto 0 auto;
-    }
     .dialogg {
   width: 408px !important;
   margin-top: 26vh !important;
@@ -414,10 +422,9 @@
         padding-top: 10px;
     }
     .introduce{
-        height: 254px;
+        height: 224px;
         width: 1024px;
         margin: 20px auto;
-        background:#fff;
     }
     .introduce>div{
         float: left;
