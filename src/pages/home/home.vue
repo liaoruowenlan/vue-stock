@@ -39,6 +39,11 @@
         			</div>
         		</div>
         	</div>
+        	
+            <div class="payHot flex">
+                <Hot></Hot>
+                <BannerLeft></BannerLeft>
+            </div>
         	<div class="introduce addbgCodel">
             		<p>
             			我们的优势
@@ -90,10 +95,6 @@
 
             </div>  
             
-            <div class="payHot flex">
-                <Hot></Hot>
-                <BannerLeft></BannerLeft>
-            </div>
             <div id="newsmust">
                 <news></news>
             </div>
@@ -429,6 +430,6 @@
     .introduce>div{
         float: left;
         width: 25%;
-        height: 100%;
+        height: 78%;
     }
 </style>
