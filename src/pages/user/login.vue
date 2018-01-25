@@ -79,6 +79,13 @@
 
           }
         },
+        beforeRouteEnter (to, from, next){
+            const token = localStorage.getItem('token')
+            if(from.path == '/home'&&to.path=='/login'&&token ){
+                next('/myaccount/capital')
+            }
+            next()
+        },
         methods: {
             change(event) {
                 this.phone.PhoneReg = false;

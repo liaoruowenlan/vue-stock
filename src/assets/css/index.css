@@ -16,6 +16,21 @@ img {
 	width: 100%;
 	background: #f7f7f7;
 }
+/* 搜索开始 */
+ .el-popper{
+	margin: 0 !important;
+}
+.popper__arrow{
+	display: none !important;
+}
+.el-input__inner{
+	height: 32px;
+	width: 424px;
+}
+.el-input__icon{
+	line-height: 36px;
+}
+/* 搜索结束 */
 .el-loading-mask{
 	background: #fff;
 	transition: none;

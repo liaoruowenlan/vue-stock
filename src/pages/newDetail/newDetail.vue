@@ -45,19 +45,25 @@ export default {
         )
         .then(res => {
           if (res.data.code == 200) {
+            if(!res.data.data){
+              _this.data = {
+                title: "【暂无详情】",
+                createTime: "",
+                content: ""
+              }
+              return
+            }
             _this.data = res.data.data;
           }
         });
     }
   },
   updated () {
-      console.log(this.$refs.content.children)
       var children = this.$refs.content.children || []
       for(let i=0;i<children.length;i++){
           children[i].style.margin="10px 0"
           children[i].style.textIndent="24px"
       }
-    //   this.$refs.content.children.style.margin="10px 0"
   }
 };
 </script>

@@ -25,7 +25,18 @@
                         </span>
                     </div>
                     <div class="stock-seo-div">
-                        <div class="seo-text">
+                      			<el-autocomplete
+                              class="inline-input"
+                              v-model="state"
+                              :fetch-suggestions="querySearch"
+                              placeholder="输入股票名称／代码"
+                              @select="handleSelect">
+                              <i
+                                class="el-icon-search el-input__icon"
+                                slot="prefix">
+                              </i>
+                            </el-autocomplete>
+                        <!-- <div class="seo-text">
                             <input type="text" maxlength="6" placeholder="输入股票名称／代码" class="seo-val" @blur="blur"  @focus="focus($event)" @keyup="seo_stock($event)" v-model="keyword"/>
                             <input type="button" value="搜索" :class="canSearch?'canSearch seo-btn':'seo-btn'"  @click="search(first,$event)"/>
                             <div class="seo-list" v-show= "seo_stock_open">
@@ -36,7 +47,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="stock_export">
                         	
                             <div v-for="(text,index) in message" :key="index">
@@ -63,7 +74,7 @@
                         <div id="main" style="width: 748px; height: 411px;">
 
                         </div>
-                        <Three></Three>
+                        <Three :code="code"></Three>
                     </div>
                     <div class="stock-right">
                         <div class="stock-right-div1">
@@ -114,7 +125,7 @@
 </template>
 
 <script>
-import Three from '../../components/threeblock'
+import Three from "../../components/threeblock";
 import TopHeader from "../../components/header.vue";
 import FooterNav from "../../components/footer.vue";
 import BuyMask from "../../components/buy.vue";
@@ -131,8 +142,8 @@ export default {
       transaction: null,
       hot: null,
       market: {},
-      code: "000001",
-      pcode: "000001",
+      code: this.$route.query.code || "000001",
+      pcode: this.$route.query.code || "000001",
       seo_stock_open: false,
       rawData: [],
       serchList: [],
@@ -153,7 +164,8 @@ export default {
       stompClient: null,
       stompSubscribe: null,
       stockTimeLineWs: null,
-      open: true
+      open: true,
+      state: ""
     };
   },
   components: {
@@ -217,6 +229,34 @@ export default {
       });
   },
   methods: {
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants;
+      var _this = this;
+      queryString = queryString ||  '1'
+       this.$axios
+        .get("/strategist/stock/selectStock?keyword=" + queryString)
+        .then(response => {
+          if (response.data.code == 200) {
+            var data = response.data.result;
+            // _this.restaurants = data;
+            _this.first = data.slice(0, 1);
+            for (let i = 0; i < data.length; i++) {
+              data[i].value = data[i].name + "    " + data[i].code;
+            }
+            cb(data);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      // 调用 callback 返回建议列表的数据
+    },
+
+    handleSelect(item) {
+      console.log(item)
+      this.state =''
+      this.search(item.code);
+    },
     pop(code) {
       // this.$router.push({path:'/quotation',query:{code:code}})
       // this.$router.go(0)
@@ -320,16 +360,6 @@ export default {
         });
     },
     search(code, event) {
-      if (event.target.className === "canSearch seo-btn") {
-        if (this.first.length > 0) {
-          code = this.first[0].code;
-        } else {
-          this.$alert("请输入正确的股票代码", "提示", {
-            confirmButtonText: "确定"
-          });
-          return;
-        }
-      }
       this.canSearch = false; //控制搜索按钮
       this.seo_stock_open = false; //显示模糊搜索列表
       this.keyword = ""; //清空搜索关键字
@@ -541,7 +571,7 @@ export default {
               right: "5%",
               padding: "8px",
               height: "65%",
-              width:'86%'
+              width: "86%"
             },
             {
               left: "8%",
@@ -768,10 +798,10 @@ export default {
 </script>
 
 <style scoped>
-.Recommend  .stock-title{
+.Recommend .stock-title {
   width: 100px;
 }
-.Recommend .Rebuy{
+.Recommend .Rebuy {
   color: #ff7e45;
   border: 1px solid #ff7e45;
   width: 60px;
@@ -780,24 +810,24 @@ export default {
   line-height: 22px;
   cursor: pointer;
 }
-.Recommend >div{
+.Recommend > div {
   text-align: center;
 }
-.Recommend  {
+.Recommend {
   justify-content: space-between;
   align-items: center;
   font-size: 12px;
   padding: 10px 12px;
   border-bottom: 1px dashed #ddd;
   background: #fff;
+  cursor: pointer;
 }
-.Recommend .name{
+.Recommend .name {
   color: #1e242e;
 }
-.Recommend .code{
+.Recommend .code {
   color: #acb3c2;
 }
-
 
 .number {
   display: inline-block;
@@ -831,25 +861,7 @@ a {
   color: #3e59a7;
   border-bottom: 4px solid #3e59a7;
 }
-.seo-list {
-  position: absolute;
-  width: 100%;
-  top: 32px;
-  max-height: 160px;
-  background: #fff;
-  overflow: hidden;
-}
-.seo-list li {
-  line-height: 32px;
-  padding: 0 8px;
-  cursor: pointer;
-}
-.seo-list li:hover {
-  background: #ddd;
-}
-.canSearch.seo-btn {
-  background: #f30;
-}
+
 .stock-left {
   float: left;
 }
@@ -980,27 +992,7 @@ a {
   margin-top: 20px;
   margin-left: 194px;
 }
-.seo-text > input {
-  float: left;
-}
-.seo-val {
-  width: 329px;
-  font-size: 14px;
-  padding-left: 35px;
-  background: url("../../assets/img/search@2x.png") no-repeat 8px 7px;
-  background-color: #eee !important;
-  background-size: 16px 17px;
-  border: 0;
-  height: 32px;
-}
-.seo-btn {
-  border: 0;
-  width: 60px;
-  height: 32px;
-  font-size: 14px;
-  color: #fff;
-  background: #adb3c1;
-}
+
 .stock_export {
   width: 424px;
   height: 147px;
@@ -1008,31 +1000,28 @@ a {
   background: rgba(0, 0, 0, 0.25);
   margin-top: 15px;
 }
-.seo-text {
-  height: 32px;
-  position: relative;
-}
+
 .stock_export > div {
   width: 141px;
   float: left;
   text-align: center;
 }
-.stock_export > div a> .bond-title {
+.stock_export > div a > .bond-title {
   margin-top: 36px;
   font-size: 14px;
   color: #fff;
 }
-.stock_export > div a> .bond-number {
+.stock_export > div a > .bond-number {
   font-size: 22px;
   /* color: #e26042; */
   margin-top: 9px;
 }
-.stock_export > div a> .bond-rose {
+.stock_export > div a > .bond-rose {
   font-size: 12px;
   color: #46c032;
   margin-top: 9px;
 }
-.stock_export > div a> .bond-rose > span:first-child {
+.stock_export > div a > .bond-rose > span:first-child {
   margin-right: 10px;
 }
 </style>

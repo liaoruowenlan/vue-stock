@@ -198,10 +198,7 @@ const router = new Router({
 })
 router.beforeEach((to, from, next) => { // 没有token时候,无法跳转其他页面.
     const Token = localStorage.getItem("token");
-    console.log(from)
-    if(from.path == '/home'&&to.path=='/login'&&Token){
-        next('/home')
-    }
+
     if (to.meta.login && !Token) {
         MessageBox.alert('您还没有登录，请先登录', '提示', { confirmButtonText: '确定', }).then(() => {
             next('/login')

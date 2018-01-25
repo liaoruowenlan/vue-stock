@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       total: 0,
-      size: 4,
+      size: 8,
       dataList:[],
       page:0,
     };
@@ -55,9 +55,6 @@ export default {
 
 <style scoped>
 .main{
-    min-height: 400px;
-}
-.settlement {
-    padding: 10px 100px;
+    min-height: 530px;
 }
 </style>

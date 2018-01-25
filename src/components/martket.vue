@@ -5,7 +5,7 @@
       </ul>
       <div :class="[item.upDropSpeed>0?'red':'green','contain']" v-for="(item,index) in market" :key="index" v-if="active==index">
           <p class="big">{{(item.lastPrice).toFixed(2)}}</p>
-          <p class="updown"><span>{{item.upDropPrice>0?'+'+item.upDropPrice:item.upDropPrice}}</span> <span>{{item.upDropSpeed>0?'+'+(item.upDropSpeed)*100:(item.upDropSpeed)*100}}%</span></p>
+          <p class="updown"><span>{{item.upDropPrice>0?'+'+item.upDropPrice:item.upDropPrice}}</span> <span>{{item.upDropSpeed>0?'+'+((item.upDropSpeed)*100).toFixed(2):((item.upDropSpeed)*100).toFixed(2)}}%</span></p>
           <p><button>大盘详情</button></p>
       </div>
   </div>
@@ -14,16 +14,16 @@
 export default {
   data() {
     return {
-              tittle: [{ name: "上证" }, { name: "深证" }, { name: "创业板" }],
+      tittle: [{ name: "上证" }, { name: "深证" }, { name: "创业板" }],
       market: [],
-      active:0
+      active: 0
     };
   },
-  mounted () {
-      this.getMarket()
+  mounted() {
+    this.getMarket();
   },
   methods: {
-          activeClick(index) {
+    activeClick(index) {
       this.active = index;
     },
     getMarket() {
@@ -43,19 +43,19 @@ export default {
 };
 </script>
 <style scoped>
- .tittle li {
+.tittle li {
   line-height: 40px;
-  flex-grow:1;
+  flex-grow: 1;
   text-align: center;
   color: #adb3c1;
   cursor: pointer;
   font-size: 14px;
   box-sizing: border-box;
 }
- .tittle1 li {
+.tittle1 li {
   padding: 0 10px;
 }
- .tittle li.active {
+.tittle li.active {
   color: #3e59a7;
   border-top: 1px solid #3e59a7;
   line-height: 38px;

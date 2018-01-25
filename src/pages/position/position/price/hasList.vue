@@ -1,13 +1,14 @@
 <template>
     <li class="item" >
+        <div class="middle flex">
         <div class="top">
             <span class="square blue"></span>
-            <span class="name">{{item.stockName}} ( {{item.stockCode}} )</span>
+            <span class="name">{{item.stockName}}</span>
+            <span class="code"> {{item.stockCode}} </span>
         </div>
-        <div class="middle flex">
-            <span class="data">{{item.buyingTime}}</span>
+            <!-- <span class="data">{{item.buyingTime}}</span> -->
             <div>
-                <span >当前盈亏</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="ornow">当前盈亏</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span :class="['money',item.profitOrLoss>0?'up':'down']">{{item.profitOrLoss}}元</span>
             </div>
             <div class="del" @click="seeDel($event,index)">
@@ -15,10 +16,9 @@
                 <i class="el-icon-arrow-down" ref="rowwer"></i>
             </div>
         </div>
-        <div class="bottom" ref="bottom" v-show="index == showNum" style="paddingLeft:20px;">
-            <p class="title">交易明细&nbsp;&nbsp;&nbsp;{{item.tradeNo}}</p>
+        <div class="bottom" ref="bottom" v-show="index == showNum" style="paddingLeft:40px;">
             <div class="bottom-box">
-                <div class="flex bottom-item clearfix">
+                <div class="flex bottom-item">
                     <p>
                         <span class="l">交易本金</span>
                         <span class="r r-color">{{item.applyAmount}}元</span>
@@ -55,9 +55,9 @@
                         <span class="l">卖出时间</span>
                         <span class="r-color">{{item.sellingTime}}</span>
                     </p>
-                    <p style="width:223px;">
-                        <span class="l"></span>
-                        <span class="r-color"></span>
+                    <p>
+                        <span class="l">交易单号</span>
+                        <span class="r-color">{{item.tradeNo}}</span>
                     </p>
                 </div>                      
             </div>
@@ -66,7 +66,7 @@
                 <div class="flex bottom-item">
                     <p>
                         <span class="l">信息服务费</span>
-                        <span class="r r-color">{{item.serviceFee}}</span>
+                        <span class="r r-color">{{item.serviceFee}}元</span>
                     </p>
                     <p>
                         <span class="l">递延次数</span>
@@ -74,7 +74,7 @@
                     </p>
                     <p>
                         <span class="l">递延费</span>
-                        <span class="r-color">{{item.deferredCharges}}</span>
+                        <span class="r-color">{{item.deferredCharges}}元</span>
                     </p>
                 </div>                     
             </div>
@@ -83,15 +83,15 @@
                 <div class="flex bottom-item">
                     <p>
                         <span class="l">冻 &nbsp;结</span>
-                        <span class="r r-color">{{item.reserveFund}}</span>
+                        <span class="r r-color">{{item.reserveFund}}元</span>
                     </p>
                     <p>
                         <span class="l">扣 &nbsp;减</span>
-                        <span class="r r-color">{{item.publisherProfitOrLoss}}</span>
+                        <span class="r r-color">{{item.publisherProfitOrLoss}}元</span>
                     </p>
                     <p>
                         <span class="l">解 &nbsp;冻</span>
-                        <span class="r-color">{{item.publisherProfitOrLoss>0?item.reserveFund:item.reserveFund+item.publisherProfitOrLoss}}</span>
+                        <span class="r-color">{{item.publisherProfitOrLoss>0?item.reserveFund:item.reserveFund+item.publisherProfitOrLoss}}元</span>
                     </p>
                 </div>                     
             </div>
@@ -104,11 +104,11 @@
                     </p>
                     <p>
                         <span class="l">交易盈亏</span>&nbsp;&nbsp;&nbsp;
-                        <span class="r r-color">{{item.profitOrLoss}}</span>
+                        <span class="r r-color">{{item.profitOrLoss}}元</span>
                     </p>
                     <p>
-                        <span class="l">盈利分配</span>&nbsp;&nbsp;&nbsp;
-                        <span class="r-color">{{item.publisherProfitOrLoss}}</span>
+                        <span class="l">盈利分配</span>&nbsp;&nbsp;&nbsp; 
+                        <span class="r-color">{{item.publisherProfitOrLoss}}元</span>
                     </p>
                 </div>
                 
@@ -146,6 +146,9 @@ export default {
 };
 </script>
 <style scoped>
+.ornow{
+  color: #1e242e;
+}
 .animation {
   -webkit-animation: fadeInDown 0.1s 0.1s ease both;
   -moz-animation: fadeInDown 0.1s 0.1s ease both;
@@ -171,23 +174,30 @@ export default {
   }
 }
 .title {
-  line-height: 60px;
+  line-height: 50px;
+  border-top: 1px dashed #ddd;
+  
 }
-.bottom-item > p:nth-child(2) {
-  padding-left: 54px;
+.code{
+  font-size: 12px;
+  color: #adb3c1;
 }
+
 .main {
   min-height: 600px;
 }
 .item {
-  padding: 10px 0;
-  border-bottom: solid 1px #ece7e7;
+  padding: 5px 0;
+  background: #f7f7f7;
+}
+.item>div{
+  background: #fff;
 }
 i {
   font-weight: 900;
 }
 .settlement {
-  padding: 10px 100px;
+  padding: 10px;
 }
 .item > div {
   line-height: 40px;
@@ -253,7 +263,5 @@ i {
 .specil p {
   font-size: 13px;
 }
-.specil > p:nth-child(2) {
-  padding-left: 45px;
-}
+
 </style>

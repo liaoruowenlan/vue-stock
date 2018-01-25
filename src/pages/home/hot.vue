@@ -24,22 +24,21 @@
             </li>
         </ul>
         <ul class="section" v-loading="loading" v-if="active==1">
-            <li class="item flex"  v-for="(item,index) in hot" :key="index">
-                <div class="one">
-                    <span class="name">{{item.stockName}}</span>
-                    <span class="code">{{item.stockCode}}</span>
+            <li class="hotitem clearfix"  v-for="(item,index) in hot" :key="index">
+                <div class=" fl">
+                    <span class="name">{{item.name}}</span>
+                    <span class="code">{{item.code}}</span>
                 </div>
-                <div class="two">
-                    <span class="status">{{item.tradeType}}</span>
+                <div class="fl">
+                    <span class="nowprice">当前价 :</span>
+                    <span :class="[item.upDropSpeed>0?'red':'green','price']">{{ (item.lastPrice).toFixed(2)}}</span>
                 </div>
-                <div class="three">
-                    <span class="ip">{{item.phone}}</span>
+                <div class="three fl">
+                    <span class="ip">涨跌幅</span>
+                    <span :class="[item.upDropSpeed>0?'red':'green','price','ip']">{{(item.upDropSpeed*100).toFixed(2)}}</span>
                 </div>
-                <div class="fore">
-                    <span class="money">{{item.profit?(item.profit).toFixed(2)+'元':"----"}}</span>
-                </div>
-                <div class="five">
-                    <button>点买</button>
+                <div class="five fl">
+                    <button @click="pointBuy(item.code,$event)">点买</button>
                 </div>
             </li>
         </ul>
@@ -215,6 +214,19 @@ export default {
 };
 </script>
 <style scoped>
+.nowprice{
+  color: #687284;
+}
+.hotitem{
+  border-bottom: 1px dashed #ddd;
+}
+.hotitem>div{
+  width: 25%;
+  font-size: 12px;
+  text-align: center;
+  padding: 8px 0;
+  line-height: 30px;
+}
 .el-pagination {
   background: #fff;
 }
@@ -289,5 +301,6 @@ export default {
   border: none;
   outline: none;
   color: #fff;
+  cursor: pointer;
 }
 </style>

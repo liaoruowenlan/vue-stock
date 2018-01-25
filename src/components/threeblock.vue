@@ -3,63 +3,146 @@
         <ul class="top clearfix">
             <li v-for="(item,index) in title" :key="index" :class="[active==index?'active':'','fl']" @click="activeClick(index)">{{item.name}}</li>
         </ul>
-        <ul class="bottom" v-if="active==0">
-            <li class="clearfix">
-                <p class="fl left">冰雪经济靠滑雪难盈利，知名地产商入局也要卖房补血</p>
-                <p class="fr right">2018.01.23</p>
-            </li>
+        <ul class="bottom" v-if="active==0"  v-loading="loading">
+            <router-link :to="{path:'/newDetail',query:{id:item.id}}" tag="li" class="clearfix" v-for="(item,index) in oneList" :key="index">
+                <p class="fl left">{{item.title}}</p>
+                <p class="fr right">{{item.createDate}}</p>
+            </router-link>
         </ul>
-        <ul class="bottom" v-if="active==1">
-            <li class="clearfix">
+        <ul class="bottom" v-if="active==1"  v-loading="loading">
+            <li class="clearfix"  v-for="(item,index) in twoList" :key="index">
                 <p class="fl left">冰雪经济靠滑雪难盈利，知名地产商入局也要卖房补血冰雪经济靠滑雪难盈利，知名地产商入局也要卖房补血</p>
                 <p class="fr right">2018.01.23</p>
             </li>
         </ul>
-        <el-collapse v-model="activeName" accordion  v-if="active==2">
-            <el-collapse-item title="一致性 Consistency" name="1">
-                <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-                <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
-            </el-collapse-item>
-            <el-collapse-item title="反馈 Feedback" name="2">
-                <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-                <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
-            </el-collapse-item>
-            <el-collapse-item title="效率 Efficiency" name="3">
-                <div>简化流程：设计简洁直观的操作流程；</div>
-                <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
-                <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
-            </el-collapse-item>
-            <el-collapse-item title="可控 Controllability" name="4">
-                <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-                <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
-            </el-collapse-item>
-        </el-collapse>
+        <div v-if="active==2" v-loading="loading">
+          <el-collapse v-model="activeName" accordion >
+              <el-collapse-item :title="'截止日期'+item.jiezhiriqi" :name="index+1"  v-for="(item,index) in threeList" :key="index">
+                  <div class="clearfix">
+                    <p><span>股票代码</span><span>{{item.stockCode}}</span></p>
+                    <p><span>每股净资产</span><span>{{item.meigujinzichan||'--'}}</span></p>
+                    <p><span>每股收益</span><span>{{item.meigushouyi||'--'}}</span></p>
+                    <p><span>每股现金含量</span><span>{{item.meiguxianjinhanliang||'--'}}</span></p>
+                    <p><span>每股资金公积金</span><span>{{item.meiguzibengongjijin||'--'}}</span></p>
+                    <p><span>固定资产合计</span><span>{{item.gudingzichanheji||'--'}}</span></p>
+                    <p><span>流动资产合计</span><span>{{item.liudongzichanheji||'--'}}</span></p>
+                    <p><span>资产总计</span><span>{{item.zichanzongji||'--'}}</span></p>
+                    <p><span>长期负债合计</span><span>{{item.changqifuzaiheji||'--'}}</span></p>
+                    <p><span>主营业务收入</span><span>{{item.zhuyingyewushouru||'--'}}</span></p>
+                    <p><span>财务费用</span><span>{{item.caiwufeiyong||'--'}}</span></p>
+                    <p><span>净利润</span><span>{{item.jinlirun||'--'}}</span></p>
+                  </div>
+              </el-collapse-item>
+          </el-collapse>
+            <el-pagination
+              layout="prev, pager, next"
+              :size="pageSize"
+              @current-change="change"
+              :total="secondTotal">
+            </el-pagination>
+        </div>
   </div>
 </template>
 
 <script>
+import qs from "qs";
 export default {
+  props: {
+    code: [String, Number]
+  },
   data() {
     return {
       title: [{ name: "新闻" }, { name: "简介" }, { name: "财务" }],
       active: 0,
-      activeName:1,
+      activeName: 0,
+      secondTotal: 4,
+      page: 0,
+      pageSize: 4,
+      type: ["stock_news", "company_profile", "financial_summary"],
+      oneList: [],
+      twoList: [],
+      threeList: [],
+      loading: false
     };
   },
+  mounted() {
+    this.getList();
+  },
+  watch: {
+    code() {
+      this.getList();
+    }
+  },
   methods: {
+    change(val) {
+      return;
+    },
     activeClick(index) {
+      this.activeName = 0;
+      this.loading = true;
       this.active = index;
+      this.getList();
+    },
+    getList() {
+      var _this = this;
+      this.$axios
+        .get(
+          "/strategist/crawler/selectData?" +
+            qs.stringify({
+              type: _this.type[_this.active],
+              code: _this.code,
+              page: _this.page,
+              pageSize: _this.pageSize
+            })
+        )
+        .then(res => {
+          _this.loading = false;
+          if (res.data.code == 200) {
+            if (_this.active == 0) {
+              _this.oneList = res.data.data;
+            } else if (_this.active == 1) {
+              _this.twoList = res.data.data;
+            } else {
+              _this.threeList = res.data.data;
+            }
+          }
+        })
+        .catch(res => {
+          _this.loading = false;
+          console.log(res);
+        });
     }
   }
 };
 </script>
 
 <style scoped>
-.el-collapse{
-    background: #fff;
+.top {
+  background: #fbfbfb;
 }
-.el-collapse-item{
-    padding: 0 10px
+.el-collapse-item__content  div{
+  border-top: 1px solid #ddd
+}
+.el-collapse-item__content p {
+  float: left;
+  width: 50%;
+}
+.threeBlock{
+  max-width: 748px;
+}
+.el-collapse-item__content p span:first-of-type{
+  display: inline-block;
+  color: #adb3c1;
+  width: 100px;
+}
+.el-pagination {
+  background: #fff;
+}
+.el-collapse {
+  background: #fff;
+}
+.el-collapse-item {
+  padding: 0 10px;
 }
 .right {
   font-size: 12px;
@@ -84,6 +167,7 @@ export default {
 .bottom li {
   padding: 10px 0;
   border-bottom: 1px dashed #ddd;
+  cursor: pointer;
 }
 .threeBlock .top li {
   width: 100px;

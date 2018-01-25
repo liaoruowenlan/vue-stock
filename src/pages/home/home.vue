@@ -94,6 +94,10 @@
             <div id="newsmust">
                 <news></news>
             </div>
+            <div style="width:1024px;margin:0 auto">
+
+                <advertisement pos="bottom"></advertisement>
+            </div>
         </div>
         <div class="width100-bg">
             <footer-nav></footer-nav>
@@ -109,7 +113,7 @@
     import Hot from './hot.vue'
     import BannerLeft from './bannerLeft.vue'
     import News from './news.vue'
-    
+    import advertisement from '../../components/advertisement.vue'
     export default {
         name: "home",
         components:{
@@ -119,7 +123,8 @@
             Pay,
             Hot,
             BannerLeft,
-            News
+            News,
+            advertisement
         },
         data(){
             return {
@@ -156,7 +161,8 @@
             if(localStorage.getItem("token")){
                 this.getpw()
             }
-        }
+        },
+        
     }
 </script>
 

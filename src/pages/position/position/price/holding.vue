@@ -11,7 +11,11 @@
                 <span class="code">
                   {{item.stockCode}}
                 </span>
-                <img src="" alt="">
+                <img v-if="item.state=='POSTED'||item.state=='BUYLOCK'" src="../../../../assets/img/cc-mairuzhong@2x.png" alt="">
+                <img v-else-if="item.state=='HOLDPOSITION'" src="../../../../assets/img/cc-chicangzhong@2x.png" alt="">
+                <img v-else-if="item.state=='SELLAPPLY'" src="../../../../assets/img/cc-maichushenqing@2x.png" alt="">
+                <img v-else src="../../../../assets/img/cc-maichusuoding@2x.png" alt="">
+                <!-- <img :src="item.state=='POSTED'||item.state=='BUYLOCK'?'../../../../assets/img/cc-mairuzhong@2x.png':item.state=='HOLDPOSITION'?'../../../../assets/img/cc-chicangzhong@2x.png':item.state=='SELLAPPLY'?'../../../../assets/img/cc-maichushenqing@2x.png':'../../../../assets/img/cc-maichusuoding@2x.png'" alt=""> -->
               </div>
               <div class="top-left-bottom">
                 <span class="dingdan">订单号</span>
@@ -185,6 +189,11 @@ export default {
 </script>
 
 <style scoped>
+.top-left-top img{
+  width: 63px;
+  height: 20px;
+  vertical-align: bottom;
+}
 .el-button--warning {
   width: 140px;
   height: 30px;

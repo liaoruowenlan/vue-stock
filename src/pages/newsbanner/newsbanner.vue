@@ -6,7 +6,7 @@
                 <News></News>
                 <div class="newsleft">
                     <Left></Left>
-                    <div>11111</div>
+                    <Advertisement pos="left"></Advertisement>
                 </div>
             </div>
       </div>
@@ -18,12 +18,14 @@ import TopHeader from "../../components/header.vue";
 import FooterNav from "../../components/footer.vue";
 import News from "../home/news";
 import Left from "../../components/martket";
+import Advertisement from '../../components/advertisement'
 export default {
   components: {
     TopHeader,
     FooterNav,
     News,
-    Left
+    Left,
+    Advertisement
   }
 };
 </script>
@@ -31,7 +33,7 @@ export default {
 .newsbanner .a{
     padding-bottom: 40px;
     background: url("../../assets/img/newsback.png") no-repeat 0 bottom /100%,
-      #fff;
+      #f7f7f7;
 
 }
 .banner {
