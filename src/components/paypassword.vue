@@ -9,7 +9,7 @@
             :close-on-click-modal="false"
             center>
         <div>
-            <input type="password"  class="payPasw" maxlength="6" @keyup="showTime($event)" ref="paymentPwdInput"  v-model="payPass" :class="addCSs?'adss':''" />
+            <input type="password"  class="payPasw" maxlength="6" @keyup="showTime($event)" ref="paymentPwdInput"  v-model="payPass" :class="addCSs?'abtn_text':''" />
         </div>
         <span slot="footer" class="dialog-footer">
         <div @click="userWithd" class="paypassword" ref="btn">
@@ -68,7 +68,7 @@ export default {
 };
 </script>
 <style scoped>
-.adss{
+.abtn_text{
     text-indent: 30px !important;
 }
 .v-modal {
