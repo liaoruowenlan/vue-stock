@@ -64,7 +64,7 @@
                     </li>
                 </ul>
                 <p><span>持卡人</span><span>{{singleBank.name}}</span></p>
-                <p><span>支行信息</span><span>-----</span></p>
+                <p><span>支行信息</span><span>{{singleBank.branchName||'--'}}</span></p>
                 <p><span>预留手机号</span><span>{{singleBank.phone || '--'}}</span></p>
             </div>
             <div class="shut">
@@ -611,7 +611,7 @@ export default {
               type: "success",
               customClass: "ablout",
               onClose: function() {
-                location.reload(); //刷新当前页面。
+                _this.$router.push({path:'/myaccount/withdrawals',query:{act:1}}) //刷新当前页面。
               }
             });
             console.log(res.data);

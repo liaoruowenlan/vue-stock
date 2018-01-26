@@ -74,34 +74,24 @@
                 <a @click="login3">修改></a>
             </p>
             <div class="setup-logo" v-if="newPay.setup_logo">
-            	<!--<el-upload
-				  class="avatar-uploader"
-				  action="/strategist/publisher/headPortrait"
-				  :headers="headers" 
-				  name="file" 
-				  :show-file-list="false"
-				  :on-success="handleAvatarSuccess"
-				  :before-upload="beforeAvatarUpload">				  
-				  <img v-if="imageUrl" :src="imageUrl" class="avatar" >
-				  <img v-else src="../../../assets/img/userdcim-.png" class="avatar" >
-				  <i v-else class="el-icon-plus avatar-uploader-icon"></i>  :on-success="handlePreview"
-				</el-upload>-->
-				<el-upload
-				  class="upload-demo"
-				  ref="upload" 
-				  action="/strategist/publisher/headPortrait"
-				  :headers="headers" 
-				   :show-file-list="false" 				   
-				  :auto-upload="false" 
-				  name="file"
-				  :on-preview = "handlePreview"		
-				  :before-upload="beforeAvatarUpload"> 
-				  <el-button size="small" type="primary">点击上传</el-button>
-				</el-upload>
-				<img v-if="imageUrl" :src="imageUrl" class="avatar" >
-				<img v-else src="../../../assets/img/userdcim-.png" class="avatar" >
-				<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-
+              <p>点击选择图片</p>
+            	<el-upload
+                class="avatar-uploader"
+                action="/strategist/publisher/headPortrait"
+                :headers="headers" 
+                name="file" 
+                ref="upload"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :on-change='change'
+                :auto-upload="false"
+                :before-upload="beforeAvatarUpload">				  
+                <img v-if="imageUrl" :src="imageUrl" class="avatar" >
+                <img v-else src="../../../assets/img/userdcim-.png" class="avatar" >
+                <img class="inimg" v-if="u" :src="u" alt="" width="120px" height="120px">
+              </el-upload>
+              <button class="query" @click="up">确定修改</button>
+              <button class="close">取消</button>
             </div>
     	</div>
     </div>
@@ -113,17 +103,16 @@ import qs from "qs";
 
 export default {
   name: "setup",
-  data() {	
+  data() {
     return {
-    	headers:{
-    		Authorization: localStorage.getItem("token")
-    	},
-    	imageUrl:localStorage.getItem("UserImg")||'',
-      	oldpassworld: {
+      headers: {
+        Authorization: localStorage.getItem("token")
+      },
+      imageUrl: localStorage.getItem("UserImg") || "",
+      oldpassworld: {
         loginpass: "",
         newloginpass: "",
         passOpen: ""
-      
       },
       newPay: {
         Phone: localStorage.getItem("phone"),
@@ -131,18 +120,18 @@ export default {
         AuCodeAdd: "",
         payOen: false,
         payOen1: false,
-        setup_logo:true,
+        setup_logo: false,
         PassWorld: "",
         PhoneReg: "",
         btn: false,
         AuCode1: "",
         PassReg: false,
-        PayCode:false
+        PayCode: false
       },
       count: "",
       timer: null,
       show: true,
-      
+      u:''
     };
   },
   computed: {
@@ -154,27 +143,36 @@ export default {
     }
   },
   methods: {
-  	submitUpload(){
-  		 this.$refs.upload.submit();//直接提交申请。
-  		 
-  	},
-  	 handlePreview(res, file) {
-  	 	console.log(1);
-	 	localStorage.setItem("UserImg", res.result);
+    change(file,fileList){
+      this.u = file.url
+    },
+    up(){
+      this.$refs.upload.submit()
+    },
+    
+    handleAvatarSuccess(res, file) {
+        this.$alert('上传成功', '提示', {
+            confirmButtonText: '确定',
+            showClose:false,
+            callback: action => {
+              localStorage.setItem('UserImg',res.result)
+              this.$router.go(0)
+            }
+          });
         this.imageUrl = URL.createObjectURL(file.raw);
       },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg'||'image/PNG';
-        const isLt2M = file.size / 1024  < 500;
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === "image/jpeg" || "image/PNG";
+      const isLt2M = file.size / 1024 < 500;
 
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式或 PNG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过500KB!');
-        }
-        return isJPG && isLt2M;
-      },
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG 格式或 PNG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过500KB!");
+      }
+      return isJPG && isLt2M;
+    },
     blur() {
       this.newPay.PhoneReg =
         this.newPay.Phone.trim() != "" &&
@@ -184,20 +182,20 @@ export default {
       this.newPay.payOen = !this.newPay.payOen;
       this.newPay.payOen1 = false;
       this.newPay.setup_logo = false;
-      this.oldpassworld.loginpass = ''
-      this.oldpassworld.newloginpass = ''
+      this.oldpassworld.loginpass = "";
+      this.oldpassworld.newloginpass = "";
     },
     login1() {
       this.newPay.payOen1 = !this.newPay.payOen1;
       this.newPay.payOen = false;
       this.newPay.setup_logo = false;
-      this.newPay.PassWorld = ''
-      this.newPay.Aucode = ''
+      this.newPay.PassWorld = "";
+      this.newPay.Aucode = "";
     },
-    login3(){
-    	this.newPay.setup_logo = !this.newPay.setup_logo;
-    	 this.newPay.payOen1 = false;
-    	 this.newPay.payOen = false;
+    login3() {
+      this.newPay.setup_logo = !this.newPay.setup_logo;
+      this.newPay.payOen1 = false;
+      this.newPay.payOen = false;
     },
     // hide() {
     //   this.oldpassworld.loginpass = null;
@@ -214,7 +212,11 @@ export default {
     setPass() {
       this.newPay.PassReg = false;
       this.newPay.btn = false;
-      if (!(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/.test(this.oldpassworld.newloginpass))) {
+      if (
+        !/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$/.test(
+          this.oldpassworld.newloginpass
+        )
+      ) {
         this.newPay.PassReg = true;
         return;
       }
@@ -242,7 +244,7 @@ export default {
             _this.$alert("密码修改成功", "提示", {
               confirmButtonText: "确定",
               callback: action => {
-                  localStorage.clear()
+                localStorage.clear();
                 _this.$router.push("/login");
               }
             });
@@ -258,15 +260,16 @@ export default {
     },
     payWold() {
       var _this = this;
-          _this.newPay.PayCode = false
-          _this.newPay.AuCode1 = false
-        
-      if(!/^\d{6}$/.test(_this.newPay.PassWorld)){
-          _this.newPay.PayCode = true
-          return
-      }if(!_this.newPay.Aucode){
-          _this.newPay.AuCode1 = true
-          return
+      _this.newPay.PayCode = false;
+      _this.newPay.AuCode1 = false;
+
+      if (!/^\d{6}$/.test(_this.newPay.PassWorld)) {
+        _this.newPay.PayCode = true;
+        return;
+      }
+      if (!_this.newPay.Aucode) {
+        _this.newPay.AuCode1 = true;
+        return;
       }
       axios
         .post(
@@ -280,17 +283,17 @@ export default {
         .then(function(res) {
           console.log(res.data);
           if (res.data.code != 200) {
-            clearInterval(_this.timer)
+            clearInterval(_this.timer);
             _this.$alert(res.data.message, "提示", {
-              confirmButtonText: "确定",
+              confirmButtonText: "确定"
             });
             _this.newPay.AuCode1 = true;
           } else if (res.data.code == 200) {
             _this.$alert("密码修改成功", "提示", {
               confirmButtonText: "确定",
-              callback:action=>{
-                  _this.newPay.Aucode = ''
-                  _this.newPay.PassWorld = '' 
+              callback: action => {
+                _this.newPay.Aucode = "";
+                _this.newPay.PassWorld = "";
               }
             });
           }
@@ -313,27 +316,26 @@ export default {
           })
         )
         .then(function(res) {
-          if(res.data.code == 200){
-         const TIME_COUNT = 60;
-          if (!_this.timer) {
-            _this.count = TIME_COUNT;
-            _this.show = false;
-            _this.timer = setInterval(() => {
-              if (_this.count > 0 && _this.count <= TIME_COUNT) {
-                _this.count--;
-              } else {
-                _this.show = true;
-                clearInterval(_this.timer);
-                _this.timer = null;
-              }
-            }, 2000);
+          if (res.data.code == 200) {
+            const TIME_COUNT = 60;
+            if (!_this.timer) {
+              _this.count = TIME_COUNT;
+              _this.show = false;
+              _this.timer = setInterval(() => {
+                if (_this.count > 0 && _this.count <= TIME_COUNT) {
+                  _this.count--;
+                } else {
+                  _this.show = true;
+                  clearInterval(_this.timer);
+                  _this.timer = null;
+                }
+              }, 2000);
+            }
+          } else {
+            this.$alert(res.data.message, "提示", {
+              confirmButtonText: "确定"
+            });
           }
-          }else{
-              this.$alert(res.data.message, '提示', {
-                  confirmButtonText: '确定',
-                });
-          }
-
         })
         .catch(function(err) {
           console.log(err);
@@ -344,7 +346,35 @@ export default {
 </script>
 
 <style scoped>
+.setup-logo{
+  background: #f7f7f7;
+  padding-left: 34px;
+}
+.setup-logo p{
+  padding-left: 10px;
 
+}
+.setup-logo button{
+  width: 134px;
+  height: 32px;
+  color: #fff;
+  border: none;
+}
+.setup-logo .query{
+  background: #ff7e45;
+}
+.setup-logo .close{
+  background: #adb3c1;
+}
+.inimg{
+  position: absolute;
+    width: 120px;
+    height: 120px;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    background: #fff;
+}
 .regw {
   position: absolute;
   bottom: -30px;

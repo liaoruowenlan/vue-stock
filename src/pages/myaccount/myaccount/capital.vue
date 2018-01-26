@@ -32,8 +32,8 @@
                 <p>我的银行卡</p>
             </div>
 
-            <div style="display: none;">
-                <!--添加银行卡-->
+            <div style="cursor: pointer;" @click="addBank">
+                添加银行卡
             </div>
 
         </div>
@@ -78,6 +78,11 @@
                     console.log(err);
                 });
 
+        },
+        methods: {
+            addBank(){
+                this.$router.push({path:'/myaccount/withdrawals',query:{act:2}})
+            }
         }
     }
 </script>
