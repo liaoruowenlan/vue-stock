@@ -103,33 +103,11 @@ export default {
   components: {
     BuyMask
   },
-  // destroyed(){
-  //   window.removeEventListener('mousedown',function(){})
-  // },
+
   mounted() {
     this.getList();
-    // var _this = this;
-    // window.addEventListener("mousedown", function(event) {
-    //   console.log(event);
-    //   if (
-    //     event.target.className ==
-    //     "el-button fr el-button--danger el-button--mini" ||event.target.tagName == "INPUT"
-    //   ) {
-    //     return;
-    //   }
-    //   _this.searchShow = false;
-    //   _this.searchList = [];
-    // });
   },
   methods: {
-    // blur(event){
-    //   console.log(event)
-    //   if(event.target.className=="el-button fr el-button--danger el-button--mini"){
-    //     return
-    //   }
-    //   this.searchShow= false;
-    //   this.searchList= []
-    // },
     changeCode(event) {
       var val = this.code;
       var _this = this;

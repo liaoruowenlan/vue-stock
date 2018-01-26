@@ -21,6 +21,7 @@
         			</div>
         			<div>
         				<img src="../../assets/img/liucheng03copy.png" />
+                        <!-- <i class="icon-icon-yougu"></i> -->
         				<p>
         					关注涨跌
         				</p>
@@ -110,245 +111,253 @@
 </template>
 
 <script>
-    import TopHeader from '../../components/header.vue'
-    import FooterNav from '../../components/footer.vue'
-    import Swiper from '../../components/swiper.vue'
-    import Pay from '../../components/paypassword.vue'
-    import Hot from './hot.vue'
-    import BannerLeft from './bannerLeft.vue'
-    import News from './news.vue'
-    import advertisement from '../../components/advertisement.vue'
-    export default {
-        name: "home",
-        components:{
-            TopHeader,
-            FooterNav,
-            Swiper,
-            Pay,
-            Hot,
-            BannerLeft,
-            News,
-            advertisement
-        },
-        data(){
-            return {
-                money1:'36890',
-                money2:'12690',
-                centerDialogVisible: false,
+import TopHeader from "../../components/header.vue";
+import FooterNav from "../../components/footer.vue";
+import Swiper from "../../components/swiper.vue";
+import Pay from "../../components/paypassword.vue";
+import Hot from "./hot.vue";
+import BannerLeft from "./bannerLeft.vue";
+import News from "./news.vue";
+import advertisement from "../../components/advertisement.vue";
+export default {
+  name: "home",
+  components: {
+    TopHeader,
+    FooterNav,
+    Swiper,
+    Pay,
+    Hot,
+    BannerLeft,
+    News,
+    advertisement
+  },
+  data() {
+    return {
+      money1: "36890",
+      money2: "12690",
+      centerDialogVisible: false
+    };
+  },
+  methods: {
+    go() {
+      this.$router.push({ path: "/quotation" });
+    },
+    getpw() {
+      var _this = this;
+      this.$axios
+        .get("/strategist/publisher/getSettingRemind", {
+          headers: {
+            Authorization: localStorage.getItem("token") || " "
+          }
+        })
+        .then(response => {
+          var data = response.data;
+          if (data.code == 200) {
+            if (!data.result.settingPaymentPassword) {
+              //确定后无法关闭。判断语句有问题。
+              _this.centerDialogVisible = true;
             }
-        },
-        methods: {
-            go(){
-                this.$router.push({path:'/quotation'})
-            },
-            getpw(){
-                var _this = this
-                this.$axios.get('/strategist/publisher/getSettingRemind',{
-                    headers: {
-                        'Authorization': localStorage.getItem("token") || ' '
-                    }
-                }).then((response)=>{
-                    var data = response.data
-                    if(data.code==200){
-                        if(!data.result.settingPaymentPassword){//确定后无法关闭。判断语句有问题。
-                            _this.centerDialogVisible =  true
-                        }
-                    }
-                })
-
-            },
-            close(){
-                this.centerDialogVisible = false
-            }
-        },
-        mounted () {
-            if(localStorage.getItem("token")){
-                this.getpw()
-            }
-        },
-        
+          }
+        });
+    },
+    close() {
+      this.centerDialogVisible = false;
     }
+  },
+  mounted() {
+    if (localStorage.getItem("token")) {
+      this.getpw();
+    }
+  }
+};
 </script>
 
 <style scoped>
-#newsmust{
-      margin: 20px auto;
- width: 1024px;
+/* .icon {
+   width: 1em; height: 1em;
+   vertical-align: -0.15em;
+   fill: currentColor;
+   overflow: hidden;
+   font-size: 70px;
+} */
+#newsmust {
+  margin: 20px auto;
+  width: 1024px;
 }
-	.aBuy-demo{
-		width: 1024px;
-		height: 168px;
-		margin: 0 auto;
-		background: url(../../assets/img/biaoti.png) no-repeat;
-		background-color: #fff;
-		background-position: 50% 10%;
-	}
-	.aBuy-demo>p{
-		text-align: center;
-		color: #3E59A7;
-		font-size: 16px;
-		line-height: 36px;
-		
-	}
-	.aBuy-demo-ul{
-		height: 132px;
-	}
-	.aBuy-demo-ul>div{
-		width: 20%;
-		height: 100%;
-		background:url(../../assets/img/liucheng-jiantou.png) no-repeat;
-		background-position: 100% 50%;
-		float: left;
-	}
-	.aBuy-demo-ul>div:last-child{
-		background: none;
-	}
-	.aBuy-demo-ul>div>img{
-		margin: 20px auto 0 auto;
-	}
-	.aBuy-demo-ul>div>p{
-		font-size: 14px;
-		color: #687284;
-		text-align: center;
-		margin-top: 5px;
-	}
-.payHot{
-    justify-content: space-between;
-        margin: 20px auto;
-        width: 1024px;
+.aBuy-demo {
+  width: 1024px;
+  height: 168px;
+  margin: 0 auto;
+  background: url(../../assets/img/biaoti.png) no-repeat;
+  background-color: #fff;
+  background-position: 50% 10%;
 }
-    .introduce>div>div{
-           height: 93px;
-    position: relative;
-    }
-    .introduce>p{
-    	line-height: 50px;
-    	text-align: center;
-    	font-size: 16px;
-    	color: #3E59A7;
-    }
-    .introduce>div>div>img{
-            position: absolute;
-    bottom: 4%;
-    left: 36%;
-    }
-    .addbgCodel{
-    	background: url(../../assets/img/biaoti.png) no-repeat;
-    	background-color:#fff ;
-    	background-position: 50% 10%;
-    }
-    .width100-bg{
-        width: 100%;
-        background: #fff;
-    }
-    .introduce>div>h3{
-        text-align: center;
-        font-size: 16px;
-        color: #3e59a7;
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-    .introduce>div>p{
-        margin: 0 auto;
-        width: 222px;
-        height: 32px;
-        font-size: 12px;
-        color: #adb3c1;
-        text-align: center;
-    }
-    .user-buyH{
-        margin-top: 31px;
-        width: 192px;
-        height: 36px;
-        cursor: pointer;
-    }
-    .buy ul{
-        margin-top: 24px;
-    }
-    .buy ul li{
-        font-size: 12px;
-        color: #687284;
-        margin-bottom: 8px;
-    }
-    .buy ul li img{
-        display: inline-block;
-        vertical-align: 2px;
-    }
-    .buy-header{
-        width: 173px;
-        height: 26px;
-        font-size: 22px;
-        color:#3E59A7;
-        font-weight: 700;
-        margin-top: 93px;
-    }
-    .bug-title{
-        margin-top: 8px;
-        height: 42px;
-        width: 512px;
-        font-size: 14px;
-        line-height: 1.57;
-        color: #1e242e;
-    }
-    .bug-title>a{
-        font-size: 12px;
-        color: #e26042;
-    }
-    .buy{
-        height: 420px;
-        background: #fff;
-        margin: 20px auto;
-        width: 1024px;
-    }
-    .buy>div{
-        float: left;
-        height: 100%;
-    }
-    .buy>div.buy-img{
-        width:410px;
-    }
-    .buy>div.buy-img img{
-        margin:60px 0 0 114px;
-    }
-    .qCcode{
-        height: 540px;
-        width: 1024px;
-        background: #fff;
-        margin: 20px auto;
-    }
-    .qCcode>div{
-        float: left;
-        height: 100%;
-    }
-    .qCcode>div.qCcode-right{
-        width: 560px;
-    }
-    .qCcode-text{
-        font-size: 14px;
-        text-align: center;
-        color: #1e242e;
-        padding-top: 9px;
-    }
-    .qCcode>div.qCcode-left{
-        width:464px;
-    }
-    .qCcode-left>img{
-        margin-top: 56px;
-        margin-left: 126px;
-    }
-    .YG-logo{
-        width: 100px;
-        height: 130px;
-        margin: 92px auto 0 auto;
-    }
-    .qsCode-title{
-     text-align: center;
-        color: #ee8354;
-        font-size: 14px;
-        text-align: center;
-        margin-top:35px;
-    }
-    .dialogg {
+.aBuy-demo > p {
+  text-align: center;
+  color: #3e59a7;
+  font-size: 16px;
+  line-height: 36px;
+}
+.aBuy-demo-ul {
+  height: 132px;
+}
+.aBuy-demo-ul > div {
+  width: 20%;
+  height: 100%;
+  background: url(../../assets/img/liucheng-jiantou.png) no-repeat;
+  background-position: 100% 50%;
+  float: left;
+  text-align: center;
+}
+.aBuy-demo-ul > div:last-child {
+  background: none;
+}
+.aBuy-demo-ul > div > img {
+  margin: 20px auto 0 auto;
+}
+.aBuy-demo-ul > div > p {
+  font-size: 14px;
+  color: #687284;
+  text-align: center;
+  margin-top: 5px;
+}
+.payHot {
+  justify-content: space-between;
+  margin: 20px auto;
+  width: 1024px;
+}
+.introduce > div > div {
+  height: 93px;
+  position: relative;
+}
+.introduce > p {
+  line-height: 50px;
+  text-align: center;
+  font-size: 16px;
+  color: #3e59a7;
+}
+.introduce > div > div > img {
+  position: absolute;
+  bottom: 4%;
+  left: 36%;
+}
+.addbgCodel {
+  background: url(../../assets/img/biaoti.png) no-repeat;
+  background-color: #fff;
+  background-position: 50% 10%;
+}
+.width100-bg {
+  width: 100%;
+  background: #fff;
+}
+.introduce > div > h3 {
+  text-align: center;
+  font-size: 16px;
+  color: #3e59a7;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.introduce > div > p {
+  margin: 0 auto;
+  width: 222px;
+  height: 32px;
+  font-size: 12px;
+  color: #adb3c1;
+  text-align: center;
+}
+.user-buyH {
+  margin-top: 31px;
+  width: 192px;
+  height: 36px;
+  cursor: pointer;
+}
+.buy ul {
+  margin-top: 24px;
+}
+.buy ul li {
+  font-size: 12px;
+  color: #687284;
+  margin-bottom: 8px;
+}
+.buy ul li img {
+  display: inline-block;
+  vertical-align: 2px;
+}
+.buy-header {
+  width: 173px;
+  height: 26px;
+  font-size: 22px;
+  color: #3e59a7;
+  font-weight: 700;
+  margin-top: 93px;
+}
+.bug-title {
+  margin-top: 8px;
+  height: 42px;
+  width: 512px;
+  font-size: 14px;
+  line-height: 1.57;
+  color: #1e242e;
+}
+.bug-title > a {
+  font-size: 12px;
+  color: #e26042;
+}
+.buy {
+  height: 420px;
+  background: #fff;
+  margin: 20px auto;
+  width: 1024px;
+}
+.buy > div {
+  float: left;
+  height: 100%;
+}
+.buy > div.buy-img {
+  width: 410px;
+}
+.buy > div.buy-img img {
+  margin: 60px 0 0 114px;
+}
+.qCcode {
+  height: 540px;
+  width: 1024px;
+  background: #fff;
+  margin: 20px auto;
+}
+.qCcode > div {
+  float: left;
+  height: 100%;
+}
+.qCcode > div.qCcode-right {
+  width: 560px;
+}
+.qCcode-text {
+  font-size: 14px;
+  text-align: center;
+  color: #1e242e;
+  padding-top: 9px;
+}
+.qCcode > div.qCcode-left {
+  width: 464px;
+}
+.qCcode-left > img {
+  margin-top: 56px;
+  margin-left: 126px;
+}
+.YG-logo {
+  width: 100px;
+  height: 130px;
+  margin: 92px auto 0 auto;
+}
+.qsCode-title {
+  text-align: center;
+  color: #ee8354;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 35px;
+}
+.dialogg {
   width: 408px !important;
   margin-top: 26vh !important;
   height: 236px !important;
@@ -374,62 +383,62 @@
   font-size: 16px;
   cursor: pointer;
 }
-.news{
-    height: 42px;
-    background: #ffffff;
-    width: 1024px;
-    margin: 0 auto;
-    position: relative;
+.news {
+  height: 42px;
+  background: #ffffff;
+  width: 1024px;
+  margin: 0 auto;
+  position: relative;
 }
-    .news>img{
-        width:14px;
-        height: 14px;
-        position: absolute;
-        top: 14px;
-        left: 7px;
-    }
-    .news>p{
-        line-height: 42px;
-        font-size: 14px;
-        margin-left: 27px;
-        float: left;
-    }
-    .news>p a{
-        color: #687284;
-    }
-    .news>div{
-        float: right;
-        height: 42px;
-        line-height: 36px;
-        font-size: 14px;
-        color: #3e59a7;
-    }
-.news>div p{
-    float: left;
+.news > img {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 14px;
+  left: 7px;
 }
-.news>div p>span{
-    color: #e26042;
-    font-size: 20px;
-    font-weight: bold;
-    display: inline-block;
-    padding: 0 7px;
+.news > p {
+  line-height: 42px;
+  font-size: 14px;
+  margin-left: 27px;
+  float: left;
 }
-.news>div p:last-child{
-    padding-left: 20px;
-    padding-right: 8px;
+.news > p a {
+  color: #687284;
 }
-    .width100{
-        padding-bottom: 1px;
-        padding-top: 10px;
-    }
-    .introduce{
-        height: 224px;
-        width: 1024px;
-        margin: 20px auto;
-    }
-    .introduce>div{
-        float: left;
-        width: 25%;
-        height: 78%;
-    }
+.news > div {
+  float: right;
+  height: 42px;
+  line-height: 36px;
+  font-size: 14px;
+  color: #3e59a7;
+}
+.news > div p {
+  float: left;
+}
+.news > div p > span {
+  color: #e26042;
+  font-size: 20px;
+  font-weight: bold;
+  display: inline-block;
+  padding: 0 7px;
+}
+.news > div p:last-child {
+  padding-left: 20px;
+  padding-right: 8px;
+}
+.width100 {
+  padding-bottom: 1px;
+  padding-top: 10px;
+}
+.introduce {
+  height: 224px;
+  width: 1024px;
+  margin: 20px auto;
+}
+.introduce > div {
+  float: left;
+  width: 25%;
+  height: 78%;
+}
 </style>

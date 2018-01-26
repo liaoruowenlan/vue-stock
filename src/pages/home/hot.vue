@@ -35,7 +35,7 @@
                 </div>
                 <div class="three fl">
                     <span class="ip">涨跌幅</span>
-                    <span :class="[item.upDropSpeed>0?'red':'green','price','ip']">{{(item.upDropSpeed*100).toFixed(2)}}</span>
+                    <span :class="[item.upDropSpeed>0?'red':'green','price','ip']">{{(item.upDropSpeed*100).toFixed(2)}}%</span>
                 </div>
                 <div class="five fl">
                     <button @click="pointBuy(item.code,$event)">点买</button>

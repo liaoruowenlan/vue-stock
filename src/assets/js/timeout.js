@@ -25,7 +25,7 @@ export default {
         e.setMinutes (stre[1]);
         n.setHours (strn[0]);
         n.setMinutes (strn[1]);
-        // console.log(nowTime)
+        console.log(nowTime)
         if (n.getTime () - b.getTime () > 0 && n.getTime () - e.getTime () < 0) {
             return true;
         } else {

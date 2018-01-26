@@ -9,8 +9,8 @@
 						<div>
 							{{info.name}}
 						</div>
-						<p>
-							{{$time.outtime("09:30",new Date().getHours() + ":" + new Date().getMinutes())?'':'休市中' }}
+						<p v-if="!$time.outtime('09:30',new Date().getHours() + ':' + new Date().getMinutes())">
+							休市中
 						</p>
 					</div>
 					<div class="market-header-number">
@@ -19,8 +19,8 @@
 								{{info.lastPrice}}
 							</div>
 							<p :class="[info.upDropSpeed>0?'red':'green']">
-								<span>{{info.upDropPrice}}</span>
-								<span>{{(info.upDropSpeed*100).toFixed(2)}}</span>
+								<span>{{info.upDropPrice}}</span>&nbsp;
+								<span>{{(info.upDropSpeed*100).toFixed(2)}}%</span>
 							</p>
 						</div>
 						<div class="market-header-number-right">
@@ -52,14 +52,14 @@
 				<div class="market-body-div">
 					<div class="market-body-left">
 						<div class="title-main">
-                            <a :class="dayormonth===0?'active':''" @click="changeMap(0)">时K</a> 
-                            <a :class="dayormonth===1?'active':''" @click="kLine(code,1,1)">日K</a>
-                            <a :class="dayormonth===2?'active':''" @click="kLine(code,2,2)">周K</a>
-                            <a :class="dayormonth===3?'active':''" @click="kLine(code,3,3)">月K</a>
-                        </div>
+                <a :class="dayormonth===0?'active':''" @click="changeMap(0)">时K</a> 
+                <a :class="dayormonth===1?'active':''" @click="kLine(code,1,1)">日K</a>
+                <a :class="dayormonth===2?'active':''" @click="kLine(code,2,2)">周K</a>
+                <a :class="dayormonth===3?'active':''" @click="kLine(code,3,3)">月K</a>
+            </div>
 						<div id="main" style="width: 748px; height: 411px;">
 
-                        </div>
+            </div>
 					</div>
 					<div class="market-body-right">
 						<div class="market-body-right-title">
@@ -68,28 +68,28 @@
 						<ul class="rank-list" v-if="active==0">
 							<li v-for="(item,index) in RankList" :key="index">
 								<div class="rank-list-text1">
-									<p>{{item.Aname}}</p>
-									<span>{{item.Anumber}}</span>
+									<p>{{item.name}}</p>
+									<span>{{item.instrumentId}}</span>
 								</div>
-								<div class="rank-list-text2">
-									{{item.Amoney}}
+								<div :class="[item.upDropSpeed>0?'red':'green','rank-list-text2']">
+									{{(item.lastPrice).toFixed(2)}}
 								</div>
-								<div class="rank-list-text3">
-									{{item.Aplus}}&nbsp;&nbsp;{{item.Areduce}}
+								<div  :class="[item.upDropSpeed>0?'red':'green','rank-list-text3']">
+									{{(item.upDropPrice).toFixed(2)}}&nbsp;&nbsp;{{(item.upDropSpeed*100).toFixed(2)}}%
 								</div>
 							</li>
 						</ul>
 						<ul class="rank-list" v-if="active==1">
 							<li v-for="(item,index) in RankList1" :key="index">
 								<div class="rank-list-text1">
-									<p>{{item.Aname}}</p>
-									<span>{{item.Anumber}}</span>
+									<p>{{item.name}}</p>
+									<span>{{item.instrumentId}}</span>
 								</div>
-								<div class="rank-list-text2">
-									{{item.Amoney}}
+								<div :class="[item.upDropSpeed>0?'red':'green','rank-list-text2']">
+									{{(item.lastPrice).toFixed(2)}}
 								</div>
-								<div class="rank-list-text3">
-									{{item.Aplus}}&nbsp;&nbsp;{{item.Areduce}}
+								<div :class="[item.upDropSpeed>0?'red':'green','rank-list-text3']">
+									{{(item.upDropPrice).toFixed(2)}}&nbsp;&nbsp;{{(item.upDropSpeed*100).toFixed(2)}}%
 								</div>
 							</li>
 						</ul>
@@ -113,8 +113,8 @@ export default {
   data() {
     return {
       active: 0,
-	  first: "",
-	  info:{},
+      first: "",
+      info: {},
       stompClient: null,
       stompSubscribe: null,
       stockTimeLineWs: null,
@@ -129,150 +129,9 @@ export default {
         }
       ],
       rawData: [],
-      RankList: [
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        },
-        {
-          Aname: "贵州茅台",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "+12.25",
-          Areduce: "+10.00%"
-        }
-      ],
-      RankList1: [
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        },
-        {
-          Aname: "中国牛逼股票",
-          Anumber: "600519",
-          Amoney: "773.640",
-          Aplus: "-12.25",
-          Areduce: "-10.00%"
-        }
-      ]
+      RankList: [],
+      RankList1: [],
+      rankType:1
     };
   },
   components: {
@@ -280,8 +139,9 @@ export default {
     FooterNav
   },
   mounted() {
-	this.shares(this.code);
-	this.getmarket()
+    this.shares(this.code);
+    this.getList();
+    this.getmarket();
     var _this = this;
     var s = new SockJS("http://10.0.0.48:8084/socket");
     this.stompClient = Stomp.over(s);
@@ -301,16 +161,35 @@ export default {
     });
   },
   methods: {
-	  getmarket(){
-		  var _this = this
-		  this.$axios.get('/strategist/stock/market/'+ this.code).then((res)=>{
-			  if(res.data.code == 200){
-				  _this.info = res.data.result
-			  }
-		  })
-	  },
+    getList(){
+      var _this = this;
+      this.$axios.get("/strategist/stock/"+this.code+"/ranking?"+qs.stringify({
+        rankType:this.rankType,
+        size:10
+      })).then(res => {
+        if (res.data.code == 200) {
+          if(_this.active==0){
+            _this.RankList = res.data.result;
+          }else{
+            _this.RankList1 = res.data.result;
+            
+          }
+        }
+      });
+    },
+    getmarket() {
+      var _this = this;
+      this.$axios.get("/strategist/stock/market/" + this.code).then(res => {
+        if (res.data.code == 200) {
+          _this.info = res.data.result;
+        }
+      });
+    },
     marKetListClick(index) {
+      if(this.active == index) return
       this.active = index;
+      this.rankType =index+1;
+      this.getList()
     },
     shares(code) {
       var _this = this;
@@ -329,7 +208,7 @@ export default {
         });
     },
     kLine(code, type, index) {
-		if(this.dayormonth == index) return
+      if (this.dayormonth == index) return;
       if (this.stompSubscribe) {
         this.stompSubscribe.unsubscribe(this.stockTimeLineWs);
       }
@@ -348,7 +227,6 @@ export default {
         });
     },
     changeMap(value) {
-		
       this.open = true;
       var _this = this;
       this.dayormonth = 0;
@@ -366,8 +244,9 @@ export default {
       this.charts = echarts.init(document.getElementById("main"));
       var upColor = "#00da3c";
       var downColor = "#ec0000";
-	  var val = value == 1 ?"时k":value == 2?"日k":value == 3?'周k':"月k";
-	  var data = this.splitData(this.rawData);
+      var val =
+        value == 1 ? "时k" : value == 2 ? "日k" : value == 3 ? "周k" : "月k";
+      var data = this.splitData(this.rawData);
       this.charts.setOption(
         {
           backgroundColor: "#fff",
@@ -588,14 +467,11 @@ export default {
           categoryData.push(rawData[i].time.split(" ")[1].slice(0, 5));
         } else if (dm === 1) {
           categoryData.push(rawData[i].time.split(" ")[0].slice(5, 10));
-        }else if(dm === 2){
+        } else if (dm === 2) {
           categoryData.push(rawData[i].time.split(" ")[0].slice(5, 10));
-			
-		}
-		else if(dm === 3){
+        } else if (dm === 3) {
           categoryData.push(rawData[i].time.split(" ")[0].slice(5, 10));
-			
-		}
+        }
         values.push([
           rawData[i].openPrice,
           rawData[i].closePrice,
@@ -684,13 +560,11 @@ export default {
 .rank-list-text2 {
   width: 25%;
   line-height: 45px;
-  color: #ea523b;
   font-size: 12px;
 }
 
 .rank-list-text3 {
   font-size: 12px;
-  color: #ea523b;
   width: 40%;
   line-height: 45px;
 }
