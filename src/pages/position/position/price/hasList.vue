@@ -140,7 +140,6 @@ export default {
       } else {
         this.showNum = null;
       }
-      // console.log(event)
     }
   }
 };
@@ -172,6 +171,9 @@ export default {
     opacity: 1;
     -moz-transform: translateY(0);
   }
+}
+.up{
+  color: #e26042;
 }
 .title {
   line-height: 50px;
