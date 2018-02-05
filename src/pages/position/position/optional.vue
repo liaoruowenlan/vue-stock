@@ -169,10 +169,11 @@ export default {
             )
             .then(res => {
               if (res.data.code == 200) {
+                var _this = this;
                 this.$message({
                   type: "success",
                   message: "删除成功!",
-                  duration:500,
+                  duration:500               
                 });
               }
               this.getList()
@@ -248,7 +249,7 @@ export default {
     },
     getList() {
       this.loading = true;
-      if(!localStorage.getItem('token')) return;
+      if(!localStorage.getItem('token')) return; 
       this.$axios
         .get(
           "/strategist/favoriteStock/favoriteStockPage?page=" +
@@ -262,6 +263,11 @@ export default {
           }
         )
         .then(res => {
+          if(res.data.result.content == ""){
+              this.page = 0;
+              this.getList();
+              
+          }
           if (res.data.code == 200) {
             this.dataList = res.data.result.content;
             this.total = res.data.result.totalElements;

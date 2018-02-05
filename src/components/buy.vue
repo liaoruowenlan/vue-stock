@@ -22,12 +22,6 @@
           <span class="close" @click="close"> X </span>
           <h2>{{name}} {{instrumentId}}</h2>
           <ul class="firstUl" v-for="(item,index) in dataList" :key="index" v-if="index==bigI">
-              <li class="topone clearfix">
-                  <span class="label fl">点买类型</span>
-                  <ul class="toptwo fr clearfix" ref="toptwo">
-                      <li :class="index1==i?'active fl':'fl'"  v-for="(o,i) in listTitle" :key="i" @click="click(i,o)">{{o.name}}</li>
-                  </ul>
-              </li>
               <li class="topone clearfix" >
                   <span class="label fl">申请金额</span>
                   <ul class="toptwo fr clearfix">
@@ -35,10 +29,22 @@
                   </ul>
               </li>
               <li class="topone clearfix" >
+                  <span class="label fl">杠杆倍数</span>
+                  <ul class="toptwo fr clearfix">
+                      <li :class="index3==i?'active fl losses':'fl losses'" v-for="(el,i) in item.losses" :key="i"  @click="click2(el,i)">{{el.multiple}}倍</li>
+                  </ul>
+              </li>
+              <li class="topone clearfix active-boder">
+                  <span class="label fl">持仓天数</span>
+                  <ul class="toptwo fr clearfix" ref="toptwo">
+                      <li :class="index1==i?'active fl':'fl'"  v-for="(o,i) in listTitle" :key="i" @click="click(i,o)">{{o.name}}</li>
+                  </ul>
+              </li>
+              <li class="topone clearfix" >
                   <span class="label fl">股  &nbsp;&nbsp;数</span>
                   <div>{{parseInt(marketValue/upLimitPrice)%100>0?parseInt(marketValue/upLimitPrice)-parseInt(marketValue/upLimitPrice)%100:'不足购买一手'}}股</div>
               </li>
-              <li class="topone clearfix" >
+              <li class="topone clearfix active-boder" >
                   <span class="label fl">资金使用率</span>
                   <div>{{((parseInt(marketValue/upLimitPrice)-parseInt(marketValue/upLimitPrice)%100)*upLimitPrice/marketValue*100).toFixed(2)}}%</div>
               </li>
@@ -46,11 +52,9 @@
                   <span class="label fl">止盈率</span>
                   <div>{{item.profit*100}}%</div>
               </li>
-              <li class="topone clearfix" >
+              <li class="topone clearfix active-boder" >
                   <span class="label fl">止损率</span>
-                  <ul class="toptwo fr clearfix">
-                      <li :class="index3==i?'active fl losses':'fl losses'" v-for="(el,i) in item.losses" :key="i"  @click="click2(el,i)">-{{((el.point)*100).toFixed(2)}}%</li>
-                  </ul>
+                  <div>{{losses > 0 ? losses*100 : item.losses[0].point*100}}%</div>
               </li>
               <li class="topone clearfix" >
                   <span class="label fl">信息服务费</span>
@@ -351,9 +355,12 @@ export default {
 .firstUl {
   min-height: 468px;
 }
-.firstUl > li:nth-of-type(2n) {
+/* .firstUl > li:nth-of-type(2n) {
   border-bottom: 1px dashed #ece7e7;
-}
+} */
+ .firstUl > li.active-boder {
+  border-bottom: 1px dashed #ece7e7;
+} 
 .firstUl > li {
   padding: 10px 0;
 }
@@ -366,7 +373,7 @@ export default {
 .topone .label {
   font-size: 14px;
   display: inline-table;
-  line-height: 20px;
+  line-height: 20px;  
   color: #687284;
   margin-right: 20px;
   margin-top: 2px;
@@ -396,7 +403,7 @@ li.active {
   text-align: center;
 }
 li.losses {
-  width: 100px;
+  width: 70px;
 }
 .secondUl button {
   width: 400px;

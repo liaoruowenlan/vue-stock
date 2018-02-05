@@ -52,8 +52,13 @@ export default {
                 content: ""
               }
               return
+            } else {
+              _this.data = res.data.data;
+              if(_this.data.content || '' == _this.data.content) {
+                _this.data.content = _this.data.title;
+              }
             }
-            _this.data = res.data.data;
+            
           }
         });
     }

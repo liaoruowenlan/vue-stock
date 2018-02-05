@@ -619,11 +619,12 @@ export default {
 }
 
 .market-header-number-right ul li {
-  color: #fff;
-  font-size: 16px;
-  margin-bottom: 18px;
-  float: left;
-  margin-right: 85px;
+ color: #fff;
+    font-size: 16px;
+    margin-bottom: 18px;
+    float: left;
+    width: 150px;
+    margin-right: 50px;
 }
 
 .market-header-number-right ul li:nth-child(3n) {

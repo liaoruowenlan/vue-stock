@@ -311,17 +311,17 @@ export default {
     },
     pointBuy(code, event) {
       event.stopPropagation();
-      if (
-        !this.$time.outtime(
-          "09:30",
-          new Date().getHours() + ":" + new Date().getMinutes()
-        )
-      ) {
-        this.$alert("非交易时间段", "交易日式", {
-          confirmButtonText: "确定"
-        });
-        return;
-      }
+      // if (
+      //   !this.$time.outtime(
+      //     "09:30",
+      //     new Date().getHours() + ":" + new Date().getMinutes()
+      //   )
+      // ) {
+      //   this.$alert("非交易时间段", "交易日式", {
+      //     confirmButtonText: "确定"
+      //   });
+      //   return;
+      // }
       axios
         .get("/strategist/stock/market/" + code)
         .then(

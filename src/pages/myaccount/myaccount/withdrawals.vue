@@ -99,7 +99,7 @@
             </el-form>
             <section>
                 <div @click="submitdata">确定</div>
-                <div class="bgcolor" @click="hide">取消</div>
+                <div class="bgcolor" @click="hide(1)">取消</div>
             </section>
         </div>
         <div class="adblank" v-if="active==1"> <!-- 用户点击我的银行卡查看模块 -->
@@ -593,13 +593,9 @@ export default {
         phone: this.ruleForm.Phone,
         bankCard: this.ruleForm.BlankCard
       };
-      if (this.ruleForm.cnaps) {
-        requestObj.branchCode = ("" + this.ruleForm.cnaps)
-          .split(",")[2]
-          .split("_")[0];
-        requestObj.branchName = ("" + this.ruleForm.cnaps)
-          .split(",")[2]
-          .split("_")[1];
+      if (this.ruleForm.cnaps.length == 3) {
+        requestObj.branchCode = this.ruleForm.cnaps[2].split("_")[0];
+        requestObj.branchName = this.ruleForm.cnaps[2].split("_")[1];
       }
       // 发送绑卡请求
       axios
@@ -615,7 +611,7 @@ export default {
               }
             });
             console.log(res.data);
-            return false;
+            return false; 
           } else if (res.data.code == 2005) {
             _this.$message({
               message: res.data.message,

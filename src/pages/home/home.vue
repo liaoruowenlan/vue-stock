@@ -50,7 +50,7 @@
             			我们的优势
             		</p>
                 <div>
-                    <div>
+                   <div>
                         <img src="../../assets/img/icon01.png" />
                     </div>
                     <h3>

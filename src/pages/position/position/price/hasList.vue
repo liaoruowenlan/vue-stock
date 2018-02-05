@@ -7,7 +7,7 @@
             <span class="code"> {{item.stockCode}} </span>
         </div>
             <!-- <span class="data">{{item.buyingTime}}</span> -->
-            <div>
+            <div v-if="item.state=='UNWIND'">
                 <span class="ornow">当前盈亏</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span :class="['money',item.profitOrLoss>0?'up':'down']">{{item.profitOrLoss}}元</span>
             </div>
@@ -85,14 +85,15 @@
                         <span class="l">冻 &nbsp;结</span>
                         <span class="r r-color">{{item.reserveFund}}元</span>
                     </p>
-                    <p>
-                        <span class="l">扣 &nbsp;减</span>
-                        <span class="r r-color">{{item.publisherProfitOrLoss}}元</span>
-                    </p>
-                    <p>
+                      <p>
                         <span class="l">解 &nbsp;冻</span>
-                        <span class="r-color">{{item.publisherProfitOrLoss>0?item.reserveFund:item.reserveFund+item.publisherProfitOrLoss}}元</span>
+                        <span class="r r-color">{{item.reserveFund}}元</span>
                     </p>
+                    <p>
+                        <span class="l"></span>
+                        <span class="r-color"></span>
+                    </p>
+                  
                 </div>                     
             </div>
             <p class="title">交易盈亏分配</p>
@@ -100,13 +101,13 @@
                 <div class="flex bottom-item">
                     <p>
                         <span class="l">方案状态</span>&nbsp;&nbsp;&nbsp;
-                        <span class="r r-color">已结算</span>
+                        <span class="r r-color">{{item.state=='UNWIND'?'已结算':((item.state=='REVOKE'&&item.windControlType)?'卖出失败':'买入失败')}}</span>
                     </p>
-                    <p>
+                    <p v-if="item.state=='UNWIND'">
                         <span class="l">交易盈亏</span>&nbsp;&nbsp;&nbsp;
                         <span class="r r-color">{{item.profitOrLoss}}元</span>
                     </p>
-                    <p>
+                    <p v-if="item.state=='UNWIND'">
                         <span class="l">盈利分配</span>&nbsp;&nbsp;&nbsp; 
                         <span class="r-color">{{item.publisherProfitOrLoss}}元</span>
                     </p>
