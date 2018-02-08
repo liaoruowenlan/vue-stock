@@ -7,7 +7,9 @@ import router from './router'
 import './assets/css/index.css'
 import axios from 'axios';
 import time from './assets/js/timeout'
+import './assets/js/iconfont'
 import './assets/icomoon/style.css'
+
 Vue.prototype.$time = time
 Vue.use(ElementUI)
 axios.defaults.headers['Authorization']=localStorage.getItem('token')||' '

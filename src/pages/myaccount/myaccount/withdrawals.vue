@@ -1,5 +1,5 @@
 <template>
-    <div class="user_div" v-model="spanbalue" >
+    <div class="user_div" v-model="spanbalue"  v-loading="loading">
         <div v-show="active==0">
             <div class="title">
                 提现
@@ -165,6 +165,7 @@ export default {
   name: "withdrawals",
   data() {
     return {
+      loading:false,
       singleBank: {
         bankIconLink: "",
         bankName: "",
@@ -337,8 +338,7 @@ export default {
                   message: res.data.message
                 });
               }
-              this.getmyBankCardList();
-
+              this.getmyBankCardList();z
               _this.hide(1);
             });
         })
@@ -598,16 +598,18 @@ export default {
         requestObj.branchName = this.ruleForm.cnaps[2].split("_")[1];
       }
       // 发送绑卡请求
+      _this.loading = true;
       axios
         .post("/strategist/bindCard/bindBankCard", qs.stringify(requestObj))
         .then(function(res) {
+          _this.loading = false;
           if (res.data.code == 200) {
             _this.$message({
               message: "绑定成功，正在跳转中。",
               type: "success",
               customClass: "ablout",
               onClose: function() {
-                _this.$router.push({path:'/myaccount/withdrawals',query:{act:1}}) //刷新当前页面。
+                  window.location.reload()
               }
             });
             console.log(res.data);
@@ -621,7 +623,14 @@ export default {
                 _this.clear();
               }
             });
-          } else {
+          }else if (res.data.code == 2014) {
+            _this.$message({
+              message: res.data.message,
+              customClass: "ablout",
+              type: "warning"
+            });
+          } 
+          else {
             _this.$message({
               message: res.data.message,
               customClass: "ablout",

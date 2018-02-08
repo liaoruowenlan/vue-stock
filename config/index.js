@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
         '/strategist': {
             // target: 'http://10.0.0.99:8084/',//设置你调用的接口域名和端口号 别忘了加http
-            target: 'http://10.0.0.48:8093/strategist/',  // 测试环境
+            target: 'http://10.0.0.48:8084/',  // 测试环境
 //             target: 'https://m.youguwang.com.cn/strategist',//设置你调用的接口域名和端口号 别忘了加http
             changeOrigin: true,
             pathRewrite: {

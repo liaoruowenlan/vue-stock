@@ -8,32 +8,42 @@
         		<p>点买流程</p>
         		<div class="aBuy-demo-ul">
         			<div>
-        				<img src="../../assets/img/liucheng01copy.png" />
+               <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-buzhou-3"></use>
+                    </svg>
         				<p>
         					查看详情
         				</p>
         			</div>
         			<div>
-        				<img src="../../assets/img/liucheng02copy.png" />
+        				 <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-buzhou-4"></use>
+                 </svg>
         				<p>
         					点买策略
         				</p>
         			</div>
         			<div>
-        				<img src="../../assets/img/liucheng03copy.png" />
+        			  <svg class="icon" aria-hidden="true">
+                          <use xlink:href="#icon-buzhou-"></use>
+                </svg>
                         <!-- <i class="icon-icon-yougu"></i> -->
         				<p>
         					关注涨跌
         				</p>
         			</div>
         			<div>
-        				<img src="../../assets/img/liucheng04copy.png" />
+        				 <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-buzhou-1"></use>
+                    </svg>
         				<p>
         					卖出股票
         				</p>
         			</div>
         			<div>
-        				<img src="../../assets/img/liucheng05copy.png" />
+        			 <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-buzhou-2"></use>
+              </svg>
         				<p>
         					收益结算
         				</p>
@@ -51,7 +61,9 @@
             		</p>
                 <div>
                    <div>
-                        <img src="../../assets/img/icon01.png" />
+                      <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-youshi-"></use>
+                      </svg>
                     </div>
                     <h3>
                         三方监管，保障资金
@@ -62,7 +74,9 @@
                 </div>
                 <div>
                     <div>
-                        <img src="../../assets/img/icon02.png" />
+                        <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-youshi-1"></use>
+                        </svg>
                     </div>
                     <h3>
                         操作便捷，一键平仓
@@ -73,7 +87,9 @@
                 </div>
                 <div>
                     <div>
-                        <img src="../../assets/img/icon03.png" />
+                         <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-youshi-2"></use>
+                    </svg>
                     </div>
                     <h3>
                         投资灵活，快速获益
@@ -84,7 +100,9 @@
                 </div>
                 <div>
                     <div>
-                        <img src="../../assets/img/icon04.png" />
+                        <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-youshi"></use>
+                    </svg>
                     </div>
                     <h3>
                         快速注册，短频交易
@@ -173,6 +191,11 @@ export default {
 </script>
 
 <style scoped>
+.aBuy-demo-ul .icon{
+  margin-top:20px;
+  width: 64px;
+  height: 64px; 
+}
 /* .icon {
    width: 1em; height: 1em;
    vertical-align: -0.15em;
@@ -236,10 +259,12 @@ export default {
   font-size: 16px;
   color: #3e59a7;
 }
-.introduce > div > div > img {
+.introduce > div > div > .icon {
   position: absolute;
-  bottom: 4%;
-  left: 36%;
+    bottom: 5%;
+    left: 34%;
+    width: 84px;
+    height: 84px;
 }
 .addbgCodel {
   background: url(../../assets/img/biaoti.png) no-repeat;

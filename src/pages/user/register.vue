@@ -68,7 +68,7 @@
 	             userAcd:"",
 				 AuCodeReg:"",
 				 AuCodeMeg:"*验证码有误，请重新输入",
-				  AuCodeUp:""
+				 AuCodeUp:""
 			  },
 			  btnUp:"",
               count:"",
